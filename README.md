@@ -1,7 +1,7 @@
 # ft_containers
 Re-implementation in C++98 of Containers **vector**, **map** and **stack**
 
-## Mandatory
+# Mandatory
 
 Re-implement in C++98 standard three different containers :
 
@@ -31,3 +31,7 @@ There are also some miscellaneous C++98 functions to re-implement :
 - Use the namespace ``ft``
 - Use of ``std::allocator`` is mandatory
 - Be wary of all the details from existing containers
+
+# Sources
+
+For all informations about the functionnality and implementation of containers, [cppreference](https://en.cppreference.com/w/) and [cplusplus](https://cplusplus.com/) were very handy
