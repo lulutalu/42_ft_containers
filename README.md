@@ -1,17 +1,14 @@
 # ft_containers
-Re-implementation in C++98 of Containers vector, map and stack
+Re-implementation in C++98 of Containers **vector**, **map** and **stack**
 
 ## Mandatory
 
 Re-implement in C++98 standard three different containers :
 
-``vector``
+- ``vector``
+- ``map``
+- ``stack``
 
-``map``
-
-``stack``
-
----
 
 There are also some miscellaneous C++98 functions to re-implement :
 
@@ -28,3 +25,9 @@ There are also some miscellaneous C++98 functions to re-implement :
 ``std::pair``
 
 ``std::make_pair``
+
+## Guidelines
+
+- Use the namespace ``ft``
+- Use of ``std::allocator`` is mandatory
+- Be wary of all the details from existing containers
