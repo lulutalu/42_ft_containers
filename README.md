@@ -31,4 +31,5 @@ There are also some miscellaneous C++98 functions to re-implement :
 
 # Sources
 
-For all informations about the functionnality and implementation of containers, [cppreference](https://en.cppreference.com/w/) and [cplusplus](https://cplusplus.com/) were very handy
+- For all informations about the functionnality and implementation of containers, [cppreference](https://en.cppreference.com/w/) and [cplusplus](https://cplusplus.com/) were very handy
+- For practical example, [geeksforgeeks website](https://www.geeksforgeeks.org) was often used
