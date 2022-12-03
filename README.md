@@ -11,6 +11,8 @@ Re-implement in C++98 standard three different containers :
 
 ``stack``
 
+---
+
 There are also some miscellaneous C++98 functions to re-implement :
 
 ``std::iterator_traits``
