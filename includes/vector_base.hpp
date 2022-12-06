@@ -1,36 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   vector_base.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/06 17:30:11 by lduboulo         ###   ########.fr       */
+/*   Created: 2022/12/06 16:51:05 by lduboulo          #+#    #+#             */
+/*   Updated: 2022/12/06 17:32:45 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <memory>
-#include <iostream>
-#include "includes/vector.hpp"
 
-int	main(void)
-{
-	int						*ptr;
-	std::allocator<int>		alloc;
-	int						i = -1;
-	int						N = 10;
-
-	try {
-		ptr = alloc.allocate(N);
-	}
-	catch (std::bad_alloc &e) {
-		std::cout << "bad allocation of memory : " << e.what() << std::endl;
-	}
-	while (++i < N)
-		alloc.construct(ptr + i, i);
-	i = -1;
-	while (++i < N)
-		alloc.destroy(ptr + i);
-	alloc.deallocate(ptr, N);
-}
+explicit vector(const allocator_type& alloc = allocator_type()) : _alloc(alloc), _pointer(NULL) {}

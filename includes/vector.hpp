@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/06 16:45:05 by lduboulo         ###   ########.fr       */
+/*   Updated: 2022/12/06 17:32:06 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@
 
 namespace ft {
 
-template <class T, class Alloc = std::allocator<T>>
+template <class T, class Alloc = std::allocator<T> >
 class vector
 {
+
 	public :
 
 		////////////////////////////////////////////////////////////////////////
@@ -48,15 +49,14 @@ class vector
 		///							Base Functions							////
 		////////////////////////////////////////////////////////////////////////
 
-		vector();
 		~vector();
 
 		explicit vector(const allocator_type& alloc = allocator_type());																			// Default Constructor
-		explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());							// Fill Constructor
+//		explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());							// Fill Constructor
 //		template <class InputIterator>		vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());		// Range Constructor
-		vector(const vector& x);																													// Copy Constructor
+//		vector(const vector& x);																													// Copy Constructor
 
-		vector&	operator = (const vector& x);
+//		vector&	operator = (const vector& x);
 
 		////////////////////////////////////////////////////////////////////////
 		///							Capacity Functions						////
@@ -84,11 +84,16 @@ class vector
 		pointer			data(void);												// Return a pointer to the underlying element storage of the vector
 		const_pointer	data(void) const;										// Return a const pointer to the underlying element storage of the vector
 
+
 	private :
 
 		allocator_type	_alloc;
 		pointer			_pointer;
+
+#		include "vector_base.hpp"
+
 };
+	
 
 }
 #endif
