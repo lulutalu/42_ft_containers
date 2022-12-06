@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/05 19:06:38 by lduboulo         ###   ########.fr       */
+/*   Updated: 2022/12/06 11:36:49 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,12 @@ class vector
 		////////////////////////////////////////////////////////////////////////
 		///							Member Functions						////
 		////////////////////////////////////////////////////////////////////////
-
+	
 		vector();
-		explicit vector(const // WIP
+		explicit vector(const allocator_type& alloc = allocator_type());																			// Default Constructor
+		explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());							// Fill Constructor
+//		template <class InputIterator>		vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());		// Range Constructor
+		vector(const vector& x);																													// Copy Constructor
 };
 
 #endif
