@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/06 13:19:02 by lduboulo         ###   ########.fr       */
+/*   Updated: 2022/12/06 13:24:30 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ class vector
 		///							Capacity Functions						////
 		////////////////////////////////////////////////////////////////////////
 
-		size_type	size() const;
-		size_type	max_size() const;
-		void		resize(size_type n, value_type val = value_type());
-		size_type	capacity() const;
-		bool		empty() const;
-		void		reserve(size_type n);
+		size_type	size() const;												// Return number of element inside the vector
+		size_type	max_size() const;											// Return maximum size possible of vector define by the system or some library
+		void		resize(size_type n, value_type val = value_type());			// Resize the container so it contains n elements
+		size_type	capacity() const;											// Return the maximum number of element storeable inside the vector
+		bool		empty() const;												// Check whether or not the vector contains 0 element
+		void		reserve(size_type n);										// Request that the capacity of the vector should at least be of n element
 };
 
 }
