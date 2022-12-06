@@ -6,8 +6,16 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/05 16:42:35 by lduboulo         ###   ########.fr       */
+/*   Updated: 2022/12/06 11:49:46 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <vector>
+#include <iostream>
 
+namespace ft = std;
+
+int	main(void)
+{
+	ft::vector<int>	test;
+}
