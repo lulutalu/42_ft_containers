@@ -6,7 +6,7 @@
 #    By: lduboulo <marvin@42lausanne.ch>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/27 18:29:51 by lduboulo          #+#    #+#              #
-#    Updated: 2022/11/11 16:29:30 by lduboulo         ###   ########.fr        #
+#    Updated: 2022/12/06 15:55:21 by lduboulo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ AR				= ar rcs
 MKDIR			= mkdir
 RM				= rm -rf
 
-CXXFLAGS		= -Wall -Wextra -Werror -Wshadow -std=c++98 -pedantic
+CXXFLAGS		= -Wall -Wextra -Werror -Wshadow -g3 -std=c++98 -pedantic
 
 TSEP			= ${SEP}=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=${RESET}
 

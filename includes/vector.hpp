@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/06 14:20:18 by lduboulo         ###   ########.fr       */
+/*   Updated: 2022/12/06 16:45:05 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ namespace ft {
 template <class T, class Alloc = std::allocator<T>>
 class vector
 {
-	private :
-
 	public :
 
 		////////////////////////////////////////////////////////////////////////
@@ -86,6 +84,10 @@ class vector
 		pointer			data(void);												// Return a pointer to the underlying element storage of the vector
 		const_pointer	data(void) const;										// Return a const pointer to the underlying element storage of the vector
 
+	private :
+
+		allocator_type	_alloc;
+		pointer			_pointer;
 };
 
 }
