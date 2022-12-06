@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/06 13:24:30 by lduboulo         ###   ########.fr       */
+/*   Updated: 2022/12/06 14:20:18 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,22 @@ class vector
 		size_type	capacity() const;											// Return the maximum number of element storeable inside the vector
 		bool		empty() const;												// Check whether or not the vector contains 0 element
 		void		reserve(size_type n);										// Request that the capacity of the vector should at least be of n element
+		
+		////////////////////////////////////////////////////////////////////////
+		///							Element access							////
+		////////////////////////////////////////////////////////////////////////
+
+		reference 		operator [] (size_type n);								// Return a reference to the element at position n
+		const_reference	operator [] (size_type n) const;						// Return a const reference to the element at position n
+		reference		at(size_type n);										// Return a reference to the element at position n with out-of-bounds checking
+		const_reference	at(size_type n) const;									// Return a const reference to the element at postion n with out-of-bounds checking
+		reference		front(void);											// Return a reference to the first element of the vector
+		const_reference	front(void) const;										// Return a const reference to the first element of the vector
+		reference		back(void);												// Return a reference to the last element of the vector
+		const_reference back(void) const;										// Return a const reference to the last element of the vector
+		pointer			data(void);												// Return a pointer to the underlying element storage of the vector
+		const_pointer	data(void) const;										// Return a const pointer to the underlying element storage of the vector
+
 };
 
 }
