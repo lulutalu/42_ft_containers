@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/06 17:32:06 by lduboulo         ###   ########.fr       */
+/*   Updated: 2022/12/09 16:31:12 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define VECTOR_HPP
 
 # include <memory>
+# include <iostream>
 # include <cstdio>
 
 namespace ft {
@@ -31,7 +32,7 @@ class vector
 		////////////////////////////////////////////////////////////////////////
 
 		typedef	T								value_type;
-		typedef	std::allocator<value_type>		allocator_type;
+		typedef	Alloc							allocator_type;
 
 		typedef value_type&						reference;
 		typedef value_type*						pointer;
@@ -48,15 +49,16 @@ class vector
 		////////////////////////////////////////////////////////////////////////
 		///							Base Functions							////
 		////////////////////////////////////////////////////////////////////////
-
-		~vector();
+/*
 
 		explicit vector(const allocator_type& alloc = allocator_type());																			// Default Constructor
-//		explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());							// Fill Constructor
-//		template <class InputIterator>		vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());		// Range Constructor
-//		vector(const vector& x);																													// Copy Constructor
+		explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());							// Fill Constructor
+		template <class InputIterator>		vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());		// Range Constructor
+		vector(const vector& x);																													// Copy Constructor
 
-//		vector&	operator = (const vector& x);
+		vector&	operator = (const vector& x);
+
+		~vector();
 
 		////////////////////////////////////////////////////////////////////////
 		///							Capacity Functions						////
@@ -83,15 +85,31 @@ class vector
 		const_reference back(void) const;										// Return a const reference to the last element of the vector
 		pointer			data(void);												// Return a pointer to the underlying element storage of the vector
 		const_pointer	data(void) const;										// Return a const pointer to the underlying element storage of the vector
-
-
-	private :
+*/
+    private :
 
 		allocator_type	_alloc;
 		pointer			_pointer;
+		size_type		_size;
+		size_type		_capacity;
 
-#		include "vector_base.hpp"
+    public :
 
+		explicit vector (const allocator_type& alloc = allocator_type()) :
+				_alloc(alloc), _pointer(NULL), _size(0), _capacity(0) {}
+
+		explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) :
+				_alloc(alloc), _pointer(NULL), _size(n), _capacity(n)
+		{
+				try {
+						_pointer = _alloc.allocate(n);
+				}
+				catch (std::bad_alloc& e) {
+						std::cout << e.what() << std::endl;
+				}
+				for (size_type i = 0; i < _size; i++)
+						_alloc.construct(_pointer + i, val);
+		}
 };
 	
 

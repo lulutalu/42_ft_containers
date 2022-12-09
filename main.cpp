@@ -6,17 +6,24 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/06 17:30:11 by lduboulo         ###   ########.fr       */
+/*   Updated: 2022/12/09 16:31:29 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <memory>
 #include <iostream>
-#include "includes/vector.hpp"
+#include <vector>
 
 int	main(void)
 {
-	int						*ptr;
+		std::vector<int>	vec(130);
+
+		std::cout << vec.capacity() << std::endl;
+		for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+				std::cout << *it << std::endl;
+		return (0);
+
+/*	int						*ptr;
 	std::allocator<int>		alloc;
 	int						i = -1;
 	int						N = 10;
@@ -32,5 +39,5 @@ int	main(void)
 	i = -1;
 	while (++i < N)
 		alloc.destroy(ptr + i);
-	alloc.deallocate(ptr, N);
+	alloc.deallocate(ptr, N);*/
 }
