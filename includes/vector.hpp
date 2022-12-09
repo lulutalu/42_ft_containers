@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/09 16:31:12 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/09 16:57:49 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,33 @@ class vector
 				for (size_type i = 0; i < _size; i++)
 						_alloc.construct(_pointer + i, val);
 		}
+
+		//template <class InputIterator>
+		//vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) WIP
+
+		vector(const vector& x) : _alloc(x._alloc), _pointer(NULL), _size(x._size), _capacity(x._capacity) {
+				*this = x;
+		}
+
+/*		vector	&operator = (const vector& x) {
+				if (&x == this)
+						return (*this);
+				try {
+						_pointer = _alloc.allocate(_size);
+				}
+				catch (std::bad_alloc& e) {
+						std::cout << e.what() << std::endl;
+				}
+				for (size_type i = 0; i < _size; i++)
+						_alloc.construct(_pointer + i, x._pointer + i)
+		}*/// WIP
+
+		~vector(void) {
+				for (size_type i = 0; i < _size; i++)
+						_alloc.destroy(_pointer + i);
+				_alloc.deallocate(_pointer, _capacity);
+		}
+
 };
 	
 
