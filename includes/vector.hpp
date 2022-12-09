@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/09 16:57:49 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/09 20:15:05 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,33 @@ class vector
 				_alloc.deallocate(_pointer, _capacity);
 		}
 
+		////////////////////////////////////////////////////////////////////////
+		///							Capacity Functions						////
+		////////////////////////////////////////////////////////////////////////
+
+		size_type	size() const {
+				return (this->_size);
+		}
+
+		size_type	max_size() const {
+				return (this->_alloc.max_size());
+		}
+
+		void		resize(size_type n, value_type val = value_type()) {			// Resize the container so it contains n elements WIP
+				if (n > this->_capacity) {
+						for (size_type i = 0; i < this->_size; i++)
+								this->_alloc.destroy(_pointer + i);
+						this->_alloc.deallocate(_pointer, _capacity);
+						try {
+								_alloc.allocate(_capacity * 2);
+						}
+						catch (std::bad_alloc& e) {
+								std::cout << e.what() << std::endl;
+						}
+						for (size_type i = 0; i < n; i++)
+								_alloc.construct(_pointer + i, val);
+				}
+		}
 };
 	
 
