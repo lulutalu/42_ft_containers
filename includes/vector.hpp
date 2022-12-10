@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/09 20:15:05 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/10 17:05:27 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,19 +149,48 @@ class vector
 				return (this->_alloc.max_size());
 		}
 
-		void		resize(size_type n, value_type val = value_type()) {			// Resize the container so it contains n elements WIP
-				if (n > this->_capacity) {
-						for (size_type i = 0; i < this->_size; i++)
-								this->_alloc.destroy(_pointer + i);
-						this->_alloc.deallocate(_pointer, _capacity);
+		// Resize the container so it contains n elements
+		// If n for resize is bigger than the actual capacity, declare another pointer with enough space (old_capacity * 2)
+		// Copy the values of old pointer inside and destroy the old pointer.
+		//
+		// Later on, the function clear could be used
+
+		void		resize(size_type n, value_type val = value_type()) {
+				if (n > _capacity) {
+						pointer	newPointer;
+
 						try {
-								_alloc.allocate(_capacity * 2);
+								if (n <= _capacity * 2)
+										newPointer = _alloc.allocate(_capacity * 2);
+								else
+										newPointer = _alloc.allocate(n);
 						}
 						catch (std::bad_alloc& e) {
 								std::cout << e.what() << std::endl;
 						}
-						for (size_type i = 0; i < n; i++)
+						for (size_type i = 0; i < _size; i++)
+								_alloc.construct(newPointer + i, _pointer + i);
+						for (size_type i = _size; i < n; i++)
+								_alloc.construct(newPointer + i, val);
+						for (size_type i = 0; i < _size; i++)
+								_alloc.destroy(_pointer + i);
+						_alloc.deallocate(_pointer, _capacity);
+						_pointer = newPointer;
+						_size = n;
+						if (n <= _capacity * 2)
+								_capacity *= 2;
+						else
+								_capacity = n;
+				}
+				else if (n < _size) {
+						for (size_type i = n; i < _size; i++)
+								_alloc.destroy(_pointer + i);
+						_size = n;
+				}
+				else if (n > _size && n <= _capacity) {
+						for (size_type i = _size; i < n; i++)
 								_alloc.construct(_pointer + i, val);
+						_size = n;
 				}
 		}
 };

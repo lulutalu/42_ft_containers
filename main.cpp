@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/09 20:10:19 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/10 16:58:01 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(void)
 		std::vector<int>	vec(130);
 
 		std::cout << vec.capacity() << std::endl;
-		vec.resize(131);
+		vec.resize(300);
 		std::cout << vec.capacity() << std::endl;
 		return (0);
 
