@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/10 17:05:27 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/10 17:22:23 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <memory>
 # include <iostream>
 # include <cstdio>
+# include <stdexcept>
 
 namespace ft {
 
@@ -156,6 +157,8 @@ class vector
 		// Later on, the function clear could be used
 
 		void		resize(size_type n, value_type val = value_type()) {
+				if (n > this->max_size())
+						throw (std::length_error("Size requested is too big\n"));
 				if (n > _capacity) {
 						pointer	newPointer;
 
@@ -193,6 +196,39 @@ class vector
 						_size = n;
 				}
 		}
+
+		size_type	capacity() const {
+				return (this->_capacity);
+		}
+
+		bool		empty() const {
+				if (_size == 0)
+						return (true);
+				return (false);
+		}
+
+		void		reserve(size_type n) {
+				if (n > this->max_size())
+						throw (std::length_error("Requested size is too big\n"));
+				else if (n > _capacity) {
+						pointer	newPointer;
+
+						try {
+								newPointer = _alloc.allocate(n);
+						}
+						catch (std::bad_alloc& e) {
+								std::cout << e.what() << std::endl;
+						}
+						for (size_type i = 0; i < _size; i++)
+								_alloc.construct(newPointer + i, _pointer + i);
+						for (size_type i = 0; i < _size; i++)
+								_alloc.destroy(_pointer + i);
+						_alloc.deallocate(_pointer, _capacity);
+						_pointer = newPointer;
+						_capacity = n;
+				}
+		}
+
 };
 	
 
