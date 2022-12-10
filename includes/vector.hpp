@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/10 17:23:42 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/10 20:52:37 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ class vector
 								std::cout << e.what() << std::endl;
 						}
 						for (size_type i = 0; i < _size; i++)
-								_alloc.construct(newPointer + i, _pointer + i);
+								_alloc.construct(newPointer + i, *(_pointer + i));
 						for (size_type i = _size; i < n; i++)
 								_alloc.construct(newPointer + i, val);
 						for (size_type i = 0; i < _size; i++)
@@ -220,7 +220,7 @@ class vector
 								std::cout << e.what() << std::endl;
 						}
 						for (size_type i = 0; i < _size; i++)
-								_alloc.construct(newPointer + i, _pointer + i);
+								_alloc.construct(newPointer + i, *(_pointer + i));
 						for (size_type i = 0; i < _size; i++)
 								_alloc.destroy(_pointer + i);
 						_alloc.deallocate(_pointer, _capacity);
@@ -229,8 +229,58 @@ class vector
 				}
 		}
 
-};
-	
+		////////////////////////////////////////////////////////////////////////
+		///							Element access							////
+		////////////////////////////////////////////////////////////////////////
 
-}
+		reference 		operator [] (size_type n) {
+				return (this->_pointer[n]);
+		}
+
+		const_reference	operator [] (size_type n) const {
+				return (this->_pointer[n]);
+		}
+
+		reference		at(size_type n) {
+				if (n >= _size)
+						throw (std::out_of_range("Requested position out of range\n"));
+				else
+						return (this->_pointer[n]);
+		}
+
+		const_reference	at(size_type n) const {
+				if (n >= _size)
+						throw (std::out_of_range("Requested position out of range\n"));
+				else
+						return (this->_pointer[n]);
+		}
+
+		reference		front(void) {
+				return (this->_pointer[0]);
+		}
+
+		const_reference	front(void) const {
+				return (this->_pointer[0]);
+		}
+
+		reference		back(void) {
+				return (this->_pointer[this->_size - 1]);
+		}
+
+		const_reference	back(void) const {
+				return (this->_pointer[this->_size - 1]);
+		}
+
+		pointer			data(void) {
+				return (this->_pointer);
+		}
+
+		const_pointer	data(void) const {
+				return (this->_pointer);
+		}
+
+}; // End of Vector Class
+
+} // End of ft namespace
+
 #endif

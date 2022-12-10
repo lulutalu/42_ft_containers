@@ -6,18 +6,30 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/10 17:16:59 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/10 20:50:15 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <memory>
-#include <iostream>
-#include <vector>
+#if 1
+
+# include <memory>
+# include <iostream>
+# include <vector>
+
+namespace ft = std;
+
+# else
+
+# include "includes/vector.hpp"
+
+#endif
 
 int	main(void)
 {
-		std::vector<int>	vec(130);
+		ft::vector<int>	vec(130, 5);
 
+		std::cout << vec.back() << std::endl;
+		std::cout << vec[130] << std::endl;
 		std::cout << vec.capacity() << std::endl;
 		vec.reserve(200);
 		std::cout << vec.capacity() << std::endl;
