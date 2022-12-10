@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/10 17:22:23 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/10 17:23:42 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ class vector
 
 		void		reserve(size_type n) {
 				if (n > this->max_size())
-						throw (std::length_error("Requested size is too big\n"));
+						throw (std::length_error("Size requested is too big\n"));
 				else if (n > _capacity) {
 						pointer	newPointer;
 
