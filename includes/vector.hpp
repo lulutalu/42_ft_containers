@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/10 20:52:37 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/14 17:40:31 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,10 @@ class vector
 		size_type		_capacity;
 
     public :
+
+		////////////////////////////////////////////////////////////////////////
+		///							Base Functions							////
+		////////////////////////////////////////////////////////////////////////
 
 		explicit vector (const allocator_type& alloc = allocator_type()) :
 				_alloc(alloc), _pointer(NULL), _size(0), _capacity(0) {}
