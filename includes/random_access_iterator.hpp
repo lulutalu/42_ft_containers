@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 14:29:26 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/16 16:24:01 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/19 15:45:14 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,17 @@ class random_access_iterator : public ft::iterator<ft::random_access_iterator_ta
 				~random_access_iterator(void);											// Destructor
 
 
-				bool	operator == (const random_access_iterator& rhs);
-				bool	operator != (const random_access_iterator& rhs);
+				bool	operator == (const random_access_iterator& rhs);				// Equal comparison
+				bool	operator != (const random_access_iterator& rhs);				// Not Equal Comparison
 
-				reference	operator * (void) const;
-				pointer		operator -> (void) const;
+				reference	operator * (void) const;									// Dereference rvalue
+				pointer		operator -> (void) const;									// Dereference rvalue
 
-				random_access_iterator	&operator ++ (void);
-				random_access_iterator	operator ++ (int);
+				random_access_iterator	&operator ++ (void);							// Pre-Increment
+				random_access_iterator	operator ++ (int);								// Post-Increment
 
-				random_access_iterator	&operator -- (void);
-				random_access_iterator	operator -- (int);
+				random_access_iterator	&operator -- (void);							// Pre-Decrement
+				random_access_iterator	operator -- (int);								// Post-Decrement
 
 }; // random access iterator class
 
