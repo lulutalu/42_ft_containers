@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 14:29:26 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/19 16:43:46 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:47:57 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ class random_access_iterator : public ft::iterator<ft::random_access_iterator_ta
 				typedef typename ft::iterator<ft::random_access_iterator_tag, T>::reference				reference;
 				typedef typename ft::iterator<ft::random_access_iterator_tag, T>::iterator_category		iterator_category;
 
+		private :
+
+				pointer		_ptr;
 
 /*				random_access_iterator(void);											// Default constructor
 				random_access_iterator(const random_access_iterator& x);				// Copy Constructor
