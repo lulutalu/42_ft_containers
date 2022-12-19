@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/19 15:57:24 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:23:25 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ int	main(void)
 {
 		ft::vector<int>	vec(130, 5);
 		ft::vector<int>::iterator	it;
+		ft::vector<int>::iterator	it2;
+		ft::vector<int>::iterator	it3;
 
-		it = vec.begin();
-		it = it + 2;
-		if (it == vec.begin())
+		it = vec.begin() + 5;
+		it2 = it - 5;
+		if (it2 == vec.begin() + 5)
 				std::cout << "Equal" << std::endl;
-		else
-				std::cout << "Not Equal" << std::endl;
 		return (0);
 
 /*	int						*ptr;
