@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/10 20:50:15 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/19 15:57:24 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <memory>
 # include <iostream>
 # include <vector>
+# include <iterator>
 
 namespace ft = std;
 
@@ -27,12 +28,14 @@ namespace ft = std;
 int	main(void)
 {
 		ft::vector<int>	vec(130, 5);
+		ft::vector<int>::iterator	it;
 
-		std::cout << vec.back() << std::endl;
-		std::cout << vec[130] << std::endl;
-		std::cout << vec.capacity() << std::endl;
-		vec.reserve(200);
-		std::cout << vec.capacity() << std::endl;
+		it = vec.begin();
+		it = it + 2;
+		if (it == vec.begin())
+				std::cout << "Equal" << std::endl;
+		else
+				std::cout << "Not Equal" << std::endl;
 		return (0);
 
 /*	int						*ptr;

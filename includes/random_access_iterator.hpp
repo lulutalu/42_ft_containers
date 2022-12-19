@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 14:29:26 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/19 15:45:14 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:02:20 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ class random_access_iterator : public ft::iterator<ft::random_access_iterator_ta
 
 				random_access_iterator	&operator -- (void);							// Pre-Decrement
 				random_access_iterator	operator -- (int);								// Post-Decrement
+
+				random_access_iterator	operator + (difference_type n) const;			// Return an iterator to actual iterator + n
+				random_access_iterator	operator - (difference_type n) const;			// Return an iterator to actual iterator - n
 
 }; // random access iterator class
 
