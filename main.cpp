@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/19 16:23:25 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/19 20:30:47 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,15 @@ namespace ft = std;
 
 int	main(void)
 {
-		ft::vector<int>	vec(130, 5);
+		ft::vector<int>	vec;
 		ft::vector<int>::iterator	it;
-		ft::vector<int>::iterator	it2;
-		ft::vector<int>::iterator	it3;
 
-		it = vec.begin() + 5;
-		it2 = it - 5;
-		if (it2 == vec.begin() + 5)
-				std::cout << "Equal" << std::endl;
+		vec.push_back(1);
+		vec.push_back(2);
+		it = vec.begin();
+		std::cout << it[0] << std::endl;
+		std::cout << it[1] << std::endl;
+		std::cout << it[2] << std::endl;
 		return (0);
 
 /*	int						*ptr;
