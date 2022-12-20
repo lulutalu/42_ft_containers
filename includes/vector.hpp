@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/14 17:40:31 by lduboulo         ###   ########.fr       */
+/*   Updated: 2022/12/20 15:30:14 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <iostream>
 # include <cstdio>
 # include <stdexcept>
+
+# include "random_access_iterator.hpp"
 
 namespace ft {
 
@@ -32,16 +34,19 @@ class vector
 		////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////
 
-		typedef	T								value_type;
-		typedef	Alloc							allocator_type;
+		typedef	T									value_type;
+		typedef	Alloc								allocator_type;
 
-		typedef value_type&						reference;
-		typedef value_type*						pointer;
-		typedef const value_type&				const_reference;
-		typedef const value_type*				const_pointer;
+		typedef value_type&							reference;
+		typedef value_type*							pointer;
+		typedef const value_type&					const_reference;
+		typedef const value_type*					const_pointer;
 
-		typedef std::size_t						size_type;
-		typedef std::ptrdiff_t					difference_type;
+		typedef ft::random_access_iterator<T>		iterator;
+		typedef ft::random_access_iterator<const T>	const_iterator;
+
+		typedef std::size_t							size_type;
+		typedef std::ptrdiff_t						difference_type;
 
 		////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////
@@ -86,7 +91,20 @@ class vector
 		const_reference back(void) const;										// Return a const reference to the last element of the vector
 		pointer			data(void);												// Return a pointer to the underlying element storage of the vector
 		const_pointer	data(void) const;										// Return a const pointer to the underlying element storage of the vector
+
+
+		////////////////////////////////////////////////////////////////////////
+		///							Iterators								////
+		////////////////////////////////////////////////////////////////////////
+
+		iterator		begin();												// Return an iterator pointing to the first element of the container
+		const_iterator	begin() const;											// Return an const iterator pointing to the first element of the container
+		iterator		end();													// Return an iterator pointing to the past-the-end element of the container
+		const_iterator	end() const;											// Return an const iterator pointing to the past-the-end element of the container
+
+		// Missing reverse_iterator functions /!\
 */
+
     private :
 
 		allocator_type	_alloc;
@@ -281,6 +299,30 @@ class vector
 
 		const_pointer	data(void) const {
 				return (this->_pointer);
+		}
+
+		////////////////////////////////////////////////////////////////////////
+		///							Iterators								////
+		////////////////////////////////////////////////////////////////////////
+
+		iterator		begin(void) {
+			return (iterator(this->_pointer));
+		}
+
+		const_iterator	begin(void) const {
+			return (const_iterator(this->_pointer));
+		}
+
+		iterator		end(void) {
+			if (this->_size == 0)
+				return (this->begin());
+			return (iterator(this->_pointer + this->_size + 1));
+		}
+
+		const_iterator	end(void) const {
+			if (this->_size == 0)
+				return (this->begin());
+			return (const_iterator(this->_pointer + this->_size + 1));
 		}
 
 }; // End of Vector Class

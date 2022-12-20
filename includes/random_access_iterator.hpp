@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 14:29:26 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/19 20:32:38 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/20 15:04:43 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class random_access_iterator : public ft::iterator<ft::random_access_iterator_ta
 
 /*				random_access_iterator(void);											// Default constructor
 				random_access_iterator(const random_access_iterator& x);				// Copy Constructor
+				random_access_iterator(pointer _newPtr);								// Constructor with pointer argument
 
 				random_access_iterator& operator = (const random_access_iterator& x); 	// Operator Overload
 
@@ -74,6 +75,8 @@ class random_access_iterator : public ft::iterator<ft::random_access_iterator_ta
 				random_access_iterator(void) : _ptr(NULL) {}
 
 				random_access_iterator(const random_access_iterator& x) : _ptr(x._ptr) {}
+
+				random_access_iterator(pointer _newPtr) : _ptr(_newPtr) {}
 
 				random_access_iterator&		operator = (const random_access_iterator& x) {
 						if (&x == this)
