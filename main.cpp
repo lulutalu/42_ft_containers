@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/19 20:30:47 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/21 17:11:15 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@ int	main(void)
 		vec.push_back(1);
 		vec.push_back(2);
 		it = vec.begin();
+		std::cout << vec.capacity() << std::endl;
+		vec.assign(2, 10);
+		std::cout << vec.capacity() << std::endl;
 		std::cout << it[0] << std::endl;
 		std::cout << it[1] << std::endl;
 		std::cout << it[2] << std::endl;

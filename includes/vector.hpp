@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/20 15:32:27 by lduboulo         ###   ########.fr       */
+/*   Updated: 2022/12/21 18:50:05 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,13 +103,30 @@ class vector
 		const_iterator	end() const;											// Return an const iterator pointing to the past-the-end element of the container
 
 		// Missing reverse_iterator functions /!\
-*/
 
 		////////////////////////////////////////////////////////////////////////
 		///							Modifiers Functions						////
 		////////////////////////////////////////////////////////////////////////
 
-		
+		template <class InputIterator>
+		void	assign(InputIterator first, InputIterator last);				// Assign new content to vector by replacing the current content with two iterators
+		void	assign(size_type n, const value_type& val);						// Assign n time val content to vector by replacing the current content
+
+		void	push_back(const value_type& val);								// Add new element after current last element of vector (might cause re-allocation)
+		void	pop_back(void);													// Remove the last element of the vector
+
+		iterator	insert(iterator position, const value_type& val);			// Insert an element of val before the position pointed by the iterator (might cause re-alloc)
+		void		insert(iterator position, size_type n, const value_type& val); 	// Insert n element of val before the position pointer by the iterator (might cause re-alloc)
+		template <class InputIterator>												// Insert from first to last w/o last before position (might cause re-alloc)
+		void		insert(iterator position, InputIterator first, InputIterator last);
+
+		iterator	erase(iterator position);									// Remove the element at position. Return an iterator atthe new location of the next element (previous erase)
+		iterator	erase(iterator first, iterator last);						// Remove the range of element between first and last including first.
+
+		void		swap(vector& x);											// Exchange the content of both vectors. (this vector -> x and x -> this)
+
+		void		clear(void);												// Remove all elements and destoying them
+*/
 
     private :
 
