@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/21 18:50:05 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/23 19:07:56 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -346,6 +346,108 @@ class vector
 			if (this->_size == 0)
 				return (this->begin());
 			return (const_iterator(this->_pointer + this->_size + 1));
+		}
+
+		////////////////////////////////////////////////////////////////////////
+		///							Modifiers Functions						////
+		////////////////////////////////////////////////////////////////////////
+
+		void	assign(size_type n, const value_type& val) {
+				if (n > _capacity) {
+						pointer	newPointer;
+						try {
+								newPointer = _alloc.allocate(n);
+						}
+						catch (std::bad_alloc& e) {
+								std::cout << e.what() << std::endl;
+						}
+						for (size_type i = 0; i < _size; i++)
+								_alloc.destroy(_pointer + i);
+						_alloc.deallocate(_pointer, _capacity);
+						for (size_type i = 0; i < n; i++)
+								_alloc.construct(newPointer + i, val);
+						_pointer = newPointer;
+						_size = n;
+						_capacity = n;
+				}
+				else {
+						for (size_type i = 0; i < _size; i++)
+								_alloc.destroy(_pointer + i);
+						for (size_type i = 0; i < n; i++)
+								_alloc.construct(_pointer + i, val);
+						_size = n;
+				}
+		}
+
+		template <class InputIterator>
+		void	assign(InputIterator first, InputIterator last) {
+				InputIterator	tmp;
+				size_type		n = 0;
+
+				for (tmp = first; tmp != last; tmp++)
+						n++;
+				if (n > _capacity) {
+						pointer	newPointer;
+						try {
+								newPointer = _alloc.allocate(n);
+						}
+						catch (std::bad_alloc& e) {
+								std::cout << e.what() << std::endl;
+						}
+						for (size_type i = 0; i < _size; i++)
+								_alloc.destroy(_pointer + i);
+						_alloc.deallocate(_pointer, _capacity);
+						for (size_type i = 0; i < n; i++)
+								_alloc.construct(newPointer + i, *first++);
+						_pointer = newPointer;
+						_size = n;
+						_capacity = n;
+				}
+				else {
+						for (size_type i = 0; i < _size; i++)
+								_alloc.destroy(_pointer + i);
+						for (size_type i = 0; i < n; i++)
+								_alloc.construct(_pointer + i, *first++);
+						_size = n;
+				}
+
+		}
+
+		void	push_back(const value_type& val) {
+				if (this->_size + 1 > this->_capacity) {
+						pointer	newPointer;
+						try {
+								newPointer = _alloc.allocate(this->_capacity * 2);
+						}
+						catch (std::bad_alloc& e) {
+								std::cout << e.what() << std::endl;
+						}
+						for (size_type i = 0; i < this->_size; i++)
+								_alloc.construct(newPointer + i, this->_pointer + i);
+						_alloc.construct(newPointer + this->_size + 1, val);
+						for (size_type i = 0; i < this->_size; i++)
+								_alloc.destroy(this->_pointer + i);
+						_alloc.deallocate(this->_pointer, this->_capacity);
+						this->_pointer = newPointer;
+						this->_capacity *= 2;
+				}
+				else
+						_alloc.construct(this->_pointer + this->_size + 1, val);
+				this->_size += 1;
+		}
+
+		void	pop_back(void) {
+				_alloc.destroy(this->_pointer + this->_size);
+				this->_size -= 1;
+		}
+
+		iterator	insert(iterator position, const value_type& val) { // Might cause re-alloc WIP
+				iterator	it;
+				size_type	dist = 0;
+
+				for (it = this->begin(); it != position; it++)
+						dist++;
+				_alloc.construct(this->_pointer + dist - 1, val);
 		}
 
 }; // End of Vector Class
