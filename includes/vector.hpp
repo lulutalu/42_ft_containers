@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/26 17:22:44 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/26 17:52:45 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,19 @@ class vector
 		////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////
 
-		typedef	T									value_type;
-		typedef	Alloc								allocator_type;
+		typedef	T												value_type;
+		typedef	Alloc											allocator_type;
 
-		typedef value_type&							reference;
-		typedef value_type*							pointer;
-		typedef const value_type&					const_reference;
-		typedef const value_type*					const_pointer;
+		typedef typename allocator_type::reference				reference;
+		typedef typename allocator_type::pointer				pointer;
+		typedef typename allocator_type::const_reference		const_reference;
+		typedef typename allocator_type::const_pointer			const_pointer;
 
-		typedef ft::random_access_iterator<T>		iterator;
-		typedef ft::random_access_iterator<const T>	const_iterator;
+		typedef ft::random_access_iterator<value_type>			iterator;
+		typedef ft::random_access_iterator<const value_type>	const_iterator;
 
-		typedef std::size_t							size_type;
-		typedef std::ptrdiff_t						difference_type;
+		typedef std::size_t										size_type;
+		typedef std::ptrdiff_t									difference_type;
 
 		////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////
@@ -339,13 +339,13 @@ class vector
 		iterator		end(void) {
 			if (this->_size == 0)
 				return (this->begin());
-			return (iterator(this->_pointer + this->_size + 1));
+			return (iterator(this->_pointer + this->_size));
 		}
 
 		const_iterator	end(void) const {
 			if (this->_size == 0)
 				return (this->begin());
-			return (const_iterator(this->_pointer + this->_size + 1));
+			return (const_iterator(this->_pointer + this->_size));
 		}
 
 		////////////////////////////////////////////////////////////////////////
@@ -464,10 +464,10 @@ class vector
 								std::cout << e.what() << std::endl;
 						}
 						for (size_type i = 0; i < diff; i++)
-								_alloc.construct(newPointer + i, this->_pointer + i);
+								_alloc.construct(newPointer + i, *(this->_pointer + i));
 						_alloc.construct(newPointer + diff, val);
 						for (size_type i = diff + 1; i <= this->_size; i++)
-								_alloc.construct(newPointer + i, this->_pointer + i - 1);
+								_alloc.construct(newPointer + i, *(this->_pointer + i - 1));
 						for (size_type i = 0; i < this->_size; i++)
 								_alloc.destroy(this->_pointer + i);
 						_alloc.deallocate(this->_pointer, this->_capacity);
@@ -490,10 +490,10 @@ class vector
 										std::cout << e.what() << std::endl;
 								}
 								for (size_type i = 0; i < diff; i++)
-										_alloc.construct(newPointer + i, this->_pointer + i);
+										_alloc.construct(newPointer + i, *(this->_pointer + i));
 								_alloc.construct(newPointer + diff, val);
 								for (size_type i = diff + 1; i <= this->_size; i++)
-										_alloc.construct(newPointer + i, this->_pointer + i - 1);
+										_alloc.construct(newPointer + i, *(this->_pointer + i - 1));
 								for (size_type i = 0; i < this->_size; i++)
 										_alloc.destroy(this->_pointer + i);
 								_alloc.deallocate(this->_pointer, this->_capacity);
@@ -503,6 +503,8 @@ class vector
 						}
 				}
 		}
+
+
 
 }; // End of Vector Class
 

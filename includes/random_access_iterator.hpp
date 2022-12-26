@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 14:29:26 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/20 15:04:43 by lduboulo         ###   ########.fr       */
+/*   Updated: 2022/12/26 17:47:32 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ class random_access_iterator : public ft::iterator<ft::random_access_iterator_ta
 				random_access_iterator		operator ++ (int) {
 						random_access_iterator	tmp (*this);
 
-						(*this)++;
+						this->_ptr++;
 						return (tmp);
 				}
 
@@ -125,7 +125,7 @@ class random_access_iterator : public ft::iterator<ft::random_access_iterator_ta
 				random_access_iterator		operator -- (int) {
 						random_access_iterator	tmp(*this);
 
-						(*this)--;
+						this->_ptr--;
 						return (tmp);
 				}
 
