@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/26 17:52:45 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/26 21:10:36 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -423,7 +423,7 @@ class vector
 								std::cout << e.what() << std::endl;
 						}
 						for (size_type i = 0; i < this->_size; i++)
-								_alloc.construct(newPointer + i, this->_pointer + i);
+								_alloc.construct(newPointer + i, *(this->_pointer + i));
 						_alloc.construct(newPointer + this->_size + 1, val);
 						for (size_type i = 0; i < this->_size; i++)
 								_alloc.destroy(this->_pointer + i);
