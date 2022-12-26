@@ -6,11 +6,11 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/26 17:52:22 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/26 21:43:51 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#if 0
+#if 1
 
 # include <memory>
 # include <iostream>
@@ -27,19 +27,19 @@ namespace ft = std;
 
 int	main(void)
 {
-		ft::vector<unsigned int>	vec(5, 10);
-		ft::vector<unsigned int>::iterator	it;
+		ft::vector<int>	vec;
+		ft::vector<int>::iterator	it;
 
+		std::cout << "Capacity : " << vec.capacity() << std::endl;
+		vec.insert(vec.begin(), 10, 5);
+		std::cout << "Capacity : " << vec.capacity() << std::endl;
 		for (it = vec.begin(); it != vec.end(); it++)
 				std::cout << *it << std::endl;
-		std::cout << "Capacity before " << vec.capacity() << std::endl;
-		ft::vector<unsigned int>::iterator	test;
-		test = vec.insert(it - 2, 4);
-		std::cout << "Insert iterator value : " << *test << std::endl;
-		std::cout << "-------------------------------------------" << std::endl;
+		std::cout << "======================================================" << std::endl;
+		vec.insert(vec.end(), 12, 10);
+		std::cout << "Capacity : " << vec.capacity() << std::endl;
 		for (it = vec.begin(); it != vec.end(); it++)
 				std::cout << *it << std::endl;
-		std::cout << "Capacity after " << vec.capacity() << std::endl;
 		return (0);
 
 /*	int						*ptr;

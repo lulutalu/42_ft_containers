@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/26 21:10:36 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/26 21:42:17 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -504,7 +504,52 @@ class vector
 				}
 		}
 
+		void	insert(iterator position, size_type n, const value_type& val) {
+				size_type	pos = 0;
+				pointer		newPointer = NULL;
+				size_type	old_cap = this->_capacity;
 
+				for (iterator it = this->begin(); it != position; it++)
+						pos++;
+
+				if (this->_size + n <= this->_capacity) {
+						try {
+								newPointer = _alloc.allocate(this->_capacity);
+						}
+						catch (std::bad_alloc& e) {
+								std::cout << e.what() << std::endl;
+						}
+				}
+				else if (this->_size + n <= this->_capacity * 2) {
+						try {
+								newPointer = _alloc.allocate(this->_capacity * 2);
+						}
+						catch (std::bad_alloc& e) {
+								std::cout << e.what() << std::endl;
+						}
+						this->_capacity *= 2;
+				}
+				else {
+						try {
+								newPointer = _alloc.allocate(this->_capacity + n);
+						}
+						catch (std::bad_alloc& e) {
+								std::cout << e.what() << std::endl;
+						}
+						this->_capacity += n;
+				}
+				for (size_type i = 0; i < pos; i++)
+						_alloc.construct(newPointer + i, *(this->_pointer + i));
+				for (size_type i = pos; i <= pos + n; i++)
+						_alloc.construct(newPointer + i, val);
+				for (size_type i = pos; i < this->_size; i++)
+						_alloc.construct(newPointer + i + n, *(this->_pointer + i));
+				for (size_type i = 0; i < this->_size; i++)
+						_alloc.destroy(this->_pointer + i);
+				_alloc.deallocate(this->_pointer, old_cap);
+				this->_pointer = newPointer;
+				this->_size += n;
+		}
 
 }; // End of Vector Class
 
