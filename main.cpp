@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/26 21:43:51 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/26 22:04:17 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,16 @@ namespace ft = std;
 
 int	main(void)
 {
-		ft::vector<int>	vec;
+		ft::vector<int>	vec(5, 5);
+		ft::vector<int>	range (10, 1);
 		ft::vector<int>::iterator	it;
 
 		std::cout << "Capacity : " << vec.capacity() << std::endl;
-		vec.insert(vec.begin(), 10, 5);
+		vec.insert(vec.begin() + 2, range.begin(), range.end());
 		std::cout << "Capacity : " << vec.capacity() << std::endl;
 		for (it = vec.begin(); it != vec.end(); it++)
 				std::cout << *it << std::endl;
 		std::cout << "======================================================" << std::endl;
-		vec.insert(vec.end(), 12, 10);
-		std::cout << "Capacity : " << vec.capacity() << std::endl;
-		for (it = vec.begin(); it != vec.end(); it++)
-				std::cout << *it << std::endl;
 		return (0);
 
 /*	int						*ptr;

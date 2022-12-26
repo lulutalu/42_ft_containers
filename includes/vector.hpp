@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/26 21:42:17 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/26 21:58:11 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -544,6 +544,58 @@ class vector
 						_alloc.construct(newPointer + i, val);
 				for (size_type i = pos; i < this->_size; i++)
 						_alloc.construct(newPointer + i + n, *(this->_pointer + i));
+				for (size_type i = 0; i < this->_size; i++)
+						_alloc.destroy(this->_pointer + i);
+				_alloc.deallocate(this->_pointer, old_cap);
+				this->_pointer = newPointer;
+				this->_size += n;
+		}
+
+		template <class InputIterator>
+		void	insert(iterator position, InputIterator first, InputIterator last) {
+				size_type	pos = 0;
+				pointer		newPointer = NULL;
+				size_type	old_cap = this->_capacity;
+				size_type	n = 0;
+
+				for (iterator it = this->begin(); it != position; it++)
+						pos++;
+
+				for (InputIterator it = first; it != last; it++)
+						n++;
+
+				if (this->_size + n <= this->_capacity) {
+						try {
+								newPointer = _alloc.allocate(this->_capacity);
+						}
+						catch (std::bad_alloc& e) {
+								std::cout << e.what() << std::endl;
+						}
+				}
+				else if (this->_size + n <= this->_capacity * 2) {
+						try {
+								newPointer = _alloc.allocate(this->_capacity * 2);
+						}
+						catch (std::bad_alloc& e) {
+								std::cout << e.what() << std::endl;
+						}
+						this->_capacity *= 2;
+				}
+				else {
+						try {
+								newPointer = _alloc.allocate(this->_capacity + n);
+						}
+						catch (std::bad_alloc& e) {
+								std::cout << e.what() << std::endl;
+						}
+						this->_capacity += n;
+				}
+				for (size_type i = 0; i < pos; i++)
+						_alloc.construct(newPointer + i, *(this->_pointer + i));
+				for (size_type i = 0; i < n; i++)
+						_alloc.construct(newPointer + pos + i, *first++);
+				for (size_type i = 0; i < this->_size + pos; i++)
+						_alloc.construct(newPointer + pos + n + i, *(this->_pointer + pos + i));
 				for (size_type i = 0; i < this->_size; i++)
 						_alloc.destroy(this->_pointer + i);
 				_alloc.deallocate(this->_pointer, old_cap);
