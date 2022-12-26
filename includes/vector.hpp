@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/23 19:07:56 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/26 17:22:44 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -441,13 +441,67 @@ class vector
 				this->_size -= 1;
 		}
 
-		iterator	insert(iterator position, const value_type& val) { // Might cause re-alloc WIP
-				iterator	it;
-				size_type	dist = 0;
+		iterator	insert(iterator position, const value_type& val) {
+				size_type	diff = 0;
+				pointer		newPointer;
 
-				for (it = this->begin(); it != position; it++)
-						dist++;
-				_alloc.construct(this->_pointer + dist - 1, val);
+				for (iterator it = this->begin(); it != position; it++)
+						diff++;
+
+				if (this->_size + 1 > this->_capacity) {
+						try {
+								if (this->_capacity == 0) {
+										this->_pointer = _alloc.allocate(1);
+										this->_size = 1;
+										this->_capacity = 1;
+										_alloc.construct(this->_pointer, val);
+										return (this->begin());
+								}
+								else
+										newPointer = _alloc.allocate(this->_capacity * 2);
+						}
+						catch (std::bad_alloc& e) {
+								std::cout << e.what() << std::endl;
+						}
+						for (size_type i = 0; i < diff; i++)
+								_alloc.construct(newPointer + i, this->_pointer + i);
+						_alloc.construct(newPointer + diff, val);
+						for (size_type i = diff + 1; i <= this->_size; i++)
+								_alloc.construct(newPointer + i, this->_pointer + i - 1);
+						for (size_type i = 0; i < this->_size; i++)
+								_alloc.destroy(this->_pointer + i);
+						_alloc.deallocate(this->_pointer, this->_capacity);
+						this->_pointer = newPointer;
+						this->_size += 1;
+						this->_capacity *= 2;
+						return (this->_pointer + diff);
+				}
+				else {
+						if (diff == this->_size) {
+								_alloc.construct(this->_pointer + diff, val);
+								this->_size += 1;
+								return (this->_pointer + diff);
+						}
+						else {
+								try {
+										newPointer = _alloc.allocate(this->_capacity);
+								}
+								catch (std::bad_alloc& e) {
+										std::cout << e.what() << std::endl;
+								}
+								for (size_type i = 0; i < diff; i++)
+										_alloc.construct(newPointer + i, this->_pointer + i);
+								_alloc.construct(newPointer + diff, val);
+								for (size_type i = diff + 1; i <= this->_size; i++)
+										_alloc.construct(newPointer + i, this->_pointer + i - 1);
+								for (size_type i = 0; i < this->_size; i++)
+										_alloc.destroy(this->_pointer + i);
+								_alloc.deallocate(this->_pointer, this->_capacity);
+								this->_pointer = newPointer;
+								this->_size += 1;
+								return (this->_pointer + diff);
+						}
+				}
 		}
 
 }; // End of Vector Class

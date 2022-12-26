@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/23 18:58:22 by lulutalu         ###   ########.fr       */
+/*   Updated: 2022/12/26 16:50:26 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	main(void)
 		for (it = vec.begin(); it != vec.end(); it++)
 				std::cout << *it << std::endl;
 		std::cout << "Capacity before " << vec.capacity() << std::endl;
-		vec.push_back(2);
+		vec.insert(it - 2, 4);
 		std::cout << "-------------------------------------------" << std::endl;
 		for (it = vec.begin(); it != vec.end(); it++)
 				std::cout << *it << std::endl;
