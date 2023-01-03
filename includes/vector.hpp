@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/26 21:58:11 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/03 14:06:30 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,7 +424,7 @@ class vector
 						}
 						for (size_type i = 0; i < this->_size; i++)
 								_alloc.construct(newPointer + i, *(this->_pointer + i));
-						_alloc.construct(newPointer + this->_size + 1, val);
+						_alloc.construct(newPointer + this->_size, val);
 						for (size_type i = 0; i < this->_size; i++)
 								_alloc.destroy(this->_pointer + i);
 						_alloc.deallocate(this->_pointer, this->_capacity);
@@ -432,7 +432,7 @@ class vector
 						this->_capacity *= 2;
 				}
 				else
-						_alloc.construct(this->_pointer + this->_size + 1, val);
+						_alloc.construct(this->_pointer + this->_size, val);
 				this->_size += 1;
 		}
 
@@ -601,6 +601,34 @@ class vector
 				_alloc.deallocate(this->_pointer, old_cap);
 				this->_pointer = newPointer;
 				this->_size += n;
+		}
+
+		iterator	erase(iterator position) {
+			pointer		newPointer = NULL;
+			size_type	pos = 0;
+
+			for (iterator it = this->begin(); it != position; it++)
+				pos++;
+
+			try {
+				newPointer = _alloc.allocate(this->_capacity);
+			}
+			catch (std::bad_alloc& e) {
+				std::cout << e.what() << std::endl;
+			}
+
+			for (size_type i = 0; i < pos; i++)
+				_alloc.construct(newPointer + i, *(this->_pointer + i));
+			for (size_type i = pos + 1; i < this->_size; i++)
+				_alloc.construct(newPointer + i - 1, *(this->_pointer + i));
+
+			for (size_type i = 0; i < this->_size; i++)
+				_alloc.destroy(this->_pointer + i);
+			_alloc.deallocate(this->_pointer, this->_capacity);
+
+			this->_pointer = newPointer;
+			this->_size -= 1;
+			return (this->_pointer + pos);
 		}
 
 }; // End of Vector Class
