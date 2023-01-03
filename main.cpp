@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/03 14:07:13 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/03 14:21:51 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,11 @@ int	main(void)
 		for (it = vec.begin(); it != vec.end(); it++)
 			std::cout << *it << std::endl;
 		std::cout << "======================================================" << std::endl;
-		std::cout << *(vec.erase(vec.begin() + 5)) << std::endl;
+		std::cout << *(vec.erase(vec.begin() + 2, vec.end() - 2)) << std::endl;
 		std::cout << "======================================================" << std::endl;
 		for (it = vec.begin(); it != vec.end(); it++)
 				std::cout << *it << std::endl;
+		std::cout << "Size : " << vec.size() << std::endl;
 		return (0);
 
 /*	int						*ptr;

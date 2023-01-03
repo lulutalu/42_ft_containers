@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/03 14:06:30 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/03 14:19:14 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -629,6 +629,38 @@ class vector
 			this->_pointer = newPointer;
 			this->_size -= 1;
 			return (this->_pointer + pos);
+		}
+
+		iterator	erase(iterator first, iterator last) {
+			pointer		newPointer = NULL;
+			size_type	start = 0;
+			size_type	n = 0;
+
+			for (iterator it = this->begin(); it != first; it++)
+				start++;
+
+			for (iterator it = first; it != last; it++)
+				n++;
+
+			try {
+				newPointer = _alloc.allocate(this->_capacity);
+			}
+			catch (std::bad_alloc& e) {
+				std::cout << e.what() << std::endl;
+			}
+
+			for (size_type i = 0; i < start; i++)
+				_alloc.construct(newPointer + i, *(this->_pointer + i));
+			for (size_type i = start + n; i < this->_size; i++)
+				_alloc.construct(newPointer + i - n, *(this->_pointer + i));
+
+			for (size_type i = 0; i < this->_size; i++)
+				_alloc.destroy(this->_pointer + i);
+			_alloc.deallocate(this->_pointer, this->_capacity);
+
+			this->_pointer = newPointer;
+			this->_size -= n;
+			return (this->_pointer + start);
 		}
 
 }; // End of Vector Class
