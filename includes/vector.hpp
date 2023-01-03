@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/03 16:14:34 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/03 17:19:16 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 # include "random_access_iterator.hpp"
 # include "enable_if.hpp"
+# include "is_integral.hpp"
 
 namespace ft {
 
@@ -390,7 +391,7 @@ class vector
 		}
 
 		template <class InputIterator>
-		void	assign(InputIterator first, InputIterator last) {
+		void	assign(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last) {
 				InputIterator	tmp;
 				size_type		n = 0;
 
