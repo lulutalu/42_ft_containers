@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/03 14:21:51 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/03 14:29:33 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,19 @@ namespace ft = std;
 int	main(void)
 {
 		ft::vector<int>	vec(5, 5);
-//		ft::vector<int>	range (10, 1);
+		ft::vector<int>	range (10, 1);
 		ft::vector<int>::iterator	it;
 
-		std::cout << "Capacity before op : " << vec.capacity() << std::endl;
-		vec.push_back(1);
-		vec.push_back(2);
-		std::cout << "Capacity after op : " << vec.capacity() << std::endl;
+		vec.swap(range);
+
 		for (it = vec.begin(); it != vec.end(); it++)
 			std::cout << *it << std::endl;
-		std::cout << "======================================================" << std::endl;
-		std::cout << *(vec.erase(vec.begin() + 2, vec.end() - 2)) << std::endl;
-		std::cout << "======================================================" << std::endl;
-		for (it = vec.begin(); it != vec.end(); it++)
-				std::cout << *it << std::endl;
-		std::cout << "Size : " << vec.size() << std::endl;
+	
+		std::cout << "============================" << std::endl;
+
+		for (it = range.begin(); it != range.end(); it++)
+			std::cout << *it << std::endl;
+
 		return (0);
 
 /*	int						*ptr;

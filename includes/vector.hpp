@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/03 14:19:14 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/03 14:29:21 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -661,6 +661,25 @@ class vector
 			this->_pointer = newPointer;
 			this->_size -= n;
 			return (this->_pointer + start);
+		}
+
+		void	swap(vector& x) {
+			pointer		tmpPointer;
+			size_type	tmpSize;
+			size_type	tmpCapacity;
+
+			tmpPointer = this->_pointer;
+			tmpSize = this->_size;
+			tmpCapacity = this->_capacity;
+
+			this->_pointer = x._pointer;
+			x._pointer = tmpPointer;
+
+			this->_size = x._size;
+			x._size = tmpSize;
+
+			this->_capacity = x._capacity;
+			x._capacity = tmpCapacity;
 		}
 
 }; // End of Vector Class
