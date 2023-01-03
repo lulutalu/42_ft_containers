@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/03 14:32:24 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/03 14:54:12 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -361,8 +361,7 @@ class vector
 						catch (std::bad_alloc& e) {
 								std::cout << e.what() << std::endl;
 						}
-						for (size_type i = 0; i < _size; i++)
-								_alloc.destroy(_pointer + i);
+						this->clear();
 						_alloc.deallocate(_pointer, _capacity);
 						for (size_type i = 0; i < n; i++)
 								_alloc.construct(newPointer + i, val);
@@ -371,8 +370,7 @@ class vector
 						_capacity = n;
 				}
 				else {
-						for (size_type i = 0; i < _size; i++)
-								_alloc.destroy(_pointer + i);
+					this->clear();
 						for (size_type i = 0; i < n; i++)
 								_alloc.construct(_pointer + i, val);
 						_size = n;
@@ -394,20 +392,22 @@ class vector
 						catch (std::bad_alloc& e) {
 								std::cout << e.what() << std::endl;
 						}
-						for (size_type i = 0; i < _size; i++)
-								_alloc.destroy(_pointer + i);
+						this->clear();
 						_alloc.deallocate(_pointer, _capacity);
-						for (size_type i = 0; i < n; i++)
-								_alloc.construct(newPointer + i, *first++);
+						for (size_type i = 0; i < n; i++) {
+								_alloc.construct(newPointer + i, (*first));
+								first++;
+						}
 						_pointer = newPointer;
 						_size = n;
 						_capacity = n;
 				}
 				else {
-						for (size_type i = 0; i < _size; i++)
-								_alloc.destroy(_pointer + i);
-						for (size_type i = 0; i < n; i++)
-								_alloc.construct(_pointer + i, *first++);
+						this->clear();
+						for (size_type i = 0; i < n; i++) {
+								_alloc.construct(_pointer + i, (*first));
+								first++;
+						}
 						_size = n;
 				}
 

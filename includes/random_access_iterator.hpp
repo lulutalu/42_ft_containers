@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 14:29:26 by lduboulo          #+#    #+#             */
-/*   Updated: 2022/12/26 17:47:32 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/03 15:43:45 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,10 @@ class random_access_iterator : public ft::iterator<ft::random_access_iterator_ta
 
 				reference	operator [] (difference_type n) const {
 						return (this->_ptr + n);
+				}
+
+				operator	random_access_iterator<const value_type> (void) const {
+					return (random_access_iterator<const value_type>(this->_ptr));
 				}
 
 }; // random access iterator class
