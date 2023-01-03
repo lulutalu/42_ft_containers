@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/03 14:54:12 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/03 16:14:34 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdexcept>
 
 # include "random_access_iterator.hpp"
+# include "enable_if.hpp"
 
 namespace ft {
 
@@ -178,9 +179,12 @@ class vector
 		}*/// WIP
 
 		~vector(void) {
-				for (size_type i = 0; i < _size; i++)
-						_alloc.destroy(_pointer + i);
-				_alloc.deallocate(_pointer, _capacity);
+				if (this->_pointer != NULL) {
+						for (size_type i = 0; i < _size; i++)
+								_alloc.destroy(_pointer + i);
+						_alloc.deallocate(_pointer, _capacity);
+						this->_pointer = NULL;
+				}
 		}
 
 		////////////////////////////////////////////////////////////////////////
@@ -204,6 +208,14 @@ class vector
 		void		resize(size_type n, value_type val = value_type()) {
 				if (n > this->max_size())
 						throw (std::length_error("Size requested is too big\n"));
+				else if (n == 0) {
+						for (size_type i = 0; i < this->_size; i++)
+							_alloc.destroy(this->_pointer + i);
+						_alloc.deallocate(this->_pointer, this->_capacity);
+						this->_pointer = NULL;
+						this->_size = 0;
+						this->_capacity = 0;
+				}
 				if (n > _capacity) {
 						pointer	newPointer;
 
