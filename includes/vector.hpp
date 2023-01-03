@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/03 14:29:21 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/03 14:32:24 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -680,6 +680,12 @@ class vector
 
 			this->_capacity = x._capacity;
 			x._capacity = tmpCapacity;
+		}
+
+		void	clear(void) {
+			for (size_type i = 0; i < this->_size; i++)
+				_alloc.destroy(this->_pointer + i);
+			this->_size = 0;
 		}
 
 }; // End of Vector Class
