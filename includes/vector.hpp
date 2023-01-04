@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/03 17:19:16 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/04 19:03:22 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,33 +159,65 @@ class vector
 						_alloc.construct(_pointer + i, val);
 		}
 
-		//template <class InputIterator>
-		//vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) WIP
+		template <class InputIterator>
+		vector(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type& alloc = allocator_type()) 
+																												: _alloc(alloc), _pointer(NULL) {
+				size_type		n = 0;
+				InputIterator	tmp = first;
+
+				for ( ; tmp != last; tmp++)
+						n++;
+
+				this->_size = n;
+				this->_capacity = n;
+
+				try {
+						this->_pointer = _alloc.allocate(this->_capacity);
+				}
+				catch (std::bad_alloc& e) {
+						std::cout << e.what() << std::endl;
+				}
+
+				n = 0;
+				for (tmp = first; tmp != last; tmp++) {
+						_alloc.construct(this->_pointer + n, (*tmp)++);
+						n++;
+				}
+		}
 
 		vector(const vector& x) : _alloc(x._alloc), _pointer(NULL), _size(x._size), _capacity(x._capacity) {
 				*this = x;
 		}
 
-/*		vector	&operator = (const vector& x) {
+		vector	&operator = (const vector& x) {
 				if (&x == this)
 						return (*this);
+
+				if (this->_pointer != NULL) {
+						this->clear();
+						_alloc.deallocate(this->_pointer, this->_capacity);
+				}
+
 				try {
-						_pointer = _alloc.allocate(_size);
+						this->_pointer = _alloc.allocate(x._capacity);
 				}
 				catch (std::bad_alloc& e) {
 						std::cout << e.what() << std::endl;
 				}
-				for (size_type i = 0; i < _size; i++)
-						_alloc.construct(_pointer + i, x._pointer + i)
-		}*/// WIP
+
+				for (size_type i = 0; i < x._size; i++)
+						_alloc.construct(this->_pointer + i, *(x._pointer + i));
+
+				this->_size = x._size;
+				this->_capacity = x._capacity;
+
+				return (*this);
+		}
 
 		~vector(void) {
-				if (this->_pointer != NULL) {
-						for (size_type i = 0; i < _size; i++)
-								_alloc.destroy(_pointer + i);
-						_alloc.deallocate(_pointer, _capacity);
-						this->_pointer = NULL;
-				}
+				this->clear();
+				if (this->_capacity != 0)
+						_alloc.deallocate(this->_pointer, this->_capacity);
 		}
 
 		////////////////////////////////////////////////////////////////////////
@@ -427,26 +459,37 @@ class vector
 		}
 
 		void	push_back(const value_type& val) {
+				size_type	oldSize = this->_size;
+
 				if (this->_size + 1 > this->_capacity) {
 						pointer	newPointer;
+
 						try {
-								newPointer = _alloc.allocate(this->_capacity * 2);
+								if (this->_capacity == 0)
+										newPointer = _alloc.allocate(1);
+								else
+										newPointer = _alloc.allocate(this->_capacity * 2);
 						}
 						catch (std::bad_alloc& e) {
 								std::cout << e.what() << std::endl;
 						}
+
 						for (size_type i = 0; i < this->_size; i++)
 								_alloc.construct(newPointer + i, *(this->_pointer + i));
 						_alloc.construct(newPointer + this->_size, val);
-						for (size_type i = 0; i < this->_size; i++)
-								_alloc.destroy(this->_pointer + i);
+						this->clear();
 						_alloc.deallocate(this->_pointer, this->_capacity);
+
+						if (this->_capacity != 0)
+								this->_capacity *= 2;
+						else
+								this->_capacity += 1;
+
 						this->_pointer = newPointer;
-						this->_capacity *= 2;
 				}
 				else
 						_alloc.construct(this->_pointer + this->_size, val);
-				this->_size += 1;
+				this->_size = oldSize + 1;
 		}
 
 		void	pop_back(void) {
@@ -565,7 +608,7 @@ class vector
 		}
 
 		template <class InputIterator>
-		void	insert(iterator position, InputIterator first, InputIterator last) {
+		void	insert(iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last) {
 				size_type	pos = 0;
 				pointer		newPointer = NULL;
 				size_type	old_cap = this->_capacity;
