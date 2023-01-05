@@ -33,3 +33,7 @@ There are also some miscellaneous C++98 functions to re-implement :
 
 - For all informations about the functionnality and implementation of containers, [cppreference](https://en.cppreference.com/w/) and [cplusplus](https://cplusplus.com/) were very handy
 - For practical example, [geeksforgeeks website](https://www.geeksforgeeks.org) was often used
+
+# Credits
+
+- mli42's [containers tester](https://github.com/mli42/containers_test)
