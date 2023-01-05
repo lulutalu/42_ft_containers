@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/04 19:03:22 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/05 16:13:05 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,18 @@ class vector
 		void		swap(vector& x);											// Exchange the content of both vectors. (this vector -> x and x -> this)
 
 		void		clear(void);												// Remove all elements and destoying them
+
+		////////////////////////////////////////////////////////////////////////
+		///							Relational Operators					////
+		////////////////////////////////////////////////////////////////////////
+
+		template <class T, class Alloc>		bool operator == (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+		template <class T, class Alloc>		bool operator != (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+		template <class T, class Alloc>		bool operator < (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+		template <class T, class Alloc>		bool operator <= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+		template <class T, class Alloc>		bool operator > (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+		template <class T, class Alloc>		bool operator >= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
 */
 
     private :
