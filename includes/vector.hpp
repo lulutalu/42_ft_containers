@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/05 16:13:05 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/05 16:38:10 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include "random_access_iterator.hpp"
 # include "enable_if.hpp"
 # include "is_integral.hpp"
+# include "equal.hpp"
+# include "lexicographical_compare.hpp"
 
 namespace ft {
 
@@ -50,14 +52,21 @@ class vector
 		typedef std::size_t										size_type;
 		typedef std::ptrdiff_t									difference_type;
 
-		////////////////////////////////////////////////////////////////////////
+/*		////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////
 		///							Member Functions						////
 		////////////////////////////////////////////////////////////////////////
+
+		////////////////////////////////////////////////////////////////////////
+		///							Getter Functions						////
+		////////////////////////////////////////////////////////////////////////
+
+		size_type	getSize(void);
+
 		////////////////////////////////////////////////////////////////////////
 		///							Base Functions							////
 		////////////////////////////////////////////////////////////////////////
-/*
+
 
 		explicit vector(const allocator_type& alloc = allocator_type());																			// Default Constructor
 		explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());							// Fill Constructor
@@ -150,6 +159,14 @@ class vector
 		size_type		_capacity;
 
     public :
+
+		////////////////////////////////////////////////////////////////////////
+		///							Getter Functions						////
+		////////////////////////////////////////////////////////////////////////
+
+		size_type	getSize(void) const {
+				return (this->_size);
+		}
 
 		////////////////////////////////////////////////////////////////////////
 		///							Base Functions							////
@@ -757,6 +774,42 @@ class vector
 		}
 
 }; // End of Vector Class
+
+		////////////////////////////////////////////////////////////////////////
+		///							Relational Operators					////
+		////////////////////////////////////////////////////////////////////////
+
+		template <class T, class Alloc>
+		bool	operator == (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs) {
+				if (lhs.getSize() != rhs.getSize())
+						return (false);
+				return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+		}
+
+		template <class T, class Alloc>
+		bool	operator != (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs) {
+				return (!(lhs == rhs));
+		}
+
+		template <class T, class Alloc>
+		bool	operator < (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs) {
+				return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+		}
+
+		template <class T, class Alloc>
+		bool	operator <= (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs) {
+				return (!(rhs < lhs));
+		}
+
+		template <class T, class Alloc>
+		bool	operator > (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs) {
+				return (rhs < lhs);
+		}
+
+		template <class T, class Alloc>
+		bool	operator >= (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs) {
+				return (!(lhs < rhs));
+		}
 
 } // End of ft namespace
 
