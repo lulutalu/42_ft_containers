@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/06 16:39:17 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/06 20:55:58 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@
 # include <stdexcept>
 
 # include "random_access_iterator.hpp"
+# include "reverse_iterator.hpp"
+
 # include "enable_if.hpp"
 # include "is_integral.hpp"
+
 # include "equal.hpp"
 # include "lexicographical_compare.hpp"
 
@@ -48,6 +51,8 @@ class vector
 
 		typedef ft::random_access_iterator<value_type>			iterator;
 		typedef ft::random_access_iterator<const value_type>	const_iterator;
+		typedef ft::reverse_iterator<iterator>					reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 		typedef std::size_t										size_type;
 		typedef std::ptrdiff_t									difference_type;
@@ -108,12 +113,14 @@ class vector
 		///							Iterators Functions						////
 		////////////////////////////////////////////////////////////////////////
 
-		iterator		begin();												// Return an iterator pointing to the first element of the container
-		const_iterator	begin() const;											// Return an const iterator pointing to the first element of the container
-		iterator		end();													// Return an iterator pointing to the past-the-end element of the container
-		const_iterator	end() const;											// Return an const iterator pointing to the past-the-end element of the container
-
-		// Missing reverse_iterator functions /!\
+		iterator				begin();										// Return an iterator pointing to the first element of the container
+		const_iterator			begin() const;									// Return an const iterator pointing to the first element of the container
+		iterator				end();											// Return an iterator pointing to the past-the-end element of the container
+		const_iterator			end() const;									// Return an const iterator pointing to the past-the-end element of the container
+		reverse_iterator		rbegin();										// Return a reverse iterator pointing to the last element of the container
+		const_reverse_iterator	rbegin() const;									// Return a const reverse iterator pointing to the last element of the container
+		reverse_iterator		rend();											// Return a reverse iterator pointing to the theoretical pre-first element of the container
+		const_reverse_iterator	rend() const;									// Return a const reverse iterator pointing to the pre-first element of the container
 
 		////////////////////////////////////////////////////////////////////////
 		///							Modifiers Functions						////
@@ -407,24 +414,40 @@ class vector
 		///							Iterators								////
 		////////////////////////////////////////////////////////////////////////
 
-		iterator		begin(void) {
+		iterator				begin(void) {
 			return (iterator(this->_pointer));
 		}
 
-		const_iterator	begin(void) const {
+		const_iterator			begin(void) const {
 			return (const_iterator(this->_pointer));
 		}
 
-		iterator		end(void) {
+		iterator				end(void) {
 			if (this->_size == 0)
 				return (this->begin());
 			return (iterator(this->_pointer + this->_size));
 		}
 
-		const_iterator	end(void) const {
+		const_iterator			end(void) const {
 			if (this->_size == 0)
 				return (this->begin());
 			return (const_iterator(this->_pointer + this->_size));
+		}
+
+		reverse_iterator		rbegin(void) {
+				return (reverse_iterator(this->_pointer + this->_size - 1));
+		}
+
+		const_reverse_iterator	rbegin(void) const {
+				return (const_reverse_iterator(this->_pointer + this->_size - 1));
+		}
+
+		reverse_iterator		rend(void) {
+				return (reverse_iterator(this->_pointer - 1));
+		}
+
+		const_reverse_iterator	rend(void) const {
+				return (const_reverse_iterator(this->_pointer - 1));
 		}
 
 		////////////////////////////////////////////////////////////////////////

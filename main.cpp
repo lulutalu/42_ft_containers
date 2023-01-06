@@ -6,11 +6,11 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/05 17:55:29 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/06 20:16:11 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#if 0
+#if 1
 
 # include <memory>
 # include <iostream>
@@ -27,11 +27,25 @@ namespace ft = std;
 
 int	main(void)
 {
-		try {
-				ft::vector<int>	v(-1, -1);
-		}
-		catch (std::exception& e) {
-				std::cout << "cc" << std::endl;
-		}
-		return (0);
+		ft::vector<int>						vec;
+
+		for (int i = 0; i < 10; i++)
+				vec.push_back(i);
+
+		ft::vector<int>::iterator			it = vec.begin();
+
+		it++;
+
+		ft::vector<int>::reverse_iterator	rev_it(it);
+
+		std::cout << *it << std::endl;
+		std::cout << *rev_it << std::endl;
+
+		ft::vector<int>::iterator			it2 = rev_it.base();
+
+		std::cout << *it2 << std::endl;
+
+		rev_it = vec.rbegin();
+
+		std::cout << *(rev_it + 3) << std::endl;
 }
