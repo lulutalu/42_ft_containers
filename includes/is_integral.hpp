@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 16:21:59 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/03 17:15:32 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/05 17:33:13 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ struct is_integral : public integral_constant<false, T> {};
  *		- short int
  *		- int
  *		- long int
- *		- long long int
+ *		- long long int (long long is a c++ extension)
  *		- unsigned char
  *		- unsigned short int
  *		- unsigned int
  *		- unsigned long int
- *		- unsigned long long int
+ *		- unsigned long long int (long long is a c++11 extension)
 */
 
 template<> struct is_integral<bool> : public integral_constant<true, bool> {};
@@ -60,7 +60,6 @@ template<> struct is_integral<int> : public integral_constant<true, int> {};
 
 template<> struct is_integral<long int> : public integral_constant<true, long int> {};
 
-template<> struct is_integral<long long int> : public integral_constant<true, long long int> {};
 
 template<> struct is_integral<unsigned char> : public integral_constant<true, unsigned char> {};
 
@@ -69,8 +68,6 @@ template<> struct is_integral<unsigned short int> : public integral_constant<tru
 template<> struct is_integral<unsigned int> : public integral_constant<true, unsigned int> {};
 
 template<> struct is_integral<unsigned long int> : public integral_constant<true, unsigned long int> {};
-
-template<> struct is_integral<unsigned long long int> : public integral_constant<true, unsigned long long int> {};
 
 } // namespace
 

@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/05 16:38:10 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/06 16:39:17 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,10 @@ class vector
 				return (this->_size);
 		}
 
+		size_type	getCapacity(void) const {
+				return (this->_capacity);
+		}
+
 		////////////////////////////////////////////////////////////////////////
 		///							Base Functions							////
 		////////////////////////////////////////////////////////////////////////
@@ -214,7 +218,7 @@ class vector
 				}
 		}
 
-		vector(const vector& x) : _alloc(x._alloc), _pointer(NULL), _size(x._size), _capacity(x._capacity) {
+		vector(const vector& x) : _alloc(x._alloc), _pointer(NULL) {
 				*this = x;
 		}
 
@@ -247,6 +251,7 @@ class vector
 				this->clear();
 				if (this->_capacity != 0)
 						_alloc.deallocate(this->_pointer, this->_capacity);
+				this->_pointer = NULL;
 		}
 
 		////////////////////////////////////////////////////////////////////////
@@ -362,14 +367,14 @@ class vector
 
 		reference		at(size_type n) {
 				if (n >= _size)
-						throw (std::out_of_range("Requested position out of range\n"));
+						throw (std::out_of_range("Requested position out of range"));
 				else
 						return (this->_pointer[n]);
 		}
 
 		const_reference	at(size_type n) const {
 				if (n >= _size)
-						throw (std::out_of_range("Requested position out of range\n"));
+						throw (std::out_of_range("Requested position out of range"));
 				else
 						return (this->_pointer[n]);
 		}
