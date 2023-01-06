@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/06 20:55:58 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/06 21:38:35 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -435,19 +435,19 @@ class vector
 		}
 
 		reverse_iterator		rbegin(void) {
-				return (reverse_iterator(this->_pointer + this->_size - 1));
+				return (reverse_iterator(this->_pointer + this->_size));
 		}
 
 		const_reverse_iterator	rbegin(void) const {
-				return (const_reverse_iterator(this->_pointer + this->_size - 1));
+				return (const_reverse_iterator(this->_pointer + this->_size));
 		}
 
 		reverse_iterator		rend(void) {
-				return (reverse_iterator(this->_pointer - 1));
+				return (reverse_iterator(this->_pointer));
 		}
 
 		const_reverse_iterator	rend(void) const {
-				return (const_reverse_iterator(this->_pointer - 1));
+				return (const_reverse_iterator(this->_pointer));
 		}
 
 		////////////////////////////////////////////////////////////////////////
