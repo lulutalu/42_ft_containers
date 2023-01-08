@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/06 21:38:35 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/08 12:05:02 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,12 @@ class vector
 		template <class T, class Alloc>		bool operator <= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
 		template <class T, class Alloc>		bool operator > (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
 		template <class T, class Alloc>		bool operator >= (const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs);
+
+		////////////////////////////////////////////////////////////////////////
+		///								Allocator							////
+		////////////////////////////////////////////////////////////////////////
+
+		allocator_type		get_allocator(void) const;
 
 */
 
@@ -496,20 +502,16 @@ class vector
 						}
 						this->clear();
 						_alloc.deallocate(_pointer, _capacity);
-						for (size_type i = 0; i < n; i++) {
-								_alloc.construct(newPointer + i, (*first));
-								first++;
-						}
+						for (size_type i = 0; i < n; i++)
+								_alloc.construct(newPointer + i, *(first)++);
 						_pointer = newPointer;
 						_size = n;
 						_capacity = n;
 				}
 				else {
 						this->clear();
-						for (size_type i = 0; i < n; i++) {
-								_alloc.construct(_pointer + i, (*first));
-								first++;
-						}
+						for (size_type i = 0; i < n; i++)
+								_alloc.construct(_pointer + i, *(first)++);
 						_size = n;
 				}
 
@@ -801,6 +803,14 @@ class vector
 			this->_size = 0;
 		}
 
+		////////////////////////////////////////////////////////////////////////
+		///								Allocator							////
+		////////////////////////////////////////////////////////////////////////
+
+		allocator_type		get_allocator(void) const {
+				return (this->_alloc);
+		}
+
 }; // End of Vector Class
 
 		////////////////////////////////////////////////////////////////////////
@@ -837,6 +847,11 @@ class vector
 		template <class T, class Alloc>
 		bool	operator >= (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs) {
 				return (!(lhs < rhs));
+		}
+
+		template <class T, class Alloc>
+		void	swap(vector<T, Alloc>& x, vector<T, Alloc>& y) {
+				x.swap(y);
 		}
 
 } // End of ft namespace
