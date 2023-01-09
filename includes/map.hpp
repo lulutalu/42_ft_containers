@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/09 17:10:53 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/09 17:44:31 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <functional>
 # include "pair.hpp"
 # include "reverse_iterator.hpp"
+# include "bidirectional_iterator.hpp"
 
 namespace ft {
 
