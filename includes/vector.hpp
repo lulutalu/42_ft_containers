@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/09 14:29:18 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/09 15:06:08 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -675,6 +675,7 @@ class vector
 				pointer		newPointer = NULL;
 				size_type	old_cap = this->_capacity;
 				size_type	n = 0;
+				size_type	old_size = this->_size;
 
 				for (iterator it = this->begin(); it != position; it++)
 						pos++;
@@ -710,15 +711,29 @@ class vector
 				}
 				for (size_type i = 0; i < pos; i++)
 						_alloc.construct(newPointer + i, *(this->_pointer + i));
-				for (size_type i = 0; i < n; i++)
-						_alloc.construct(newPointer + pos + i, *first++);
+
+				for (size_type i = 0; i < n; i++) {
+						try { _alloc.construct(newPointer + pos + i, *first++); }
+						catch (...) {
+								for (size_type j = 0; j < pos + i; j++)
+										_alloc.destroy(newPointer + j);
+								_alloc.deallocate(newPointer, this->_capacity);
+								this->clear();
+								_alloc.deallocate(this->_pointer, old_cap);
+								this->_pointer = NULL;
+								this->_size = 0;
+								this->_capacity = 0;
+								throw ("Error when construct");
+						}
+				}
+
 				for (size_type i = 0; i < this->_size + pos; i++)
 						_alloc.construct(newPointer + pos + n + i, *(this->_pointer + pos + i));
-				for (size_type i = 0; i < this->_size; i++)
-						_alloc.destroy(this->_pointer + i);
+
+				this->clear();
 				_alloc.deallocate(this->_pointer, old_cap);
 				this->_pointer = newPointer;
-				this->_size += n;
+				this->_size = old_size + n;
 		}
 
 		iterator	erase(iterator position) {
