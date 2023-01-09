@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/08 12:39:24 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/09 14:29:18 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,12 +226,12 @@ class vector
 
 				n = 0;
 				for (tmp = first; tmp != last; tmp++) {
-						_alloc.construct(this->_pointer + n, (*tmp)++);
+						_alloc.construct(this->_pointer + n, *tmp);
 						n++;
 				}
 		}
 
-		vector(const vector& x) : _alloc(x._alloc), _pointer(NULL) {
+		vector(const vector& x) : _alloc(x._alloc), _pointer(NULL), _size(x._size), _capacity(x._capacity) {
 				*this = x;
 		}
 
@@ -245,7 +245,8 @@ class vector
 				}
 
 				try {
-						this->_pointer = _alloc.allocate(x._capacity);
+						if (x._capacity > 0)
+								this->_pointer = _alloc.allocate(x._capacity);
 				}
 				catch (std::bad_alloc& e) {
 						std::cout << e.what() << std::endl;
