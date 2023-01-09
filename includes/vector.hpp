@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/08 12:05:02 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/08 12:39:24 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -461,6 +461,8 @@ class vector
 		////////////////////////////////////////////////////////////////////////
 
 		void	assign(size_type n, const value_type& val) {
+				if (n <= 0)
+						return ;
 				if (n > _capacity) {
 						pointer	newPointer;
 						try {
@@ -721,6 +723,7 @@ class vector
 		iterator	erase(iterator position) {
 			pointer		newPointer = NULL;
 			size_type	pos = 0;
+			size_type	old_size = this->_size;
 
 			for (iterator it = this->begin(); it != position; it++)
 				pos++;
@@ -737,12 +740,11 @@ class vector
 			for (size_type i = pos + 1; i < this->_size; i++)
 				_alloc.construct(newPointer + i - 1, *(this->_pointer + i));
 
-			for (size_type i = 0; i < this->_size; i++)
-				_alloc.destroy(this->_pointer + i);
+			this->clear();
 			_alloc.deallocate(this->_pointer, this->_capacity);
 
 			this->_pointer = newPointer;
-			this->_size -= 1;
+			this->_size = old_size - 1;
 			return (this->_pointer + pos);
 		}
 
