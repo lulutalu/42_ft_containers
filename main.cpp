@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/09 15:04:02 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/09 17:04:11 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ namespace ft = std;
 #else
 
 # include "includes/vector.hpp"
+# include "includes/map.hpp"
 # include <vector>
 
 #endif

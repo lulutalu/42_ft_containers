@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/09 16:04:54 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/09 17:10:53 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 # define MAP_HPP
 
 # include <functional>
+# include "pair.hpp"
+# include "reverse_iterator.hpp"
 
 namespace ft {
 
-template <class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<ft::pair<const Key, T>>
-class map 
-{
+template <class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<ft::pair<const Key, T> > >
+class map {
 
 		public :
 
@@ -44,6 +45,12 @@ class map
 				typedef ft::bidirectional_iterator<const value_type>	const_iterator;
 				typedef ft::reverse_iterator<iterator>					reverse_iterator;
 				typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
+
+		private :
+
+				allocator_type		_alloc;
+				key_compare			_compare;
+				size_type			_size;
 
 }; // class
 
