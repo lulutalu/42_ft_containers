@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/10 11:59:43 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/10 12:10:25 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 namespace ft {
 
-template <class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<ft::pair<const Key, T> > >
+template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T> > >
 class map {
 
 		public :
@@ -35,12 +35,12 @@ class map {
 				typedef std::size_t										size_type;
 				typedef std::ptrdiff_t									difference_type;
 				typedef Compare											key_compare;
-				typedef Allocator										allocator_type;
+				typedef Alloc											allocator_type;
 
 				typedef value_type&										reference;
 				typedef const value_type&								const_reference;
-				typedef typename Allocator::pointer						pointer;
-				typedef typename Allocator::const_pointer				const_pointer;
+				typedef typename Alloc::pointer							pointer;
+				typedef typename Alloc::const_pointer					const_pointer;
 
 				typedef ft::bidirectional_iterator<value_type>			iterator;
 				typedef ft::bidirectional_iterator<const value_type>	const_iterator;
@@ -176,6 +176,40 @@ class map {
 */
 
 }; // class
+
+/*		////////////////////////////////////////////////////////////////
+		///					Non-Member Functions					////
+		////////////////////////////////////////////////////////////////
+		
+		////////////////////////////////////////////////////////////////
+		///					Relational Operators					////
+		////////////////////////////////////////////////////////////////
+
+		template <class Key, class T, class Compare, class Alloc>
+		bool	operator == (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs);
+
+		template <class Key, class T, class Compare, class Alloc>
+		bool	operator != (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs);
+
+		template <class Key, class T, class Compare, class Alloc>
+		bool	operator < (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs);
+
+		template <class Key, class T, class Compare, class Alloc>
+		bool	operator <= (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs);
+
+		template <class Key, class T, class Compare, class Alloc>
+		bool	operator > (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs);
+
+		template <class Key, class T, class Compare, class Alloc>
+		bool	operator >= (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs);
+
+		////////////////////////////////////////////////////////////////
+		///							Overload						////
+		////////////////////////////////////////////////////////////////
+
+		template <class Key, class T, class Compare, class Alloc>
+		void	swap(ft::map<Key, T, Compare, Alloc>& lhs, ft::map<Key, T, Compare, Alloc>& rhs);
+*/
 
 } // namespace
 
