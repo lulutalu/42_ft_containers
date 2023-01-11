@@ -6,11 +6,11 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/11 17:17:51 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/11 20:29:24 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#if 1
+#if 0
 
 # include <memory>
 # include <iostream>
@@ -25,25 +25,18 @@ namespace ft = std;
 
 # include "includes/vector.hpp"
 # include "includes/map.hpp"
+# include "includes/binary_search_tree.hpp"
 # include <vector>
 
 #endif
 
 
 int	main(void) {
-		ft::map<std::string, char>	map;
+		ft::BST<int, std::string>		test;
 
-		map["Pouet"] = 'N';
-		map["Rat"] = 'R';
-		map["Nul"] = 'P';
+		test.insertNode(ft::pair<int, std::string>(5, "Root"));
+		test.insertNode(ft::pair<int, std::string>(2, "Left Child"));
+		test.insertNode(ft::pair<int, std::string>(7, "Right Child"));
 
-		map.insert(ft::pair<std::string, char>("Coucou", 'C'));
-
-		ft::map<std::string, char>::iterator it = map.begin();
-
-		std::cout << it->second << std::endl;
-		it++;
-		std::cout << it->second << std::endl;
-		it++;
-		std::cout << it->second << std::endl;
+		test.printTree();
 }

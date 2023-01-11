@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/11 17:42:47 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/11 20:28:59 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 # define BINARY_SEARCH_TREE
 
 # include "pair.hpp"
+
 # include <functional>
+# include <iostream>
 
 namespace ft {
 
@@ -26,6 +28,10 @@ struct Node {
 		Node*						lChild;	// pointer to left child of node
 		Node*						rChild;	// pointer to right child of node
 		Node*						parent;	// pointer to parend of node
+
+
+		Node(ft::pair<const Key, T> newPair) : 
+				color(1), pair(newPair), lChild(nullptr), rChild(nullptr), parent(nullptr) {}
 
 };
 
@@ -43,7 +49,10 @@ class BST
 {
 		public :
 
-				typedef Node<Key, T>*	NodePtr;
+				typedef Node<Key, T>	Node;
+				typedef Node*			NodePtr;
+				typedef Alloc			allocator_type;
+				typedef Compare			comp_operation;
 
 		private :
 				
@@ -71,6 +80,66 @@ class BST
 
 				void	rightRotate(NodePtr node);							// Make the operation rrotate to the node in parameter
 */
+
+				BST(const comp_operation& comp = comp_operation(), const allocator_type& alloc = allocator_type()) 
+						: _root(nullptr), _comp(comp), _alloc(alloc) {}
+
+				void	insertNode(ft::pair<const Key, T> newPair) {
+						if (this->_root == nullptr) {
+								NodePtr		newNode = nullptr;
+
+								newNode = _alloc.allocate(1);
+								_alloc.construct(newNode, Node(newPair));
+								this->_root = newNode;
+								recolor(this->_root);
+						}
+						else {
+								NodePtr		cur = this->_root;
+								NodePtr		ptrParent = nullptr;
+								int			dir;
+
+								while (cur != nullptr) {
+										if (cur->pair._first == newPair._first) // check if the key already exist inside the BST
+												return ;
+										else if (this->_comp(newPair._first, cur->pair._first)) {
+												ptrParent = cur;
+												cur = cur->lChild;
+												dir = 0;
+										}
+										else {
+												ptrParent = cur;
+												cur = cur->rChild;
+												dir = 1;
+										}
+								}
+
+								NodePtr		newNode = nullptr;
+
+								newNode = _alloc.allocate(1);
+								_alloc.construct(newNode, Node(newPair));
+								newNode->parent = ptrParent;
+								if (dir == 0)
+										ptrParent->lChild = newNode;
+								else
+										ptrParent->rChild = newNode;
+								cur = newNode;
+						}
+				}
+
+				void	recolor(NodePtr node) {
+						if (node->color == 1)
+								node->color = 0;
+						else
+								node->color = 1;
+				}
+
+				void	printTree(void) const {
+						NodePtr											cur = this->_root;
+
+						std::cout << "\t\t\t\t\t" << cur->pair._first << std::endl;
+						cur = cur->lChild;
+						std::cout << "\t\t\t\t" << cur->pair._first << "\t\t" << cur->parent->rChild->pair._first;
+				}
 
 }; // BST class
 
