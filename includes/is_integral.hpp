@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 16:21:59 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/09 12:50:03 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/12 15:08:45 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ struct is_integral : public integral_constant<false, T> {};
 /* Integral Types :
  *		- bool
  *		- char
- *		- char16_t
- *		- char32_t
  *		- wchar_t
  *		- signed char
  *		- short int
@@ -49,10 +47,6 @@ struct is_integral : public integral_constant<false, T> {};
 template<> struct is_integral<bool> : public integral_constant<true, bool> {};
 
 template<> struct is_integral<char> : public integral_constant<true, char> {};
-
-template<> struct is_integral<char16_t> : public integral_constant<true, char16_t> {};
-
-template<> struct is_integral<char32_t> : public integral_constant<true, char32_t> {};
 
 template<> struct is_integral<wchar_t> : public integral_constant<true, wchar_t> {};
 
@@ -78,10 +72,6 @@ template<> struct is_integral<const bool> : public integral_constant<true, const
 
 template<> struct is_integral<const char> : public integral_constant<true, const char> {};
 
-template<> struct is_integral<const char16_t> : public integral_constant<true, const char16_t> {};
-
-template<> struct is_integral<const char32_t> : public integral_constant<true, const char32_t> {};
-
 template<> struct is_integral<const wchar_t> : public integral_constant<true, const wchar_t> {};
 
 template<> struct is_integral<const signed char> : public integral_constant<true, const signed char> {};
@@ -104,10 +94,6 @@ template<> struct is_integral<const unsigned long int> : public integral_constan
 template<> struct is_integral<volatile bool> : public integral_constant<true, volatile bool> {};
 
 template<> struct is_integral<volatile char> : public integral_constant<true, volatile char> {};
-
-template<> struct is_integral<volatile char16_t> : public integral_constant<true, volatile char16_t> {};
-
-template<> struct is_integral<volatile char32_t> : public integral_constant<true, volatile char32_t> {};
 
 template<> struct is_integral<volatile wchar_t> : public integral_constant<true, volatile wchar_t> {};
 

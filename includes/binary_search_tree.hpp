@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/11 20:28:59 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/12 17:00:01 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,15 @@ namespace ft {
 template <class Key, class T>
 struct Node {
 
-		int							color; 	// 1 -> red, 0 -> black
+
+		bool						color; 	// true -> red, false -> black
 		ft::pair<const Key, T>		pair;	// grant access to key and value
 		Node*						lChild;	// pointer to left child of node
 		Node*						rChild;	// pointer to right child of node
 		Node*						parent;	// pointer to parend of node
 
-
 		Node(ft::pair<const Key, T> newPair) : 
-				color(1), pair(newPair), lChild(nullptr), rChild(nullptr), parent(nullptr) {}
+				color(true), pair(newPair), lChild(NULL), rChild(NULL), parent(NULL) {}
 
 };
 
@@ -59,6 +59,7 @@ class BST
 				NodePtr				_root;
 				Compare				_comp;
 				Alloc				_alloc;
+				std::size_t			_size;
 
 		public :
 
@@ -82,11 +83,19 @@ class BST
 */
 
 				BST(const comp_operation& comp = comp_operation(), const allocator_type& alloc = allocator_type()) 
-						: _root(nullptr), _comp(comp), _alloc(alloc) {}
+						: _root(NULL), _comp(comp), _alloc(alloc), _size(0) {}
+
+				std::size_t		getSize(void) const {
+						return (this->_size);
+				}
+
+				NodePtr			getRoot(void) const {
+						return (this->_root);
+				}
 
 				void	insertNode(ft::pair<const Key, T> newPair) {
-						if (this->_root == nullptr) {
-								NodePtr		newNode = nullptr;
+						if (this->_root == NULL) {
+								NodePtr		newNode = NULL;
 
 								newNode = _alloc.allocate(1);
 								_alloc.construct(newNode, Node(newPair));
@@ -95,17 +104,20 @@ class BST
 						}
 						else {
 								NodePtr		cur = this->_root;
-								NodePtr		ptrParent = nullptr;
+								NodePtr		ptrParent = NULL;
 								int			dir;
 
-								while (cur != nullptr) {
+								while (cur != NULL) {
+
 										if (cur->pair._first == newPair._first) // check if the key already exist inside the BST
 												return ;
+
 										else if (this->_comp(newPair._first, cur->pair._first)) {
 												ptrParent = cur;
 												cur = cur->lChild;
 												dir = 0;
 										}
+
 										else {
 												ptrParent = cur;
 												cur = cur->rChild;
@@ -113,7 +125,7 @@ class BST
 										}
 								}
 
-								NodePtr		newNode = nullptr;
+								NodePtr		newNode = NULL;
 
 								newNode = _alloc.allocate(1);
 								_alloc.construct(newNode, Node(newPair));
@@ -124,21 +136,30 @@ class BST
 										ptrParent->rChild = newNode;
 								cur = newNode;
 						}
+						this->_size++;
 				}
 
-				void	recolor(NodePtr node) {
-						if (node->color == 1)
-								node->color = 0;
-						else
-								node->color = 1;
-				}
+				void	recolor(NodePtr node) { node->color = !node->color; }
 
-				void	printTree(void) const {
-						NodePtr											cur = this->_root;
-
-						std::cout << "\t\t\t\t\t" << cur->pair._first << std::endl;
-						cur = cur->lChild;
-						std::cout << "\t\t\t\t" << cur->pair._first << "\t\t" << cur->parent->rChild->pair._first;
+				void	printTree(NodePtr root, std::string indent, bool last) const {
+						if (root != NULL) {
+								std::cout << indent;
+								if (last) {
+										std::cout << "R----";
+										indent += "     ";
+								} else {
+										std::cout << "L----";
+										indent += "|    ";
+								}
+								std::string		strCol;
+								if (root->color)
+										strCol = "RED";
+								else
+										strCol = "BLACK";
+								std::cout << root->pair._second << " (" << strCol << ")" << std::endl;
+								printTree(root->lChild, indent, false);
+								printTree(root->rChild, indent, true);
+						}
 				}
 
 }; // BST class
