@@ -6,7 +6,7 @@
 #    By: lduboulo <marvin@42lausanne.ch>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/27 18:29:51 by lduboulo          #+#    #+#              #
-#    Updated: 2022/12/06 15:55:21 by lduboulo         ###   ########.fr        #
+#    Updated: 2023/01/12 17:30:13 by lduboulo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,8 @@ SRCS_FILES		= main.cpp \
 SRCS			= ${patsubst %, ${SRCS_DIR}%, ${SRCS_FILES}}
 
 O_DIR			= ./objs/
+
+INC_DIR			= ./includes/
 
 OBJS_FILES		:= ${SRCS_FILES:.cpp=.o}
 
@@ -61,7 +63,7 @@ ${O_DIR}:
 				@printf "${BUILD}${O_DIR} Directory Created 📎${RESET}\n\n"
 
 ${O_DIR}%.o:%.cpp Makefile
-				@${CXX} ${CXXFLAGS} -o $@ -c $<
+				@${CXX} ${CXXFLAGS} -o $@ -c $< -I${INC_DIR}
 				@printf "\e[1K\r${BUILD} 🚧 $@ from $<${RESET}"
 
 clean :

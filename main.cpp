@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/12 17:13:48 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/12 17:52:51 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ namespace ft = std;
 
 #else
 
-# include "includes/vector.hpp"
-# include "includes/map.hpp"
-# include "includes/binary_search_tree.hpp"
+# include <vector.hpp>
+# include <map.hpp>
+# include <binary_search_tree.hpp>
 # include <vector>
 
 #endif
@@ -35,13 +35,17 @@ int	main(void) {
 		ft::BST<int, std::string>		test;
 
 		test.insertNode(ft::pair<int, std::string>(10, "Ten"));
-		test.insertNode(ft::pair<int, std::string>(5, "Five"));
 		test.insertNode(ft::pair<int, std::string>(20, "Twenty"));
-		test.insertNode(ft::pair<int, std::string>(1, "One"));
-		test.insertNode(ft::pair<int, std::string>(7, "Seven"));
-		test.insertNode(ft::pair<int, std::string>(4, "Four"));
-		test.insertNode(ft::pair<int, std::string>(55, "Fifty-Five"));
-		test.insertNode(ft::pair<int, std::string>(15, "Fifteen"));
+		test.insertNode(ft::pair<int, std::string>(30, "Thirty"));
+		test.insertNode(ft::pair<int, std::string>(40, "Forty"));
+
+		test.printTree(test.getRoot(), 0);
+
+		test.leftRotate(test.getRoot());
+
+		test.printTree(test.getRoot(), 0);
+
+		test.leftRotate(test.getRoot());
 
 		test.printTree(test.getRoot(), 0);
 }

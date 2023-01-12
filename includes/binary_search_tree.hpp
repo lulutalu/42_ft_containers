@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/12 17:10:35 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/12 17:51:36 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,9 +139,26 @@ class BST
 						this->_size++;
 				}
 
-//				void	leftRotate(NodePtr node) {
+				void	leftRotate(NodePtr node) {
+						if (node->rChild == NULL)
+								return ;
 
-//				}
+						NodePtr		tmp = node->rChild;
+						NodePtr		oldParent = node->parent;
+
+						node->rChild = tmp->lChild;
+						node->parent = tmp;
+						tmp->lChild = node;
+						if (oldParent != NULL) {
+								tmp->parent = oldParent;
+								if (oldParent->lChild == node)
+										oldParent->lChild = tmp;
+								else
+										oldParent->rChild = tmp;
+						}
+						else
+								this->_root = tmp;
+				}
 
 				void	recolor(NodePtr node) { node->color = !node->color; }
 
@@ -153,7 +170,14 @@ class BST
 						std::cout << std::endl;
 						for (int i = 5; i < space; i++)
 								std::cout << " ";
-						std::cout << root->pair._second << std::endl;
+
+						std::string		strCol;
+
+						if (root->color)
+								strCol = "\033[1;31m";
+						else
+								strCol = "\033[0m";
+						std::cout << strCol << root->pair._second << "\033[0m" << std::endl;
 						printTree(root->lChild, space);
 				}
 
