@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/12 17:00:01 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/12 17:10:35 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,27 +139,22 @@ class BST
 						this->_size++;
 				}
 
+//				void	leftRotate(NodePtr node) {
+
+//				}
+
 				void	recolor(NodePtr node) { node->color = !node->color; }
 
-				void	printTree(NodePtr root, std::string indent, bool last) const {
-						if (root != NULL) {
-								std::cout << indent;
-								if (last) {
-										std::cout << "R----";
-										indent += "     ";
-								} else {
-										std::cout << "L----";
-										indent += "|    ";
-								}
-								std::string		strCol;
-								if (root->color)
-										strCol = "RED";
-								else
-										strCol = "BLACK";
-								std::cout << root->pair._second << " (" << strCol << ")" << std::endl;
-								printTree(root->lChild, indent, false);
-								printTree(root->rChild, indent, true);
-						}
+				void	printTree(NodePtr root, int space) const {
+						if (root == NULL)
+								return ;
+						space += 5;
+						printTree(root->rChild, space);
+						std::cout << std::endl;
+						for (int i = 5; i < space; i++)
+								std::cout << " ";
+						std::cout << root->pair._second << std::endl;
+						printTree(root->lChild, space);
 				}
 
 }; // BST class
