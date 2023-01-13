@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/12 17:51:36 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/13 14:14:16 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,25 +139,33 @@ class BST
 						this->_size++;
 				}
 
-				void	leftRotate(NodePtr node) {
-						if (node->rChild == NULL)
+				/* We need to bring modifications to 4 nodes.
+				 * First 'node' : parent and rChild will change
+				 * Then 'node->rChild' : parent and lChild will change.
+				 * Also 'node->parent' : lChild or rChild will change depending of prev pos of 'node'
+				 * Finally 'node->rChild->lChild : parent will change. */
+				void	leftRotate(NodePtr x) {
+						if (x->rChild == NULL)
 								return ;
 
-						NodePtr		tmp = node->rChild;
-						NodePtr		oldParent = node->parent;
+						NodePtr		y = x->rChild;
 
-						node->rChild = tmp->lChild;
-						node->parent = tmp;
-						tmp->lChild = node;
-						if (oldParent != NULL) {
-								tmp->parent = oldParent;
-								if (oldParent->lChild == node)
-										oldParent->lChild = tmp;
-								else
-										oldParent->rChild = tmp;
-						}
+						x->rChild = y->lChild;
+
+						if (x->rChild != NULL)
+								x->rChild->parent = x;
+
+						y->lChild = x;
+
+						y->parent = x->parent;
+						if (y->parent == NULL)
+								this->_root = y;
+						else if (y->parent->lChild == x)
+								y->parent->lChild = y;
 						else
-								this->_root = tmp;
+								y->parent->rChild = y;
+
+						x->parent = y;
 				}
 
 				void	recolor(NodePtr node) { node->color = !node->color; }
