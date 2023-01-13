@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/13 14:19:04 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/13 15:04:28 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,10 @@ int	main(void) {
 		test.printTree(test.getRoot(), 0);
 
 		test.leftRotate(test.getRoot());
+
+		test.printTree(test.getRoot(), 0);
+
+		test.rightRotate(test.getRoot());
 
 		test.printTree(test.getRoot(), 0);
 }

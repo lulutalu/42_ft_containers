@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/13 14:14:16 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/13 15:03:56 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,37 @@ class BST
 								x->rChild->parent = x;
 
 						y->lChild = x;
+
+						y->parent = x->parent;
+						if (y->parent == NULL)
+								this->_root = y;
+						else if (y->parent->lChild == x)
+								y->parent->lChild = y;
+						else
+								y->parent->rChild = y;
+
+						x->parent = y;
+				}
+
+				/*
+				 * Same as leftRotate, 4 nodes need to be manipulated
+				 * x : x->parent and x->lChild will change
+				 * y : y->parent and y->rChild will change
+				 * x->parent : either lChild or rChild need to be change
+				 * y->rChild : parent will change
+				*/
+				void	rightRotate(NodePtr x) {
+						if (x->lChild == NULL)
+								return ;
+
+						NodePtr		y = x->lChild;
+
+						x->lChild = y->rChild;
+
+						if (x->lChild != NULL)
+								x->lChild->parent = x;
+
+						y->rChild = x;
 
 						y->parent = x->parent;
 						if (y->parent == NULL)
