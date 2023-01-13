@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/13 15:03:56 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/13 16:02:56 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ class BST
 
 				void	deleteNode(Key& key);								// Delete a Node with the parameter key
 
-				void	insertFix(void);									// After inserting new node check if the 5 rules of Red-Black-BST are respected
+				void	insertFix(NodePtr x);								// After inserting new node check if the 5 rules of Red-Black-BST are respected
 
 				void	deleteFix(void);									// After deleting a node check if the 5 rules of Red-Black-BST are respected
 
@@ -101,6 +101,8 @@ class BST
 								_alloc.construct(newNode, Node(newPair));
 								this->_root = newNode;
 								recolor(this->_root);
+								this->_size++;
+								return ;
 						}
 						else {
 								NodePtr		cur = this->_root;
@@ -135,8 +137,58 @@ class BST
 								else
 										ptrParent->rChild = newNode;
 								cur = newNode;
+								this->_size++;
+								insertFix(cur);
 						}
-						this->_size++;
+				}
+
+				void	insertFix(NodePtr x) {
+						NodePtr		gp = NULL;
+						bool		r;
+						bool		uncle = true;
+
+						if (x->parent->parent != NULL) {
+								gp = x->parent->parent;
+								if (gp->lChild == x->parent)
+										r = false;
+								else
+										r = true;
+								if ((r && gp->lChild == NULL) || (!r && gp->rChild == NULL))
+										uncle = false;
+						}
+
+						if (x->parent->color) { // Parent is red
+								if ((r && (gp->lChild != NULL && gp->lChild->color)) || (!r && (gp->rChild != NULL && gp->rChild->color))) { // Both Uncle and Parent are red
+										if (gp != this->_root)
+												recolor(gp);
+										recolor(gp->lChild);
+										recolor(gp->rChild);
+								}
+								else if (!uncle || ((r && !gp->lChild->color) || (!r && !gp->rChild->color))) { // Uncle is black
+										if (r && x->parent->rChild == x) {							// Parent is rChild of GrandParent and x is rChild of Parent
+												leftRotate(gp);
+												recolor(gp);
+												recolor(x->parent);
+										}
+										else if (r && x->parent->lChild == x) {						// Parent is rChild of GrandParent and x is lChild of Parent
+												rightRotate(x->parent);
+												leftRotate(gp);
+												recolor(gp);
+												recolor(x);
+										}
+										else if (!r && x->parent->lChild == x) {					// Parent is lChild of GrandParent and x is lChild of Parent
+												rightRotate(gp);
+												recolor(gp);
+												recolor(x->parent);
+										}
+										else if (!r && x->parent->rChild == x) {					// Parent is lChild of GrandParent anx x is rChild of Parent
+												leftRotate(x->parent);
+												rightRotate(gp);
+												recolor(gp);
+												recolor(x);
+										}
+								}
+						}
 				}
 
 				/* We need to bring modifications to 4 nodes.
