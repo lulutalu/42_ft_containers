@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/13 16:02:56 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/13 19:25:46 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ struct Node {
 
 
 		bool						color; 	// true -> red, false -> black
-		ft::pair<const Key, T>		pair;	// grant access to key and value
+		ft::pair<Key, T>		pair;	// grant access to key and value
 		Node*						lChild;	// pointer to left child of node
 		Node*						rChild;	// pointer to right child of node
 		Node*						parent;	// pointer to parend of node
 
-		Node(ft::pair<const Key, T> newPair) : 
+		Node(ft::pair<Key, T> newPair) : 
 				color(true), pair(newPair), lChild(NULL), rChild(NULL), parent(NULL) {}
 
 };
@@ -93,7 +93,7 @@ class BST
 						return (this->_root);
 				}
 
-				void	insertNode(ft::pair<const Key, T> newPair) {
+				void	insertNode(ft::pair<Key, T> newPair) {
 						if (this->_root == NULL) {
 								NodePtr		newNode = NULL;
 
@@ -189,6 +189,80 @@ class BST
 										}
 								}
 						}
+				}
+
+				void	deleteNode(const Key& key) {
+						NodePtr		cur;
+						NodePtr		y;
+						bool		oldColor = true;
+
+						cur = this->_root;
+						while (cur != NULL && cur->pair._first != key) {
+								if (this->_comp(key, cur->pair._first))
+										cur = cur->lChild;
+								else
+										cur = cur->rChild;
+						}
+						if (cur == NULL) {
+								std::cout << "No occurence found" << std::endl;
+								return ;
+						}
+
+						if (cur->lChild != NULL && cur->rChild != NULL) {							// If cur has two child
+								y = minimum(cur->rChild);
+								oldColor = !y->color;
+								if (y->parent != cur)
+										y->parent->lChild = y->rChild;
+								cur->pair = y->pair;
+								_alloc.destroy(y);
+								_alloc.deallocate(y, 1);
+						}
+						else if (cur->lChild == NULL && cur->rChild == NULL) {						// If cur has no Child
+								oldColor = !cur->color;
+								if (cur->parent->lChild == cur)
+										cur->parent->lChild = NULL;
+								else
+										cur->parent->rChild = NULL;
+								if (this->_root == cur)
+										this->_root = NULL;
+								_alloc.destroy(cur);
+								_alloc.deallocate(cur, 1);
+						}
+						else if (cur->lChild != NULL) {												// If cur has a lChild
+								oldColor = !cur->color;
+								if (cur == this->_root)
+										this->_root = cur->lChild;
+								else if (cur->parent->lChild == cur)
+										cur->parent->lChild = cur->lChild;
+								else
+										cur->parent->rChild = cur->lChild;
+								cur->lChild->parent = cur->parent;
+								_alloc.destroy(cur);
+								_alloc.deallocate(cur, 1);
+						}
+						else {																		// If cur has a rChild
+								oldColor = !cur->color;
+								if (cur == this->_root)
+										this->_root = cur->rChild;
+								else if (cur->parent->lChild == cur)
+										cur->parent->lChild = cur->rChild;
+								else
+										cur->parent->rChild = cur->rChild;
+								cur->rChild->parent = cur->parent;
+								_alloc.destroy(cur);
+								_alloc.deallocate(cur, 1);
+						}
+						if (oldColor)
+								std::cout << "Node was black" << std::endl;
+						else
+								std::cout << "Node was red" << std::endl;
+				}
+
+				NodePtr	minimum(NodePtr x) {
+						while (x->lChild != NULL) {
+								x = x->lChild;
+						}
+						return (x);
 				}
 
 				/* We need to bring modifications to 4 nodes.

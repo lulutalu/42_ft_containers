@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 16:10:38 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/09 16:44:55 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/13 19:07:07 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,19 @@ struct pair {
 		pair(const first_type& a, const second_type& b) : _first(a), _second(b)	{}; 	// Assignation Constructor
 
 		pair&		operator = (const pair& other) {
-				if (&other == *this)
+				if (&other == this)
 						return (*this);
-				this->_first = other._first;
-				this->_second = other._second;
+				this->_first = other.getFirst();
+				this->_second = other.getSecond();
 				return (*this);
+		}
+
+		first_type	getFirst(void) const {
+				return (this->_first);
+		}
+
+		second_type	getSecond(void) const {
+				return (this->_second);
 		}
 
 }; // struct
