@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/17 15:40:53 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/17 17:50:27 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,7 @@ class BST
 				void	deleteNode(const Key& key) {
 						NodePtr		cur;
 						NodePtr		y;
+						NodePtr		par = NULL;
 						bool		oldColor = true;
 
 						cur = this->_root;
@@ -210,19 +211,26 @@ class BST
 
 						if (cur->lChild != NULL && cur->rChild != NULL) {							// If cur has two child
 								y = minimum(cur->rChild);
-								oldColor = !y->color;
-								if (y->parent != cur)
+								if (y->parent != cur) {
 										y->parent->lChild = y->rChild;
+										if (y->rChild != NULL)
+												y->rChild->color = y->color;
+								}
+								oldColor = false;
 								cur->pair = y->pair;
 								_alloc.destroy(y);
 								_alloc.deallocate(y, 1);
 						}
 						else if (cur->lChild == NULL && cur->rChild == NULL) {						// If cur has no Child
 								oldColor = !cur->color;
-								if (cur->parent->lChild == cur)
+								if (cur->parent->lChild == cur) {
 										cur->parent->lChild = NULL;
-								else
+										par = cur->parent;
+								}
+								else {
 										cur->parent->rChild = NULL;
+										par = cur->parent;
+								}
 								if (this->_root == cur)
 										this->_root = NULL;
 								_alloc.destroy(cur);
@@ -233,6 +241,7 @@ class BST
 								cur->pair = y->pair;
 								cur->lChild = NULL;
 								oldColor = !y->color;
+								par = cur;
 								_alloc.destroy(y);
 								_alloc.deallocate(y, 1);
 						}
@@ -241,6 +250,7 @@ class BST
 								cur->pair = y->pair;
 								cur->rChild = NULL;
 								oldColor = !y->color;
+								par = cur;
 								_alloc.destroy(y);
 								_alloc.deallocate(y, 1);
 						}
@@ -248,14 +258,52 @@ class BST
 								std::cout << "Node was black" << std::endl;
 						else
 								std::cout << "Node was red" << std::endl;
-//						if (oldColor)
-//								deleteFix(deleteFix);
+						if (oldColor)
+								deleteFix(par);
 				}
 
 				void	deleteFix(NodePtr x) {
 						NodePtr		sibling = NULL;
+						bool		dir;
 
-						(void)x;
+						if (x->rChild == NULL) {
+								sibling = x->lChild;
+								dir = true;
+						}
+						else {
+								sibling = x->rChild;
+								dir = false;
+						}
+
+						if (!dir) {
+								if (sibling->color) {												// If the sibling color is red
+										recolor(sibling);
+										x->color = true;
+										leftRotate(x);
+										x = sibling->lChild;
+								}																	// If both the sibling's child color is black
+								else if ((sibling->lChild == NULL || !sibling->lChild->color) && (sibling->rChild == NULL || !sibling->rChild->color)) {
+										sibling->color = true;
+										x = x->parent;
+								}																	// If the rChild of sibling is black
+								else if ((sibling->rChild == NULL || !sibling->rChild->color)) {
+										if (sibling->lChild != NULL)
+												sibling->lChild->color = false;
+										sibling->color = true;
+										rightRotate(sibling);
+								}
+								else {
+										sibling->color = x->color;
+										x->parent->color = false;
+										if (sibling->rChild != NULL)
+												sibling->rChild->color = false;
+										leftRotate(x);
+								}
+
+								if (x != this->_root && !x->color)
+										deleteFix(x);
+
+						}
 				}
 
 				NodePtr	minimum(NodePtr x) {

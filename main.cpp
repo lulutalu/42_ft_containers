@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/17 15:41:25 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/17 17:46:27 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,12 @@ namespace ft = std;
 int	main(void) {
 		ft::BST<int, std::string>		test;
 
-		test.insertNode(ft::pair<int, std::string>(70, "Seventy"));
+		test.insertNode(ft::pair<int, std::string>(55, "Fifty-Five"));
+		test.insertNode(ft::pair<int, std::string>(65, "Sixty-Five"));
 		test.insertNode(ft::pair<int, std::string>(45, "Forty-Five"));
-		test.insertNode(ft::pair<int, std::string>(50, "Fifty"));
-		test.insertNode(ft::pair<int, std::string>(48, "Forty-eight"));
+		test.insertNode(ft::pair<int, std::string>(60, "Sixty"));
+		test.insertNode(ft::pair<int, std::string>(75, "Seventy-Five"));
+		test.insertNode(ft::pair<int, std::string>(57, "Fifty-Seven"));
 
 		test.printTree(test.getRoot(), 0);
 
