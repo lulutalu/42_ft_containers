@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/13 19:25:46 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/17 15:40:53 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,33 +229,33 @@ class BST
 								_alloc.deallocate(cur, 1);
 						}
 						else if (cur->lChild != NULL) {												// If cur has a lChild
-								oldColor = !cur->color;
-								if (cur == this->_root)
-										this->_root = cur->lChild;
-								else if (cur->parent->lChild == cur)
-										cur->parent->lChild = cur->lChild;
-								else
-										cur->parent->rChild = cur->lChild;
-								cur->lChild->parent = cur->parent;
-								_alloc.destroy(cur);
-								_alloc.deallocate(cur, 1);
+								y = cur->lChild;
+								cur->pair = y->pair;
+								cur->lChild = NULL;
+								oldColor = !y->color;
+								_alloc.destroy(y);
+								_alloc.deallocate(y, 1);
 						}
 						else {																		// If cur has a rChild
-								oldColor = !cur->color;
-								if (cur == this->_root)
-										this->_root = cur->rChild;
-								else if (cur->parent->lChild == cur)
-										cur->parent->lChild = cur->rChild;
-								else
-										cur->parent->rChild = cur->rChild;
-								cur->rChild->parent = cur->parent;
-								_alloc.destroy(cur);
-								_alloc.deallocate(cur, 1);
+								y = cur->rChild;
+								cur->pair = y->pair;
+								cur->rChild = NULL;
+								oldColor = !y->color;
+								_alloc.destroy(y);
+								_alloc.deallocate(y, 1);
 						}
 						if (oldColor)
 								std::cout << "Node was black" << std::endl;
 						else
 								std::cout << "Node was red" << std::endl;
+//						if (oldColor)
+//								deleteFix(deleteFix);
+				}
+
+				void	deleteFix(NodePtr x) {
+						NodePtr		sibling = NULL;
+
+						(void)x;
 				}
 
 				NodePtr	minimum(NodePtr x) {
