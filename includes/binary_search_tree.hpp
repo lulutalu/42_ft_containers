@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/18 17:24:43 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/18 17:41:26 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,6 +281,63 @@ class BST
 				}
 
 				void	deleteFix(NodePtr x) {
+						NodePtr		w;
+
+						while (x != this->_root && !x->color) {
+								if (x->parent->lChild == x) {								// If x is left Child
+										w = x->parent->rChild;
+										if (w->color) {										// Sibling color is red
+												recolor(w);
+												x->parent->color = true;
+												leftRotate(x->parent);
+												w = x->parent->rChild;
+										}
+										else if (!w->rChild->color && !w->lChild->color) {	// Both Sibling's child color are black
+												w->color = true;
+												x = x->parent;
+										}
+										else if (!w->rChild->color) {						// Right Child of sibling is black
+												w->lChild->color = false;
+												w->color = true;
+												rightRotate(w);
+												w = x->parent->rChild;
+										}
+										else {												// Other cases
+												w->color = x->parent->color;
+												x->parent->parent->color = false;
+												w->rChild->color = false;
+												leftRotate(x->parent);
+												x = this->_root;
+										}
+								}
+								else {														// If x is right Child
+										w = x->parent->lChild;
+										if (w->color) {
+												recolor(w);
+												x->parent->color = true;
+												rightRotate(x->parent);
+												w = x->parent->lChild;
+										}
+										else if (!w->rChild->color && !w->lChild->color) {
+												w->color = true;
+												x = x->parent;
+										}
+										else if (!w->lChild->color) {
+												w->rChild->color = false;
+												w->color = true;
+												leftRotate(w);
+												w = x->parent->lChild;
+										}
+										else {
+												w->color = x->parent->color;
+												x->parent->parent->color = false;
+												w->lChild->color = false;
+												rightRotate(x->parent);
+												x = this->_root;
+										}
+								}
+						}
+						x->color = false;
 				}
 
 				NodePtr	minimum(NodePtr x) {
