@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/18 16:42:14 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/18 17:24:43 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,63 +208,67 @@ class BST
 				void	deleteNode(const Key& key) {
 						NodePtr		cur;
 						NodePtr		y;
-						NodePtr		par = NULL;
+						NodePtr		x;
 						bool		oldColor = true;
 
 						cur = this->_root;
-						while (cur != NULL && cur->pair._first != key) {
+						while (cur != this->_null && cur->pair._first != key) {
 								if (this->_comp(key, cur->pair._first))
 										cur = cur->lChild;
 								else
 										cur = cur->rChild;
 						}
-						if (cur == NULL) {
+						if (cur == this->_null) {
 								std::cout << "No occurence found" << std::endl;
 								return ;
 						}
 
-						if (cur->lChild != NULL && cur->rChild != NULL) {							// If cur has two child
+						if (cur->lChild != this->_null && cur->rChild != this->_null) {							// If cur has two child
 								y = minimum(cur->rChild);
-								if (y->parent != cur) {
+								if (y->parent != cur)
 										y->parent->lChild = y->rChild;
-										if (y->rChild != NULL)
-												y->rChild->color = y->color;
-								}
-								oldColor = false;
+								oldColor = !y->color;
+								x = y->rChild;
+								if (x == this->_null)
+										x->parent = y->parent;
 								cur->pair = y->pair;
 								_alloc.destroy(y);
 								_alloc.deallocate(y, 1);
 						}
-						else if (cur->lChild == NULL && cur->rChild == NULL) {						// If cur has no Child
+						else if (cur->lChild == this->_null && cur->rChild == this->_null) {					// If cur has no Child
 								oldColor = !cur->color;
 								if (cur->parent->lChild == cur) {
-										cur->parent->lChild = NULL;
-										par = cur->parent;
+										cur->parent->lChild = this->_null;
+										x = cur->parent->lChild;
+										x->parent = cur->parent;
 								}
 								else {
-										cur->parent->rChild = NULL;
-										par = cur->parent;
+										cur->parent->rChild = this->_null;
+										x = cur->parent->rChild;
+										x->parent = cur->parent;
 								}
 								if (this->_root == cur)
-										this->_root = NULL;
+										this->_root = this->_null;
 								_alloc.destroy(cur);
 								_alloc.deallocate(cur, 1);
 						}
-						else if (cur->lChild != NULL) {												// If cur has a lChild
+						else if (cur->lChild != this->_null) {													// If cur has a lChild
 								y = cur->lChild;
 								cur->pair = y->pair;
-								cur->lChild = NULL;
+								cur->lChild = this->_null;
+								x = cur->lChild;
+								x->parent = cur;
 								oldColor = !y->color;
-								par = cur;
 								_alloc.destroy(y);
 								_alloc.deallocate(y, 1);
 						}
 						else {																		// If cur has a rChild
 								y = cur->rChild;
 								cur->pair = y->pair;
-								cur->rChild = NULL;
+								cur->rChild = this->_null;
+								x = cur->rChild;
+								x->parent = cur;
 								oldColor = !y->color;
-								par = cur;
 								_alloc.destroy(y);
 								_alloc.deallocate(y, 1);
 						}
@@ -273,51 +277,10 @@ class BST
 						else
 								std::cout << "Node was red" << std::endl;
 						if (oldColor)
-								deleteFix(par);
+								deleteFix(x);
 				}
 
 				void	deleteFix(NodePtr x) {
-						NodePtr		sibling = NULL;
-						bool		dir;
-
-						if (x->rChild == NULL) {
-								sibling = x->lChild;
-								dir = true;
-						}
-						else {
-								sibling = x->rChild;
-								dir = false;
-						}
-
-						if (!dir) {
-								if (sibling->color) {												// If the sibling color is red
-										recolor(sibling);
-										x->color = true;
-										leftRotate(x);
-										x = sibling->lChild;
-								}																	// If both the sibling's child color is black
-								else if ((sibling->lChild == NULL || !sibling->lChild->color) && (sibling->rChild == NULL || !sibling->rChild->color)) {
-										sibling->color = true;
-										x = x->parent;
-								}																	// If the rChild of sibling is black
-								else if ((sibling->rChild == NULL || !sibling->rChild->color)) {
-										if (sibling->lChild != NULL)
-												sibling->lChild->color = false;
-										sibling->color = true;
-										rightRotate(sibling);
-								}
-								else {
-										sibling->color = x->color;
-										x->parent->color = false;
-										if (sibling->rChild != NULL)
-												sibling->rChild->color = false;
-										leftRotate(x);
-								}
-
-								if (x != this->_root && !x->color)
-										deleteFix(x);
-
-						}
 				}
 
 				NodePtr	minimum(NodePtr x) {
