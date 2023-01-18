@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/17 17:50:27 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/18 16:42:14 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ struct Node {
 
 
 		bool						color; 	// true -> red, false -> black
-		ft::pair<Key, T>		pair;	// grant access to key and value
+		ft::pair<Key, T>			pair;	// grant access to key and value
 		Node*						lChild;	// pointer to left child of node
 		Node*						rChild;	// pointer to right child of node
 		Node*						parent;	// pointer to parend of node
@@ -33,6 +33,7 @@ struct Node {
 		Node(ft::pair<Key, T> newPair) : 
 				color(true), pair(newPair), lChild(NULL), rChild(NULL), parent(NULL) {}
 
+		Node(void) : color(false), pair(), lChild(NULL), rChild(NULL), parent(NULL) {}
 };
 
 /*
@@ -57,6 +58,7 @@ class BST
 		private :
 				
 				NodePtr				_root;
+				NodePtr				_null;
 				Compare				_comp;
 				Alloc				_alloc;
 				std::size_t			_size;
@@ -83,7 +85,15 @@ class BST
 */
 
 				BST(const comp_operation& comp = comp_operation(), const allocator_type& alloc = allocator_type()) 
-						: _root(NULL), _comp(comp), _alloc(alloc), _size(0) {}
+						: _root(NULL), _comp(comp), _alloc(alloc), _size(0) {
+						_null = _alloc.allocate(1);
+						_alloc.construct(_null, Node());
+						_null->color = false;
+						_null->lChild = NULL;
+						_null->rChild = NULL;
+						_null->parent = NULL;
+						_root = _null;
+						}
 
 				std::size_t		getSize(void) const {
 						return (this->_size);
@@ -94,11 +104,13 @@ class BST
 				}
 
 				void	insertNode(ft::pair<Key, T> newPair) {
-						if (this->_root == NULL) {
+						if (this->_root == this->_null) {
 								NodePtr		newNode = NULL;
 
 								newNode = _alloc.allocate(1);
 								_alloc.construct(newNode, Node(newPair));
+								newNode->lChild = this->_null;
+								newNode->rChild = this->_null;
 								this->_root = newNode;
 								recolor(this->_root);
 								this->_size++;
@@ -109,7 +121,7 @@ class BST
 								NodePtr		ptrParent = NULL;
 								int			dir;
 
-								while (cur != NULL) {
+								while (cur != this->_null) {
 
 										if (cur->pair._first == newPair._first) // check if the key already exist inside the BST
 												return ;
@@ -131,6 +143,8 @@ class BST
 
 								newNode = _alloc.allocate(1);
 								_alloc.construct(newNode, Node(newPair));
+								newNode->rChild = this->_null;
+								newNode->lChild = this->_null;
 								newNode->parent = ptrParent;
 								if (dir == 0)
 										ptrParent->lChild = newNode;
@@ -153,12 +167,12 @@ class BST
 										r = false;
 								else
 										r = true;
-								if ((r && gp->lChild == NULL) || (!r && gp->rChild == NULL))
+								if ((r && gp->lChild == this->_null) || (!r && gp->rChild == this->_null))
 										uncle = false;
 						}
 
 						if (x->parent->color) { // Parent is red
-								if ((r && (gp->lChild != NULL && gp->lChild->color)) || (!r && (gp->rChild != NULL && gp->rChild->color))) { // Both Uncle and Parent are red
+								if ((r && (gp->lChild != this->_null && gp->lChild->color)) || (!r && (gp->rChild != this->_null && gp->rChild->color))) { // Both Uncle and Parent are red
 										if (gp != this->_root)
 												recolor(gp);
 										recolor(gp->lChild);
@@ -307,7 +321,7 @@ class BST
 				}
 
 				NodePtr	minimum(NodePtr x) {
-						while (x->lChild != NULL) {
+						while (x->lChild != this->_null) {
 								x = x->lChild;
 						}
 						return (x);
@@ -319,20 +333,20 @@ class BST
 				 * Also 'node->parent' : lChild or rChild will change depending of prev pos of 'node'
 				 * Finally 'node->rChild->lChild : parent will change. */
 				void	leftRotate(NodePtr x) {
-						if (x->rChild == NULL)
+						if (x->rChild == this->_null)
 								return ;
 
 						NodePtr		y = x->rChild;
 
 						x->rChild = y->lChild;
 
-						if (x->rChild != NULL)
+						if (x->rChild != this->_null)
 								x->rChild->parent = x;
 
 						y->lChild = x;
 
 						y->parent = x->parent;
-						if (y->parent == NULL)
+						if (y->parent == this->_null)
 								this->_root = y;
 						else if (y->parent->lChild == x)
 								y->parent->lChild = y;
@@ -350,20 +364,20 @@ class BST
 				 * y->rChild : parent will change
 				*/
 				void	rightRotate(NodePtr x) {
-						if (x->lChild == NULL)
+						if (x->lChild == this->_null)
 								return ;
 
 						NodePtr		y = x->lChild;
 
 						x->lChild = y->rChild;
 
-						if (x->lChild != NULL)
+						if (x->lChild != this->_null)
 								x->lChild->parent = x;
 
 						y->rChild = x;
 
 						y->parent = x->parent;
-						if (y->parent == NULL)
+						if (y->parent == this->_null)
 								this->_root = y;
 						else if (y->parent->lChild == x)
 								y->parent->lChild = y;
@@ -376,7 +390,7 @@ class BST
 				void	recolor(NodePtr node) { node->color = !node->color; }
 
 				void	printTree(NodePtr root, int space) const {
-						if (root == NULL)
+						if (root == this->_null)
 								return ;
 						space += 5;
 						printTree(root->rChild, space);

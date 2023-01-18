@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/17 17:46:27 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/18 16:42:25 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,6 @@ int	main(void) {
 		test.insertNode(ft::pair<int, std::string>(60, "Sixty"));
 		test.insertNode(ft::pair<int, std::string>(75, "Seventy-Five"));
 		test.insertNode(ft::pair<int, std::string>(57, "Fifty-Seven"));
-
-		test.printTree(test.getRoot(), 0);
-
-		test.deleteNode(45);
 
 		test.printTree(test.getRoot(), 0);
 }
