@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/18 17:41:26 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/18 18:35:37 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,9 +225,11 @@ class BST
 
 						if (cur->lChild != this->_null && cur->rChild != this->_null) {							// If cur has two child
 								y = minimum(cur->rChild);
-								if (y->parent != cur)
-										y->parent->lChild = y->rChild;
 								oldColor = !y->color;
+								if (y->parent == cur)
+										cur->rChild = this->_null;
+								else
+										y->parent->lChild = y->rChild;
 								x = y->rChild;
 								if (x == this->_null)
 										x->parent = y->parent;
@@ -304,7 +306,8 @@ class BST
 										}
 										else {												// Other cases
 												w->color = x->parent->color;
-												x->parent->parent->color = false;
+												if (x->parent != this->_root)
+														x->parent->parent->color = false;
 												w->rChild->color = false;
 												leftRotate(x->parent);
 												x = this->_root;
@@ -330,7 +333,8 @@ class BST
 										}
 										else {
 												w->color = x->parent->color;
-												x->parent->parent->color = false;
+												if (x->parent != this->_root)
+														x->parent->parent->color = false;
 												w->lChild->color = false;
 												rightRotate(x->parent);
 												x = this->_root;
@@ -341,7 +345,7 @@ class BST
 				}
 
 				NodePtr	minimum(NodePtr x) {
-						while (x->lChild != this->_null) {
+						while (x->lChild != this->_null && x->lChild != NULL) {
 								x = x->lChild;
 						}
 						return (x);
@@ -366,7 +370,7 @@ class BST
 						y->lChild = x;
 
 						y->parent = x->parent;
-						if (y->parent == this->_null)
+						if (y->parent == this->_null || y->parent == NULL)
 								this->_root = y;
 						else if (y->parent->lChild == x)
 								y->parent->lChild = y;
@@ -397,7 +401,7 @@ class BST
 						y->rChild = x;
 
 						y->parent = x->parent;
-						if (y->parent == this->_null)
+						if (y->parent == this->_null || y->parent == NULL)
 								this->_root = y;
 						else if (y->parent->lChild == x)
 								y->parent->lChild = y;
@@ -410,7 +414,7 @@ class BST
 				void	recolor(NodePtr node) { node->color = !node->color; }
 
 				void	printTree(NodePtr root, int space) const {
-						if (root == this->_null)
+						if (root == this->_null || root == NULL)
 								return ;
 						space += 5;
 						printTree(root->rChild, space);
