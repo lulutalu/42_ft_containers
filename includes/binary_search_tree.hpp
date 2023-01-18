@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/18 18:35:37 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/18 21:42:21 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,18 @@ class BST
 
 				void	insertFix(NodePtr x);								// After inserting new node check if the 5 rules of Red-Black-BST are respected
 
-				void	deleteFix(void);									// After deleting a node check if the 5 rules of Red-Black-BST are respected
+				void	deleteFix(NodePtr x);								// After deleting a node check if the 5 rules of Red-Black-BST are respected
 
 				void	recolor(NodePtr node);								// Change the color of the node in parameter
 
 				void	leftRotate(NodePtr node);							// Make the operation lrotate to the node in parameter
 
 				void	rightRotate(NodePtr node);							// Make the operation rrotate to the node in parameter
+
+				std::size_t		getSize(void);
+
+				NodePtr			getRoot(void);
+
 */
 
 				BST(const comp_operation& comp = comp_operation(), const allocator_type& alloc = allocator_type()) 
@@ -94,6 +99,10 @@ class BST
 						_null->parent = NULL;
 						_root = _null;
 						}
+
+				~BST(void) {
+
+				}
 
 				std::size_t		getSize(void) const {
 						return (this->_size);
@@ -278,6 +287,7 @@ class BST
 								std::cout << "Node was black" << std::endl;
 						else
 								std::cout << "Node was red" << std::endl;
+						this->_size--;
 						if (oldColor)
 								deleteFix(x);
 				}

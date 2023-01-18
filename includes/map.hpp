@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/10 12:10:25 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/18 21:41:50 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include "pair.hpp"
 # include "reverse_iterator.hpp"
 # include "bidirectional_iterator.hpp"
+# include "binary_search_tree.hpp"
+# include "enable_if.hpp"
+# include "is_integral.hpp"
 
 namespace ft {
 
@@ -77,9 +80,9 @@ class map {
 
 		private :
 
-				allocator_type		_alloc;
-				key_compare			_compare;
-				size_type			_size;
+				allocator_type				_alloc;
+				key_compare					_compare;
+				BST<Key, T, Compare>		_bst;
 
 		public :
 
@@ -174,6 +177,26 @@ class map {
 
 				allocator_type		get_allocator(void) const;					// Return a copy of the allocator used in the container
 */
+
+		////////////////////////////////////////////////////////////////
+		///						Member Functions					////
+		////////////////////////////////////////////////////////////////
+
+		explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) :
+				_bst(comp, alloc), _alloc(alloc), _compare(comp) {}
+
+		template <class InputIterator>
+		map(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, 
+						const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _bst(comp, alloc), _alloc(alloc), _compare(comp) {
+				while (first != last) {
+						this->_bst.insertNode(*first);
+						first++;
+				}
+		}
+
+//		map(const map& x) Need working iterator inside of BST to implement
+
+
 
 }; // class
 
