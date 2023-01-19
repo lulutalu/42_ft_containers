@@ -6,11 +6,11 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/19 18:40:30 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/19 18:50:38 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#if 0
+#if 1
 
 # include <memory>
 # include <iostream>
@@ -32,23 +32,9 @@ namespace ft = std;
 
 
 int	main(void) {
-		ft::BST<int, std::string>			test;
-		ft::BST<int, std::string>			cpy;
 
-		test.insertNode(ft::pair<int, std::string>(10, "Ten"));
-		test.insertNode(ft::pair<int, std::string>(20, "Twenty"));
-		test.insertNode(ft::pair<int, std::string>(5, "Five"));
-		test.insertNode(ft::pair<int, std::string>(15, "Fifteen"));
+		std::allocator<std::pair<const int, std::string> >		alloc;
 
-		test.printTree(test.getRoot(), 0);
+		std::cout << alloc.max_size() << std::endl;
 
-		std::cout << "#####################################" << std::endl << std::endl;
-
-		cpy.insertNode(ft::pair<int, std::string>(5, "Five"));
-		cpy.insertNode(ft::pair<int, std::string>(10, "Ten"));
-		cpy.insertNode(ft::pair<int, std::string>(15, "Fifteen"));
-		cpy.insertNode(ft::pair<int, std::string>(20, "Twenty"));
-		cpy.insertNode(ft::pair<int, std::string>(30, "Thirty"));
-
-		cpy.printTree(cpy.getRoot(), 0);
 }

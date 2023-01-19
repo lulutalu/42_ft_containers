@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/19 18:07:20 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/19 18:50:59 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,13 @@ class map {
 		map&		operator = (const map& x) {
 				if (this == &x)
 						return (*this);
+
+				for (iterator it = x.begin(); it != x.end(); it++)
+						this->_bst.insertNode(*it);
+				return (*this);
 		}
+
+		~map(void) {}
 
 		////////////////////////////////////////////////////////////////
 		///						Iterators Functions					////
@@ -237,6 +243,24 @@ class map {
 
 		const_reverse_iterator	rend(void) const {
 				return (const_reverse_iterator(this->_bst.minimum(this->_bst.getRoot())));
+		}
+
+		////////////////////////////////////////////////////////////////
+		///						Capacity Functions					////
+		////////////////////////////////////////////////////////////////
+
+		bool		empty(void) const {
+				if (this->_bst.getSize() == 0)
+						return (true);
+				return (false);
+		}
+
+		size_type	size(void) const {
+				return (this->_bst.getSize());
+		}
+
+		size_type	max_size(void) const {
+				return (this->_alloc.max_size());
 		}
 
 }; // class
