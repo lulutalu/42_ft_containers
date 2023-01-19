@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/19 17:52:09 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/19 18:38:31 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,6 +306,9 @@ class BST
 						bool		oldColor = true;
 
 						cur = this->_root;
+						if (cur == this->_null || cur == NULL)
+								return ;
+
 						while (cur != this->_null && cur->pair._first != key) {
 								if (this->_comp(key, cur->pair._first))
 										cur = cur->lChild;
@@ -333,7 +336,9 @@ class BST
 						}
 						else if (cur->lChild == this->_null && cur->rChild == this->_null) {					// If cur has no Child
 								oldColor = !cur->color;
-								if (cur->parent->lChild == cur) {
+								if (cur->parent == NULL)
+										this->_root = this->_null;
+								else if (cur->parent->lChild == cur) {
 										cur->parent->lChild = this->_null;
 										x = cur->parent->lChild;
 										x->parent = cur->parent;
@@ -343,8 +348,6 @@ class BST
 										x = cur->parent->rChild;
 										x->parent = cur->parent;
 								}
-								if (this->_root == cur)
-										this->_root = this->_null;
 								_alloc.destroy(cur);
 								_alloc.deallocate(cur, 1);
 						}
@@ -383,13 +386,17 @@ class BST
 						while (x != this->_root && !x->color) {
 								if (x->parent->lChild == x) {								// If x is left Child
 										w = x->parent->rChild;
+										if (w->rChild == NULL)
+												w->rChild = this->_null;
+										if (w->lChild == NULL)
+												w->lChild = this->_null;
 										if (w->color) {										// Sibling color is red
 												recolor(w);
 												x->parent->color = true;
 												leftRotate(x->parent);
 												w = x->parent->rChild;
 										}
-										else if (!w->rChild->color && !w->lChild->color) {	// Both Sibling's child color are black
+										else if ((w->rChild != this->_null && !w->rChild->color) && (w->lChild != this->_null && !w->lChild->color)) {	// Both Sibling's child color are black
 												w->color = true;
 												x = x->parent;
 										}
