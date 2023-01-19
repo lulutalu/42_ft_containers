@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/19 19:37:38 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/19 19:48:55 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -550,7 +550,7 @@ class BST
 				iterator	find(const Key& key) {
 						iterator	it = this->minimum(this->getRoot());
 
-						while (it->first != key)
+						while (it->_ptr != this->_null && it->first != key)
 								it++;
 						return (it);
 				}
