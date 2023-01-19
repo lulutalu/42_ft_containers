@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/19 16:57:20 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/19 18:07:20 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,9 +194,50 @@ class map {
 				}
 		}
 
-//		map(const map& x) Need working iterator inside of BST to implement
+		map(const map& x) : _bst(x._compare, x._alloc), _alloc(x._alloc), _compare(x._compare) {
+				*this = x;
+		}
 
+		map&		operator = (const map& x) {
+				if (this == &x)
+						return (*this);
+		}
 
+		////////////////////////////////////////////////////////////////
+		///						Iterators Functions					////
+		////////////////////////////////////////////////////////////////
+
+		iterator				begin(void) {
+				return (iterator(this->_bst.minimum(this->_bst.getRoot())));
+		}
+
+		const_iterator			begin(void) const {
+				return (const_iterator(this->_bst.minimum(this->_bst.getRoot())));
+		}
+
+		iterator				end(void) {
+				return (iterator(this->_bst.maximum(this->_bst.getRoot())));
+		}
+
+		const_iterator			end(void) const {
+				return (const_iterator(this->_bst.maximum(this->_bst.getRoot())));
+		}
+
+		reverse_iterator		rbegin(void) {
+				return (reverse_iterator(this->_bst.maximum(this->_bst.getRoot())));
+		}
+
+		const_reverse_iterator	rbegin(void) const {
+				return (const_reverse_iterator(this->_bst.maximum(this->_bst.getRoot())));
+		}
+
+		reverse_iterator		rend(void) {
+				return (reverse_iterator(this->_bst.minimum(this->_bst.getRoot())));
+		}
+
+		const_reverse_iterator	rend(void) const {
+				return (const_reverse_iterator(this->_bst.minimum(this->_bst.getRoot())));
+		}
 
 }; // class
 
