@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/18 21:42:21 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/19 16:48:06 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define BINARY_SEARCH_TREE
 
 # include "pair.hpp"
+# include "bidirectional_iterator.hpp"
 
 # include <functional>
 # include <iostream>
@@ -55,6 +56,75 @@ class BST
 				typedef Alloc			allocator_type;
 				typedef Compare			comp_operation;
 
+
+		class BSTIterator : public ft::bidirectional_iterator<NodePtr>
+		{
+
+				private :
+
+						friend class BST;
+
+						BST		_bst;
+
+				public :
+
+						ft::pair<Key, T>&	operator * (void) const {
+								return (*this->_ptr->pair);
+						}
+
+						ft::pair<Key, T>*	operator -> (void) const {
+								return  (&(*this->_ptr->pair));
+						}
+
+						BSTIterator&		operator ++ (void) {
+								NodePtr		y;
+
+								if (this->_ptr == this->_bst.maximum(this->_bst.getRoot()))
+										throw std::exception();
+
+								y = this->_bst.minimum(this->_ptr->rChild);
+								if (y != this->_bst._null && y != NULL)
+										this->_ptr = y;
+								else if (this->_ptr->parent->rChild != this->_ptr)
+										this->_ptr = this->_ptr->parent;
+								else
+										this->_ptr = this->_ptr->parent->parent;
+								return (*this);
+						}
+
+						BSTIterator			operator ++ (int) {
+								BSTIterator		tmp(*this);
+
+								++(*this);
+								return (tmp);
+						}
+
+						BSTIterator&		operator -- (void) {
+								NodePtr		y;
+
+								if (this->_ptr == this->_bst.minimum(this->_bst.getRoot()))
+										throw std::exception();
+
+								y = this->_bst.maximum(this->_ptr->lChild);
+								if (y != this->_bst.null && y != NULL)
+										this->_ptr = y;
+								else if (this->_ptr->parent->lChild != this->_ptr)
+										this->_ptr = this->_ptr->parent;
+								else
+										this->_ptr = this->_parent->parent;
+								return (*this);
+						}
+
+						BSTIterator			operator -- (int) {
+								BSTIterator		tmp(*this);
+
+								--(*this);
+								return (tmp);
+						}
+
+		}; // end of iterator class
+
+
 		private :
 				
 				NodePtr				_root;
@@ -65,7 +135,7 @@ class BST
 
 		public :
 
-/*				BST(void);													// Constructor of empty BST
+/*				BST(const comp_operation& comp = comp_operation(), const allocator_type& alloc = allocator_type());		// Constructor of empty BST
 
 				~BST(void);													// Destructor /!\ Need to free all of the nodes /!\
 
@@ -82,6 +152,10 @@ class BST
 				void	leftRotate(NodePtr node);							// Make the operation lrotate to the node in parameter
 
 				void	rightRotate(NodePtr node);							// Make the operation rrotate to the node in parameter
+
+				NodePtr			minimum(NodePtr x);
+
+				NodePtr 		maximum(NodePtr x);
 
 				std::size_t		getSize(void);
 
@@ -358,6 +432,12 @@ class BST
 						while (x->lChild != this->_null && x->lChild != NULL) {
 								x = x->lChild;
 						}
+						return (x);
+				}
+
+				NodePtr	maximum(NodePtr x) {
+						while (x->rChild != this->_null && x->rChild != NULL)
+								x = x->rChild;
 						return (x);
 				}
 

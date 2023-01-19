@@ -6,11 +6,11 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/18 18:33:09 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/19 15:58:39 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#if 0
+#if 1
 
 # include <memory>
 # include <iostream>
@@ -32,40 +32,14 @@ namespace ft = std;
 
 
 int	main(void) {
-		ft::BST<int, std::string>		test;
+		ft::map<int, std::string>			test;
+		ft::map<int, std::string>::iterator	it;
 
-		test.insertNode(ft::pair<int, std::string>(10, "Ten"));
-		test.insertNode(ft::pair<int, std::string>(100, "Hundred"));
-		test.insertNode(ft::pair<int, std::string>(60, "Sixty"));
-		test.insertNode(ft::pair<int, std::string>(80, "Eighty"));
-		test.insertNode(ft::pair<int, std::string>(50, "Fifty"));
-		test.insertNode(ft::pair<int, std::string>(59, "Fifty-Nine"));
-		test.insertNode(ft::pair<int, std::string>(70, "Seventy"));
+		test.insert(ft::pair<int, std::string>(100, "Ten"));
+		test.insert(ft::pair<int, std::string>(200, "Twenty"));
+		test.insert(ft::pair<int, std::string>(150, "Five"));
+		test.insert(ft::pair<int, std::string>(250, "Five"));
 
-		test.printTree(test.getRoot(), 0);
-
-		test.deleteNode(80);
-
-		std::cout << "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" << std::endl;
-
-		test.printTree(test.getRoot(), 0);
-
-		test.deleteNode(70);
-
-		std::cout << "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" << std::endl;
-
-		test.printTree(test.getRoot(), 0);
-		
-		test.deleteNode(60);
-
-		std::cout << "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" << std::endl;
-
-		test.printTree(test.getRoot(), 0);
-
-		test.deleteNode(10);
-
-		std::cout << "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" << std::endl;
-
-		test.printTree(test.getRoot(), 0);
-
+		for (it = test.begin(); it != test.end(); it++)
+				std::cout << it->first << std::endl;
 }

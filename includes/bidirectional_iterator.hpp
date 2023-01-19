@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 17:15:00 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/09 17:43:54 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/19 16:25:55 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class bidirectional_iterator : public ft::iterator<ft::bidirectional_iterator_ta
 				typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference			reference;
 				typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::iterator_category	iterator_category;
 
-		private :
+		protected :
 
 				pointer		_ptr;
 
