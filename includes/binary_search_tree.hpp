@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/19 16:55:01 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/19 17:52:09 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,13 @@ class BST
 						}
 
 				~BST(void) {
-
+						while (this->_root != this->_null)
+								deleteNode(this->_root->pair._first);
+						this->_root = NULL;
+						_alloc.destroy(this->_null);
+						_alloc.deallocate(this->_null, 1);
+						this->_null = NULL;
+						this->_size = 0;
 				}
 
 				std::size_t		getSize(void) const {
