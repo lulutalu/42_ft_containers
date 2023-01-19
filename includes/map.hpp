@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/19 19:53:44 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/19 19:57:18 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -346,6 +346,18 @@ class map {
 		void		clear(void) {
 				if (this->_bst.getRoot() != NULL)
 						this->_bst.clearTree();
+		}
+
+		////////////////////////////////////////////////////////////////
+		///						Observers Functions					////
+		////////////////////////////////////////////////////////////////
+
+		key_compare		key_comp(void) const {
+				return (this->_compare);
+		}
+
+		value_compare	value_comp(void) const {
+				return (value_compare());
 		}
 
 }; // class
