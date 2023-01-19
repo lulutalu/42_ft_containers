@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/18 21:41:50 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/19 16:57:20 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ class map {
 				typedef typename Alloc::pointer							pointer;
 				typedef typename Alloc::const_pointer					const_pointer;
 
-				typedef ft::bidirectional_iterator<value_type>			iterator;
-				typedef ft::bidirectional_iterator<const value_type>	const_iterator;
-				typedef ft::reverse_iterator<iterator>					reverse_iterator;
-				typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
+				typedef typename ft::BST<Key, T, Compare>::iterator						iterator;
+				typedef typename ft::BST<Key, T, Compare>::const_iterator				const_iterator;
+				typedef typename ft::BST<Key, T, Compare>::reverse_iterator				reverse_iterator;
+				typedef typename ft::BST<Key, T, Compare>::const_reverse_iterator		const_reverse_iterator;
 
 				////////////////////////////////////////////////////////////////
 				///							Friend Class					////

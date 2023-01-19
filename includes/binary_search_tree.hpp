@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/19 16:48:06 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/19 16:55:01 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "pair.hpp"
 # include "bidirectional_iterator.hpp"
+# include "reverse_iterator.hpp"
 
 # include <functional>
 # include <iostream>
@@ -56,8 +57,8 @@ class BST
 				typedef Alloc			allocator_type;
 				typedef Compare			comp_operation;
 
-
-		class BSTIterator : public ft::bidirectional_iterator<NodePtr>
+		template <class U>
+		class BSTIterator : public ft::bidirectional_iterator<U>
 		{
 
 				private :
@@ -124,6 +125,10 @@ class BST
 
 		}; // end of iterator class
 
+		typedef BSTIterator<NodePtr>						iterator;
+		typedef BSTIterator<const NodePtr>					const_iterator;
+		typedef ft::reverse_iterator<iterator>				reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
 		private :
 				
