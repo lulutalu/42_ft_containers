@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/19 18:38:31 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/19 19:37:38 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,11 +142,15 @@ class BST
 
 /*				BST(const comp_operation& comp = comp_operation(), const allocator_type& alloc = allocator_type());		// Constructor of empty BST
 
+				BST&		operator = (const BST& x);						// Overload for copy
+
 				~BST(void);													// Destructor /!\ Need to free all of the nodes /!\
 
-				void	insertNode(ft::pair<const Key, T> newPair);			// Insert new Node with the parameter newPair<const Key, T>
+				void	clearTree(void);
 
-				void	deleteNode(Key& key);								// Delete a Node with the parameter key
+				bool	insertNode(ft::pair<const Key, T> newPair);			// Insert new Node with the parameter newPair<const Key, T>
+
+				bool	deleteNode(const Key& key);							// Delete a Node with the parameter key
 
 				void	insertFix(NodePtr x);								// After inserting new node check if the 5 rules of Red-Black-BST are respected
 
@@ -162,10 +166,13 @@ class BST
 
 				NodePtr 		maximum(NodePtr x);
 
-				std::size_t		getSize(void);
+				std::size_t		getSize(void) const;
 
-				NodePtr			getRoot(void);
+				NodePtr			getNull(void) const;
 
+				NodePtr			getRoot(void) const;
+
+				iterator		find(const Key& key);
 */
 
 				BST(const comp_operation& comp = comp_operation(), const allocator_type& alloc = allocator_type()) 
@@ -177,9 +184,23 @@ class BST
 						_null->rChild = NULL;
 						_null->parent = NULL;
 						_root = _null;
-						}
+				}
+
+				BST&		operator = (const BST& x) {
+						if (this == &x)
+								return (*this);
+						this->_root = x._root;
+						this->_null = x._null;
+						this->_size = x._size;
+						return (*this);
+				}
 
 				~BST(void) {
+						if (this->_root != NULL)
+								this->clearTree();
+				}
+
+				void	clearTree(void) {
 						while (this->_root != this->_null)
 								deleteNode(this->_root->pair._first);
 						this->_root = NULL;
@@ -197,7 +218,13 @@ class BST
 						return (this->_root);
 				}
 
-				void	insertNode(ft::pair<Key, T> newPair) {
+				NodePtr			getNull(void) const {
+						return (this->_null);
+				}
+
+				bool	insertNode(ft::pair<Key, T> newPair) {
+						bool	isNewNode = false;
+
 						if (this->_root == this->_null) {
 								NodePtr		newNode = NULL;
 
@@ -208,7 +235,7 @@ class BST
 								this->_root = newNode;
 								recolor(this->_root);
 								this->_size++;
-								return ;
+								isNewNode = true;
 						}
 						else {
 								NodePtr		cur = this->_root;
@@ -218,7 +245,7 @@ class BST
 								while (cur != this->_null) {
 
 										if (cur->pair._first == newPair._first) // check if the key already exist inside the BST
-												return ;
+												return (false);
 
 										else if (this->_comp(newPair._first, cur->pair._first)) {
 												ptrParent = cur;
@@ -246,7 +273,9 @@ class BST
 										ptrParent->rChild = newNode;
 								cur = newNode;
 								this->_size++;
+								isNewNode = true;
 								insertFix(cur);
+								return (isNewNode);
 						}
 				}
 
@@ -299,7 +328,7 @@ class BST
 						}
 				}
 
-				void	deleteNode(const Key& key) {
+				bool	deleteNode(const Key& key) {
 						NodePtr		cur;
 						NodePtr		y;
 						NodePtr		x;
@@ -307,7 +336,7 @@ class BST
 
 						cur = this->_root;
 						if (cur == this->_null || cur == NULL)
-								return ;
+								return (false);
 
 						while (cur != this->_null && cur->pair._first != key) {
 								if (this->_comp(key, cur->pair._first))
@@ -317,7 +346,7 @@ class BST
 						}
 						if (cur == this->_null) {
 								std::cout << "No occurence found" << std::endl;
-								return ;
+								return (false);
 						}
 
 						if (cur->lChild != this->_null && cur->rChild != this->_null) {							// If cur has two child
@@ -371,13 +400,10 @@ class BST
 								_alloc.destroy(y);
 								_alloc.deallocate(y, 1);
 						}
-						if (oldColor)
-								std::cout << "Node was black" << std::endl;
-						else
-								std::cout << "Node was red" << std::endl;
 						this->_size--;
 						if (oldColor)
 								deleteFix(x);
+						return (true);
 				}
 
 				void	deleteFix(NodePtr x) {
@@ -520,6 +546,14 @@ class BST
 				}
 
 				void	recolor(NodePtr node) { node->color = !node->color; }
+
+				iterator	find(const Key& key) {
+						iterator	it = this->minimum(this->getRoot());
+
+						while (it->first != key)
+								it++;
+						return (it);
+				}
 
 				void	printTree(NodePtr root, int space) const {
 						if (root == this->_null || root == NULL)

@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/19 18:50:59 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/19 19:38:14 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ class map {
 		map(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, 
 						const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _bst(comp, alloc), _alloc(alloc), _compare(comp) {
 				while (first != last) {
-						this->_bst.insertNode(*first);
+						this->_bst.insertNode(first->pair);
 						first++;
 				}
 		}
@@ -261,6 +261,72 @@ class map {
 
 		size_type	max_size(void) const {
 				return (this->_alloc.max_size());
+		}
+
+		////////////////////////////////////////////////////////////////
+		///						Element Access						////
+		////////////////////////////////////////////////////////////////
+
+		mapped_type&		operator [] (const key_type& k) {
+		}
+
+		////////////////////////////////////////////////////////////////
+		///						Modifiers Functions					////
+		////////////////////////////////////////////////////////////////
+
+		ft::pair<iterator, bool>	insert(const value_type& val) {
+				bool		isNew;
+				iterator	it;
+
+				isNew = this->_bst.insertNode(val);
+				it = this->_bst.find(val->_first);
+				return (ft::make_pair(it, isNew));
+		}
+
+		iterator					insert(iterator position, const value_type& val) {
+				iterator	it;
+
+				this->_bst.insertNode(val);
+				it = this->_bst.find(val->_first);
+				return (it);
+		}
+
+		template <class InputIterator>
+		void	insert (typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last) {
+				while (first != last) {
+						this->_bst.insertNode(first->pair);
+						first++;
+				}
+		}
+
+		void		erase(iterator position) {
+				this->_bst.deleteNode(position->pair._first);
+		}
+
+		size_type	erase(const key_type& k) {
+				if (this->_bst.deleteNode(k))
+						return (1);
+				return (0);
+		}
+
+		void		erase(iterator first, iterator last) {
+				while (first != last) {
+						this->_bst.deleteNode(first->pair._first);
+						first++;
+				}
+		}
+
+		void		swap(map& x) {
+				BST<Key, T, Compare>	tmp;
+
+				tmp = this->_bst;
+				this->_bst = x._bst;
+				x._bst = tmp;
+		}
+
+		void		clear(void) {
+				if (this->_bst.getRoot() != NULL)
+						this->_bst.clearTree();
 		}
 
 }; // class
