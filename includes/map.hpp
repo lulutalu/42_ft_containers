@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/19 19:57:18 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/20 15:56:05 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,6 +358,66 @@ class map {
 
 		value_compare	value_comp(void) const {
 				return (value_compare());
+		}
+
+		////////////////////////////////////////////////////////////////
+		///							Operations						////
+		////////////////////////////////////////////////////////////////
+
+		iterator		find(const key_type& k) {
+				iterator	it = this->_bst.find(k);
+
+				if (it->_ptr == this->_bst.getNull())
+						return (this->end());
+				return (it);
+		}
+
+		const_iterator	find(const key_type& k) const {
+				const_iterator	it = this->_bst.find(k);
+
+				if (it->_ptr == this->_bst.getNull())
+						return (this->end());
+				return (it);
+		}
+
+		size_type		count(const key_type& k) const {
+				iterator	it = this->_bst.find(k);
+
+				if (it->_ptr == this->_bst.getNull())
+						return (0);
+				return (1);
+		}
+
+		iterator		lower_bound(const key_type& k) {
+				return (this->_bst.lower(k));
+		}
+
+		const_iterator	lower_bound(const key_type& k) const {
+				return (this->_bst.lower(k));
+		}
+
+		iterator		upper_bound(const key_type& k) {
+				return (this->_bst.upper(k));
+		}
+
+		const_iterator	upper_bound(const key_type& k) const {
+				return (this->_bst.upper(k));
+		}
+
+		ft::pair<const_iterator, const_iterator>	equal_range(const key_type& k) const {
+				return (ft::make_pair(this->lower_bound(k), this->upper_bound(k)));
+		}
+
+		ft::pair<iterator, iterator>				equal_range(const key_type& k) {
+				return (ft::make_pair(this->lower_bound(k), this->upper_bound(k)));
+		}
+
+		////////////////////////////////////////////////////////////////
+		///							Allocator						////
+		////////////////////////////////////////////////////////////////
+
+		allocator_type		get_allocator(void) const {
+				return (this->_alloc);
 		}
 
 }; // class

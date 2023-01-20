@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/19 19:48:55 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/20 15:48:29 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,8 @@ class BST
 				NodePtr			getRoot(void) const;
 
 				iterator		find(const Key& key);
+
+				iterator		lower(const Key& key);
 */
 
 				BST(const comp_operation& comp = comp_operation(), const allocator_type& alloc = allocator_type()) 
@@ -548,10 +550,54 @@ class BST
 				void	recolor(NodePtr node) { node->color = !node->color; }
 
 				iterator	find(const Key& key) {
-						iterator	it = this->minimum(this->getRoot());
+						iterator	it(this->minimum(this->getRoot()));
 
 						while (it->_ptr != this->_null && it->first != key)
 								it++;
+						return (it);
+				}
+
+				iterator		lower(const Key& key) {
+						iterator	it(this->minimum(this->_root));
+
+						while (it->_ptr != this->maximum(this->_root)) {
+								if (!this->_comp(it->_first, key))
+										return (it);
+								it++;
+						}
+						return (it);
+				}
+
+				const_iterator	lower(const Key& key) const {
+						const_iterator	it(this->minimum(this->_root));
+
+						while (it->_ptr != this->maximum(this->_root)) {
+								if (!this->_comp(it->_first, key))
+										return (it);
+								it++;
+						}
+						return (it);
+				}
+
+				iterator		upper(const Key& key) {
+						iterator	it(this->minimum(this->_root));
+
+						while (it->_ptr != this->maximum(this->_root)) {
+								if (this->_comp(key, it->_first))
+										return (it);
+								it++;
+						}
+						return (it);
+				}
+
+				const_iterator	upper(const Key& key) const {
+						const_iterator	it(this->minimum(this->_root));
+
+						while (it->_ptr != this->maximum(this->_root)) {
+								if (this->_comp(key, it->_first))
+										return (it);
+								it++;
+						}
 						return (it);
 				}
 
