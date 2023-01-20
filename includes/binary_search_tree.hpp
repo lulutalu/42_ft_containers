@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/20 19:06:21 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/20 21:23:07 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,13 @@ class BST
 						BSTIterator&		operator ++ (void) {
 								NodePtr		y;
 
-								if (this->_ptr == this->_bst->maximum(this->_bst->getRoot()))
+								if (this->_ptr == NULL || this->_ptr == this->_bst->_null)
 										throw std::exception();
+
+								if (this->_ptr == this->_bst->maximum(this->_bst->getRoot())) {
+										this->_ptr = this->_ptr->rChild;
+										return (*this);
+								}
 
 								y = this->_bst->minimum(this->_ptr->rChild);
 								if (y != this->_bst->_null && y != NULL)
@@ -142,8 +147,8 @@ class BST
 
 						BSTIterator&		operator -- (void) {
 								NodePtr		y;
-
-								if (this->_ptr == this->_bst->minimum(this->_bst->getRoot()))
+								
+								if (this->_bst->_root == NULL || this->_bst->_root == this->_bst->_null)
 										throw std::exception();
 
 								y = this->_bst->maximum(this->_ptr->lChild);
@@ -268,6 +273,10 @@ class BST
 						return (this->_null);
 				}
 
+				allocator_type	getAlloc(void) const {
+						return (this->_alloc);
+				}
+
 				bool	insertNode(value_type newPair) {
 						bool	isNewNode = false;
 
@@ -278,6 +287,8 @@ class BST
 								_alloc.construct(newNode, Node(newPair));
 								newNode->lChild = this->_null;
 								newNode->rChild = this->_null;
+								newNode->lChild->parent = newNode;
+								newNode->rChild->parent = newNode;
 								this->_root = newNode;
 								recolor(this->_root);
 								this->_size++;
@@ -312,6 +323,8 @@ class BST
 								_alloc.construct(newNode, Node(newPair));
 								newNode->rChild = this->_null;
 								newNode->lChild = this->_null;
+								newNode->rChild->parent = newNode;
+								newNode->lChild->parent = newNode;
 								newNode->parent = ptrParent;
 								if (dir == 0)
 										ptrParent->lChild = newNode;
@@ -520,15 +533,18 @@ class BST
 				}
 
 				NodePtr	minimum(NodePtr x) const {
-						while (x->lChild != this->_null && x->lChild != NULL) {
-								x = x->lChild;
+						if (x != NULL) {
+								while (x->lChild != this->_null && x->lChild != NULL)
+									x = x->lChild;
 						}
 						return (x);
 				}
 
 				NodePtr	maximum(NodePtr x) const {
-						while (x->rChild != this->_null && x->rChild != NULL)
-								x = x->rChild;
+						if (x != NULL) {
+								while (x->rChild != this->_null && x->rChild != NULL)
+										x = x->rChild;
+						}
 						return (x);
 				}
 
@@ -605,7 +621,7 @@ class BST
 
 				iterator		lower(const Key& key) {
 						iterator	it(this->minimum(this->_root), this);
-						iterator	end(this->maximum(this->_root), this);
+						iterator	end(this->maximum(this->_root)->rChild, this);
 
 						while (it != end) {
 								if (!this->_comp(it->first, key))
@@ -617,7 +633,7 @@ class BST
 
 				const_iterator	lower(const Key& key) const {
 						iterator	it(this->minimum(this->_root), this);
-						iterator	end(this->maximum(this->_root), this);
+						iterator	end(this->maximum(this->_root)->rChild, this);
 
 						while (it != end) {
 								if (!this->_comp(it->first, key))
@@ -629,7 +645,7 @@ class BST
 
 				iterator		upper(const Key& key) {
 						iterator	it(this->minimum(this->_root), this);
-						iterator	end(this->maximum(this->_root), this);
+						iterator	end(this->maximum(this->_root)->rChild, this);
 
 						while (it != end) {
 								if (this->_comp(key, it->first))
@@ -641,7 +657,7 @@ class BST
 
 				const_iterator	upper(const Key& key) const {
 						iterator	it(this->minimum(this->_root), this);
-						iterator	end(this->maximum(this->_root), this);
+						iterator	end(this->maximum(this->_root)->rChild, this);
 
 						while (it != end) {
 								if (this->_comp(key, it->first))

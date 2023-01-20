@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/20 19:17:32 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/20 20:54:34 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,11 +232,11 @@ class map {
 		}
 
 		iterator				end(void) {
-				return (iterator(this->_bst.maximum(this->_bst.getRoot()), &this->_bst));
+				return (iterator(this->_bst.maximum(this->_bst.getRoot())->rChild, &this->_bst));
 		}
 
 		const_iterator			end(void) const {
-				return (const_iterator(this->_bst.maximum(this->_bst.getRoot()), &this->_bst));
+				return (const_iterator(this->_bst.maximum(this->_bst.getRoot())->rChild, &this->_bst));
 		}
 
 		reverse_iterator		rbegin(void) {
@@ -270,7 +270,7 @@ class map {
 		}
 
 		size_type	max_size(void) const {
-				return (this->_alloc.max_size());
+				return (this->_bst.getAlloc().max_size());
 		}
 
 		////////////////////////////////////////////////////////////////
@@ -278,9 +278,7 @@ class map {
 		////////////////////////////////////////////////////////////////
 
 		mapped_type&		operator [] (const key_type& k) {
-				iterator	it = this->_bst.find(k);
-
-				return (it->second);
+				return ((*((this->insert(ft::make_pair(k, mapped_type()))).first)).second);
 		}
 
 		mapped_type&		at(const key_type& k) {
