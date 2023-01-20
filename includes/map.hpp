@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/20 16:10:07 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/20 18:25:00 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ class map {
 				typedef typename Alloc::pointer							pointer;
 				typedef typename Alloc::const_pointer					const_pointer;
 
-				typedef typename ft::BST<Key, T, Compare>::iterator						iterator;
-				typedef typename ft::BST<Key, T, Compare>::const_iterator				const_iterator;
-				typedef typename ft::BST<Key, T, Compare>::reverse_iterator				reverse_iterator;
-				typedef typename ft::BST<Key, T, Compare>::const_reverse_iterator		const_reverse_iterator;
+				typedef typename ft::BST<value_type, key_type, key_compare>::iterator					iterator;
+				typedef typename ft::BST<value_type, key_type, key_compare>::const_iterator				const_iterator;
+				typedef typename ft::BST<value_type, key_type, key_compare>::reverse_iterator			reverse_iterator;
+				typedef typename ft::BST<value_type, key_type, key_compare>::const_reverse_iterator		const_reverse_iterator;
 
 				////////////////////////////////////////////////////////////////
 				///							Friend Class					////
@@ -63,6 +63,9 @@ class map {
 
 				class value_compare : public std::binary_function<value_type, value_type, bool>
 				{
+						
+						friend class map<key_type, mapped_type, key_compare, allocator_type>;
+
 						public :
 								
 								//						Member Types
@@ -72,24 +75,24 @@ class map {
 
 								//						Member Functions
 								bool		operator () (const value_type&x, const value_type& y) const {
-										return (this->_comp(x.first, y.first));
+										return (this->comp(x.first, y.first));
 								}
 
 						protected :
 
 								//						Protected variable
-								Compare		_comp;
+								Compare		comp;
 
 								//						Protected Constructor
-								value_compare(Compare c) : _comp(c) {};
+								value_compare(Compare c) : comp(c) {};
 
 				}; // value_compare class
 
 		private :
 
-				allocator_type				_alloc;
-				key_compare					_compare;
-				BST<Key, T, Compare>		_bst;
+				allocator_type								_alloc;
+				key_compare									_compare;
+				BST<value_type, key_type, key_compare>		_bst;
 
 		public :
 
@@ -190,18 +193,18 @@ class map {
 		////////////////////////////////////////////////////////////////
 
 		explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) :
-				_bst(comp, alloc), _alloc(alloc), _compare(comp) {}
+				_alloc(alloc), _compare(comp), _bst(comp, alloc) {}
 
 		template <class InputIterator>
 		map(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, 
-						const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _bst(comp, alloc), _alloc(alloc), _compare(comp) {
+						const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _alloc(alloc), _compare(comp), _bst(comp, alloc) {
 				while (first != last) {
-						this->_bst.insertNode(first->pair);
+						this->_bst.insertNode(*first);
 						first++;
 				}
 		}
 
-		map(const map& x) : _bst(x._compare, x._alloc), _alloc(x._alloc), _compare(x._compare) {
+		map(const map& x) : _alloc(x._alloc), _compare(x._compare), _bst(x._compare, x._alloc) {
 				*this = x;
 		}
 
@@ -221,35 +224,35 @@ class map {
 		////////////////////////////////////////////////////////////////
 
 		iterator				begin(void) {
-				return (iterator(this->_bst.minimum(this->_bst.getRoot())));
+				return (iterator(this->_bst.minimum(this->_bst.getRoot()), &this->_bst));
 		}
 
 		const_iterator			begin(void) const {
-				return (const_iterator(this->_bst.minimum(this->_bst.getRoot())));
+				return (const_iterator(this->_bst.minimum(this->_bst.getRoot()), &this->_bst));
 		}
 
 		iterator				end(void) {
-				return (iterator(this->_bst.maximum(this->_bst.getRoot())));
+				return (iterator(this->_bst.maximum(this->_bst.getRoot()), &this->_bst));
 		}
 
 		const_iterator			end(void) const {
-				return (const_iterator(this->_bst.maximum(this->_bst.getRoot())));
+				return (const_iterator(this->_bst.maximum(this->_bst.getRoot()), &this->_bst));
 		}
 
 		reverse_iterator		rbegin(void) {
-				return (reverse_iterator(this->_bst.maximum(this->_bst.getRoot())));
+				return (reverse_iterator(this->_bst.maximum(this->_bst.getRoot()), &this->_bst));
 		}
 
 		const_reverse_iterator	rbegin(void) const {
-				return (const_reverse_iterator(this->_bst.maximum(this->_bst.getRoot())));
+				return (const_reverse_iterator(this->_bst.maximum(this->_bst.getRoot()), &this->_bst));
 		}
 
 		reverse_iterator		rend(void) {
-				return (reverse_iterator(this->_bst.minimum(this->_bst.getRoot())));
+				return (reverse_iterator(this->_bst.minimum(this->_bst.getRoot()), &this->_bst));
 		}
 
 		const_reverse_iterator	rend(void) const {
-				return (const_reverse_iterator(this->_bst.minimum(this->_bst.getRoot())));
+				return (const_reverse_iterator(this->_bst.minimum(this->_bst.getRoot()), &this->_bst));
 		}
 
 		////////////////////////////////////////////////////////////////
@@ -277,7 +280,7 @@ class map {
 		mapped_type&		operator [] (const key_type& k) {
 				iterator	it = this->_bst.find(k);
 
-				return (it->pair._first);
+				return (it->second);
 		}
 
 		mapped_type&		at(const key_type& k) {
@@ -312,6 +315,7 @@ class map {
 		iterator					insert(iterator position, const value_type& val) {
 				iterator	it;
 
+				(void)position;
 				this->_bst.insertNode(val);
 				it = this->_bst.find(val->_first);
 				return (it);
@@ -364,7 +368,7 @@ class map {
 		}
 
 		value_compare	value_comp(void) const {
-				return (value_compare());
+				return (value_compare(this->key_comp()));
 		}
 
 		////////////////////////////////////////////////////////////////

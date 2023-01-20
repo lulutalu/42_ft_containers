@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/20 15:48:29 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/20 18:34:17 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@
 
 namespace ft {
 
-template <class Key, class T>
+template <class T>
 struct Node {
 
 
 		bool						color; 	// true -> red, false -> black
-		ft::pair<Key, T>			pair;	// grant access to key and value
+		T							pair;	// grant access to key and value
 		Node*						lChild;	// pointer to left child of node
 		Node*						rChild;	// pointer to right child of node
 		Node*						parent;	// pointer to parend of node
 
-		Node(ft::pair<Key, T> newPair) : 
+		Node(T newPair) : 
 				color(true), pair(newPair), lChild(NULL), rChild(NULL), parent(NULL) {}
 
 		Node(void) : color(false), pair(), lChild(NULL), rChild(NULL), parent(NULL) {}
@@ -47,44 +47,78 @@ struct Node {
  * 		5. For all the path inside the BST, the number of black nodes encounter from root to leaves must be the same
 */
 
-template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::Node<Key, T> > >
+template <class T, class Key, class Compare = std::less<Key>, class Alloc = std::allocator<ft::Node<T> > >
 class BST
 {
 		public :
 
-				typedef Node<Key, T>	Node;
+				typedef Node<T>			Node;
 				typedef Node*			NodePtr;
 				typedef Alloc			allocator_type;
 				typedef Compare			comp_operation;
 
 		template <class U>
-		class BSTIterator : public ft::bidirectional_iterator<U>
+		class BSTIterator
 		{
 
 				private :
 
 						friend class BST;
 
-						BST		_bst;
+						typedef U&		reference;
+						typedef U*		pointer;
+
+						const BST*	_bst;
+						NodePtr		_ptr;
 
 				public :
 
-						ft::pair<Key, T>&	operator * (void) const {
-								return (*this->_ptr->pair);
+						BSTIterator(void) : _bst(NULL), _ptr(NULL) {};
+
+						BSTIterator(const BSTIterator& x) : _bst(x._bst), _ptr(x._ptr) {}
+
+						BSTIterator(NodePtr newPtr, const BST* tree) : _bst(tree), _ptr(newPtr) {}
+
+						~BSTIterator(void) {
+								this->_ptr = NULL;
 						}
 
-						ft::pair<Key, T>*	operator -> (void) const {
-								return  (&(*this->_ptr->pair));
+						BSTIterator&		operator = (const BSTIterator& x) {
+								if (&x == this)
+										return (*this);
+								this->_ptr = x._ptr;
+								this->_bst = x._bst;
+								return (*this);
+						}
+
+						bool	operator == (const BSTIterator& rhs) const {
+								return (this->_ptr == rhs._ptr);
+						}
+
+						bool	operator != (const BSTIterator& rhs) const {
+								return (this->_ptr != rhs._ptr);
+						}
+
+						operator	BSTIterator<const U> (void) const {
+								return (BSTIterator<const U>(this->_ptr, this->_bst));
+						}
+
+						reference	operator * (void) {
+								return (this->_ptr->pair);
+						}
+
+						pointer		operator -> (void) {
+								return  (&(this->_ptr->pair));
 						}
 
 						BSTIterator&		operator ++ (void) {
 								NodePtr		y;
 
-								if (this->_ptr == this->_bst.maximum(this->_bst.getRoot()))
+								if (this->_ptr == this->_bst->maximum(this->_bst->getRoot()))
 										throw std::exception();
 
-								y = this->_bst.minimum(this->_ptr->rChild);
-								if (y != this->_bst._null && y != NULL)
+								y = this->_bst->minimum(this->_ptr->rChild);
+								if (y != this->_bst->_null && y != NULL)
 										this->_ptr = y;
 								else if (this->_ptr->parent->rChild != this->_ptr)
 										this->_ptr = this->_ptr->parent;
@@ -103,16 +137,16 @@ class BST
 						BSTIterator&		operator -- (void) {
 								NodePtr		y;
 
-								if (this->_ptr == this->_bst.minimum(this->_bst.getRoot()))
+								if (this->_ptr == this->_bst->minimum(this->_bst->getRoot()))
 										throw std::exception();
 
-								y = this->_bst.maximum(this->_ptr->lChild);
-								if (y != this->_bst.null && y != NULL)
+								y = this->_bst->maximum(this->_ptr->lChild);
+								if (y != this->_bst->_null && y != NULL)
 										this->_ptr = y;
 								else if (this->_ptr->parent->lChild != this->_ptr)
 										this->_ptr = this->_ptr->parent;
 								else
-										this->_ptr = this->_parent->parent;
+										this->_ptr = this->_ptr->parent->parent;
 								return (*this);
 						}
 
@@ -123,10 +157,14 @@ class BST
 								return (tmp);
 						}
 
+						U*		getPointer(void) const {
+								return (this->_ptr);
+						}
+
 		}; // end of iterator class
 
-		typedef BSTIterator<NodePtr>						iterator;
-		typedef BSTIterator<const NodePtr>					const_iterator;
+		typedef BSTIterator<T>								iterator;
+		typedef BSTIterator<const T>						const_iterator;
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
@@ -204,7 +242,7 @@ class BST
 
 				void	clearTree(void) {
 						while (this->_root != this->_null)
-								deleteNode(this->_root->pair._first);
+								deleteNode(this->_root->pair.first);
 						this->_root = NULL;
 						_alloc.destroy(this->_null);
 						_alloc.deallocate(this->_null, 1);
@@ -246,10 +284,10 @@ class BST
 
 								while (cur != this->_null) {
 
-										if (cur->pair._first == newPair._first) // check if the key already exist inside the BST
+										if (cur->pair.first == newPair.first) // check if the key already exist inside the BST
 												return (false);
 
-										else if (this->_comp(newPair._first, cur->pair._first)) {
+										else if (this->_comp(newPair.first, cur->pair.first)) {
 												ptrParent = cur;
 												cur = cur->lChild;
 												dir = 0;
@@ -277,8 +315,8 @@ class BST
 								this->_size++;
 								isNewNode = true;
 								insertFix(cur);
-								return (isNewNode);
 						}
+						return (isNewNode);
 				}
 
 				void	insertFix(NodePtr x) {
@@ -340,8 +378,8 @@ class BST
 						if (cur == this->_null || cur == NULL)
 								return (false);
 
-						while (cur != this->_null && cur->pair._first != key) {
-								if (this->_comp(key, cur->pair._first))
+						while (cur != this->_null && cur->pair.first != key) {
+								if (this->_comp(key, cur->pair.first))
 										cur = cur->lChild;
 								else
 										cur = cur->rChild;
@@ -361,7 +399,8 @@ class BST
 								x = y->rChild;
 								if (x == this->_null)
 										x->parent = y->parent;
-								cur->pair = y->pair;
+								cur->pair.first = y->pair.first;
+								cur->pair.second = y->pair.second;
 								_alloc.destroy(y);
 								_alloc.deallocate(y, 1);
 						}
@@ -474,14 +513,14 @@ class BST
 						x->color = false;
 				}
 
-				NodePtr	minimum(NodePtr x) {
+				NodePtr	minimum(NodePtr x) const {
 						while (x->lChild != this->_null && x->lChild != NULL) {
 								x = x->lChild;
 						}
 						return (x);
 				}
 
-				NodePtr	maximum(NodePtr x) {
+				NodePtr	maximum(NodePtr x) const {
 						while (x->rChild != this->_null && x->rChild != NULL)
 								x = x->rChild;
 						return (x);
@@ -550,18 +589,20 @@ class BST
 				void	recolor(NodePtr node) { node->color = !node->color; }
 
 				iterator	find(const Key& key) {
-						iterator	it(this->minimum(this->getRoot()));
+						iterator	it(this->minimum(this->getRoot()), this);
+						iterator	null(this->_null, this);
 
-						while (it->_ptr != this->_null && it->first != key)
+						while (it != null && it->first != key)
 								it++;
 						return (it);
 				}
 
 				iterator		lower(const Key& key) {
-						iterator	it(this->minimum(this->_root));
+						iterator	it(this->minimum(this->_root), this);
+						iterator	end(this->maximum(this->_root), this);
 
-						while (it->_ptr != this->maximum(this->_root)) {
-								if (!this->_comp(it->_first, key))
+						while (it != end) {
+								if (!this->_comp(it->first, key))
 										return (it);
 								it++;
 						}
@@ -569,10 +610,11 @@ class BST
 				}
 
 				const_iterator	lower(const Key& key) const {
-						const_iterator	it(this->minimum(this->_root));
+						iterator	it(this->minimum(this->_root), this);
+						iterator	end(this->maximum(this->_root), this);
 
-						while (it->_ptr != this->maximum(this->_root)) {
-								if (!this->_comp(it->_first, key))
+						while (it != end) {
+								if (!this->_comp(it->first, key))
 										return (it);
 								it++;
 						}
@@ -580,10 +622,11 @@ class BST
 				}
 
 				iterator		upper(const Key& key) {
-						iterator	it(this->minimum(this->_root));
+						iterator	it(this->minimum(this->_root), this);
+						iterator	end(this->maximum(this->_root), this);
 
-						while (it->_ptr != this->maximum(this->_root)) {
-								if (this->_comp(key, it->_first))
+						while (it != end) {
+								if (this->_comp(key, it->first))
 										return (it);
 								it++;
 						}
@@ -591,10 +634,11 @@ class BST
 				}
 
 				const_iterator	upper(const Key& key) const {
-						const_iterator	it(this->minimum(this->_root));
+						iterator	it(this->minimum(this->_root), this);
+						iterator	end(this->maximum(this->_root), this);
 
-						while (it->_ptr != this->maximum(this->_root)) {
-								if (this->_comp(key, it->_first))
+						while (it != end) {
+								if (this->_comp(key, it->first))
 										return (it);
 								it++;
 						}
@@ -616,7 +660,7 @@ class BST
 								strCol = "\033[1;31m";
 						else
 								strCol = "\033[0m";
-						std::cout << strCol << root->pair._second << "\033[0m" << std::endl;
+						std::cout << strCol << root->pair.second << "\033[0m" << std::endl;
 						printTree(root->lChild, space);
 				}
 
