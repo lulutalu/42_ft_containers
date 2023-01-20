@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/20 18:34:17 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/20 19:06:21 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@
 
 namespace ft {
 
-template <class T>
+template <class Value>
 struct Node {
 
 
 		bool						color; 	// true -> red, false -> black
-		T							pair;	// grant access to key and value
+		Value						pair;	// grant access to key and value
 		Node*						lChild;	// pointer to left child of node
 		Node*						rChild;	// pointer to right child of node
 		Node*						parent;	// pointer to parend of node
 
-		Node(T newPair) : 
+		Node(Value newPair) : 
 				color(true), pair(newPair), lChild(NULL), rChild(NULL), parent(NULL) {}
 
 		Node(void) : color(false), pair(), lChild(NULL), rChild(NULL), parent(NULL) {}
@@ -52,21 +52,27 @@ class BST
 {
 		public :
 
-				typedef Node<T>			Node;
-				typedef Node*			NodePtr;
-				typedef Alloc			allocator_type;
-				typedef Compare			comp_operation;
+				typedef T					value_type;
+				typedef Node<value_type>	Node;
+				typedef Node*				NodePtr;
+				typedef Alloc				allocator_type;
+				typedef Compare				comp_operation;
 
 		template <class U>
 		class BSTIterator
 		{
 
-				private :
+				public :
 
 						friend class BST;
 
+						typedef typename ft::iterator<ft::bidirectional_iterator_tag, U>::value_type		value_type;
+						typedef typename ft::iterator<ft::bidirectional_iterator_tag, U>::difference_type	difference_type;
+						typedef typename ft::iterator<ft::bidirectional_iterator_tag, U>::iterator_category	iterator_category;
 						typedef U&		reference;
 						typedef U*		pointer;
+
+				private :
 
 						const BST*	_bst;
 						NodePtr		_ptr;
@@ -103,11 +109,11 @@ class BST
 								return (BSTIterator<const U>(this->_ptr, this->_bst));
 						}
 
-						reference	operator * (void) {
+						reference	operator * (void) const {
 								return (this->_ptr->pair);
 						}
 
-						pointer		operator -> (void) {
+						pointer		operator -> (void) const {
 								return  (&(this->_ptr->pair));
 						}
 
@@ -163,8 +169,8 @@ class BST
 
 		}; // end of iterator class
 
-		typedef BSTIterator<T>								iterator;
-		typedef BSTIterator<const T>						const_iterator;
+		typedef BSTIterator<value_type>						iterator;
+		typedef BSTIterator<const value_type>				const_iterator;
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
@@ -262,7 +268,7 @@ class BST
 						return (this->_null);
 				}
 
-				bool	insertNode(ft::pair<Key, T> newPair) {
+				bool	insertNode(value_type newPair) {
 						bool	isNewNode = false;
 
 						if (this->_root == this->_null) {
@@ -588,7 +594,7 @@ class BST
 
 				void	recolor(NodePtr node) { node->color = !node->color; }
 
-				iterator	find(const Key& key) {
+				iterator	find(const Key& key) const {
 						iterator	it(this->minimum(this->getRoot()), this);
 						iterator	null(this->_null, this);
 

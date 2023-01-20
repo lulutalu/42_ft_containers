@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/20 18:25:00 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/20 19:17:32 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class map {
 
 				typedef Key												key_type;
 				typedef T												mapped_type;
-				typedef ft::pair<const Key, T>							value_type;
+				typedef ft::pair<key_type, mapped_type>					value_type;
 				typedef std::size_t										size_type;
 				typedef std::ptrdiff_t									difference_type;
 				typedef Compare											key_compare;
@@ -212,7 +212,7 @@ class map {
 				if (this == &x)
 						return (*this);
 
-				for (iterator it = x.begin(); it != x.end(); it++)
+				for (const_iterator it = x.begin(); it != x.end(); it++)
 						this->_bst.insertNode(*it);
 				return (*this);
 		}
@@ -240,19 +240,19 @@ class map {
 		}
 
 		reverse_iterator		rbegin(void) {
-				return (reverse_iterator(this->_bst.maximum(this->_bst.getRoot()), &this->_bst));
+				return (reverse_iterator(this->end()));
 		}
 
 		const_reverse_iterator	rbegin(void) const {
-				return (const_reverse_iterator(this->_bst.maximum(this->_bst.getRoot()), &this->_bst));
+				return (const_reverse_iterator(this->end()));
 		}
 
 		reverse_iterator		rend(void) {
-				return (reverse_iterator(this->_bst.minimum(this->_bst.getRoot()), &this->_bst));
+				return (reverse_iterator(this->begin()));
 		}
 
 		const_reverse_iterator	rend(void) const {
-				return (const_reverse_iterator(this->_bst.minimum(this->_bst.getRoot()), &this->_bst));
+				return (const_reverse_iterator(this->begin()));
 		}
 
 		////////////////////////////////////////////////////////////////
@@ -308,7 +308,7 @@ class map {
 				iterator	it;
 
 				isNew = this->_bst.insertNode(val);
-				it = this->_bst.find(val->_first);
+				it = this->_bst.find(val.first);
 				return (ft::make_pair(it, isNew));
 		}
 
@@ -317,20 +317,20 @@ class map {
 
 				(void)position;
 				this->_bst.insertNode(val);
-				it = this->_bst.find(val->_first);
+				it = this->_bst.find(val.first);
 				return (it);
 		}
 
 		template <class InputIterator>
 		void	insert (typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last) {
 				while (first != last) {
-						this->_bst.insertNode(first->pair);
+						this->_bst.insertNode(*first);
 						first++;
 				}
 		}
 
 		void		erase(iterator position) {
-				this->_bst.deleteNode(position->pair._first);
+				this->_bst.deleteNode(position->first);
 		}
 
 		size_type	erase(const key_type& k) {
@@ -341,13 +341,13 @@ class map {
 
 		void		erase(iterator first, iterator last) {
 				while (first != last) {
-						this->_bst.deleteNode(first->pair._first);
+						this->_bst.deleteNode(first->first);
 						first++;
 				}
 		}
 
 		void		swap(map& x) {
-				BST<Key, T, Compare>	tmp;
+				BST<value_type, key_type, key_compare>	tmp;
 
 				tmp = this->_bst;
 				this->_bst = x._bst;
@@ -377,24 +377,27 @@ class map {
 
 		iterator		find(const key_type& k) {
 				iterator	it = this->_bst.find(k);
+				iterator	null(this->_bst.getNull(), &this->_bst);
 
-				if (it->_ptr == this->_bst.getNull())
+				if (it == null)
 						return (this->end());
 				return (it);
 		}
 
 		const_iterator	find(const key_type& k) const {
 				const_iterator	it = this->_bst.find(k);
+				const_iterator	null(this->_bst.getNull(), &this->_bst);
 
-				if (it->_ptr == this->_bst.getNull())
+				if (it == null)
 						return (this->end());
 				return (it);
 		}
 
 		size_type		count(const key_type& k) const {
 				iterator	it = this->_bst.find(k);
+				iterator	null(this->_bst.getNull(), &this->_bst);
 
-				if (it->_ptr == this->_bst.getNull())
+				if (it == null)
 						return (0);
 				return (1);
 		}

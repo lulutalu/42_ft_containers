@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 16:58:36 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/06 21:30:46 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/20 19:14:37 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ namespace ft {
 
 				public :
 
-				reverse_iterator(void) : _base(NULL) {}
+				reverse_iterator(void) : _base() {}
 
 				explicit reverse_iterator(iterator_type it) : _base(it) {}
 
