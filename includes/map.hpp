@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/20 20:54:34 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/21 15:20:27 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,6 +212,9 @@ class map {
 				if (this == &x)
 						return (*this);
 
+				if (this->_bst.getRoot() != NULL)
+						this->_bst.clearTree();
+
 				for (const_iterator it = x.begin(); it != x.end(); it++)
 						this->_bst.insertNode(*it);
 				return (*this);
@@ -232,11 +235,17 @@ class map {
 		}
 
 		iterator				end(void) {
-				return (iterator(this->_bst.maximum(this->_bst.getRoot())->rChild, &this->_bst));
+				if (this->_bst.getRoot() != NULL)
+						return (iterator(this->_bst.maximum(this->_bst.getRoot())->rChild, &this->_bst));
+				else
+						return (this->begin());
 		}
 
 		const_iterator			end(void) const {
-				return (const_iterator(this->_bst.maximum(this->_bst.getRoot())->rChild, &this->_bst));
+				if (this->_bst.getRoot() != NULL)
+						return (const_iterator(this->_bst.maximum(this->_bst.getRoot())->rChild, &this->_bst));
+				else
+						return (this->begin());
 		}
 
 		reverse_iterator		rbegin(void) {
@@ -354,7 +363,7 @@ class map {
 
 		void		clear(void) {
 				if (this->_bst.getRoot() != NULL)
-						this->_bst.clearTree();
+						this->_bst.clearAll();
 		}
 
 		////////////////////////////////////////////////////////////////
@@ -430,6 +439,12 @@ class map {
 
 		allocator_type		get_allocator(void) const {
 				return (this->_alloc);
+		}
+
+
+		
+		void	debog(void) {
+				this->_bst.printTree(this->_bst.getRoot(), 0);
 		}
 
 }; // class

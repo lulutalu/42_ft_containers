@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/20 21:24:19 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/21 15:34:33 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,52 +34,32 @@ namespace ft = std;
 
 int		main(void)
 {
-	std::list<ft::pair<int, int> > lst;
-	ft::map<int, int>::iterator		cc;
-	unsigned int lst_size = 7;
+	std::list<ft::pair<const int, std::string> > lst;
+	unsigned int lst_size = 10;
 	for (unsigned int i = 0; i < lst_size; ++i)
-		lst.push_back(ft::make_pair(lst_size - i, i));
-
-	ft::map<int, int> mp(lst.begin(), lst.end());
-//	ft::map<int, int>::iterator it = mp.begin();
-	ft::map<int, int>::iterator ite = mp.end();
-
-		std::cout << ite->first << "\t" << ite->second << std::endl;
-
-		--ite;
-		std::cout << ite->first << "\t" << ite->second << std::endl;
-
-/*	ft::map<int, int> mp_range(it, --(--ite));
-
-	std::cout << ite->first << "\t" << ite->second << std::endl;
-
-	for (int i = 0; it != ite; ++it)
-		it->second = ++i * 5;
-
-	it = mp.begin(); ite = --(--mp.end());
-	ft::map<int, int> mp_copy(mp);
-	for (int i = 0; it != ite; ++it)
-		it->second = ++i * 7;
-
-	std::cout << "\t-- PART ONE --" << std::endl;
-	for (cc = mp.begin(); cc != mp.end(); cc++)
-			std::cout << cc->first << "\t" << cc->second << std::endl;
-	std::cout << "#################################" << std::endl << std::endl;
-	for (cc = mp_range.begin(); cc != mp_range.end(); cc++)
-			std::cout << cc->first << "\t" << cc->second << std::endl;
-	std::cout << "#################################" << std::endl << std::endl;
-	for (cc = mp_copy.begin(); cc != mp_copy.end(); cc++)
-			std::cout << cc->first << "\t" << cc->second << std::endl;
+		lst.push_back(ft::make_pair(i, std::string((lst_size - i), i + 65)));
+	ft::map<const int, std::string> mp(lst.begin(), lst.end());
 //	printSize(mp);
-//	printSize(mp_range);
-//	printSize(mp_copy);
 
-	mp = mp_copy;
-	mp_copy = mp_range;
-	mp_range.clear();
+	mp.erase(++mp.begin());
 
-	std::cout << "\t-- PART TWO --" << std::endl;
+	mp.erase(mp.begin());
+	mp.erase(--mp.end());
+
+	mp.erase(mp.begin(), ++(++(++mp.begin())));
+	mp.erase(--(--(--mp.end())), --mp.end());
+
+	mp[10] = "Hello";
+	mp[11] = "Hi there";
 //	printSize(mp);
-//	printSize(mp_range);
-//	printSize(mp_copy);*/
+	mp.erase(--(--(--mp.end())), mp.end());
+
+	mp[12] = "ONE";
+	mp[13] = "TWO";
+	mp[14] = "THREE";
+	mp[15] = "FOUR";
+//	printSize(mp);
+	mp.erase(mp.begin(), mp.end());
+
+	return (0);
 }

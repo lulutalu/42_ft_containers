@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/20 21:23:07 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/21 17:45:45 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,16 @@ class BST
 								
 								if (this->_bst->_root == NULL || this->_bst->_root == this->_bst->_null)
 										throw std::exception();
+								
+								if (this->_ptr == this->_bst->maximum(this->_bst->_root)->rChild) {
+										this->_ptr = this->_bst->maximum(this->_bst->_root);
+										return (*this);
+								}
+
+								if (this->_ptr == this->_bst->minimum(this->_bst->_root)) {
+										this->_ptr = NULL;
+										return (*this);
+								}
 
 								y = this->_bst->maximum(this->_ptr->lChild);
 								if (y != this->_bst->_null && y != NULL)
@@ -248,17 +258,41 @@ class BST
 
 				~BST(void) {
 						if (this->_root != NULL)
-								this->clearTree();
+								this->clearAll();
 				}
 
 				void	clearTree(void) {
 						while (this->_root != this->_null)
 								deleteNode(this->_root->pair.first);
 						this->_root = NULL;
-						_alloc.destroy(this->_null);
-						_alloc.deallocate(this->_null, 1);
-						this->_null = NULL;
 						this->_size = 0;
+				}
+
+				void	clearAll(void) {
+						this->clearTree();
+						if (this->_null != NULL) {
+								_alloc.destroy(this->_null);
+								_alloc.deallocate(this->_null, 1);
+								this->_null = NULL;
+						}
+				}
+
+				NodePtr	NodeDup(NodePtr nPtr, value_type pair) {
+						NodePtr		newN = NULL;
+
+						newN = _alloc.allocate(1);
+						_alloc.construct(newN, Node(pair));
+						newN->color = nPtr->color;
+						newN->lChild = nPtr->lChild;
+						newN->rChild = nPtr->rChild;
+						newN->parent = nPtr->parent;
+						if (newN->parent != NULL && newN->parent != this->_null) {
+								if (newN->parent->lChild == nPtr)
+										newN->parent->lChild = newN;
+								else
+										newN->parent->rChild = newN;
+						}
+						return (newN);
 				}
 
 				std::size_t		getSize(void) const {
@@ -280,7 +314,7 @@ class BST
 				bool	insertNode(value_type newPair) {
 						bool	isNewNode = false;
 
-						if (this->_root == this->_null) {
+						if (this->_root == this->_null || this->_root == NULL) {
 								NodePtr		newNode = NULL;
 
 								newNode = _alloc.allocate(1);
@@ -416,10 +450,14 @@ class BST
 								else
 										y->parent->lChild = y->rChild;
 								x = y->rChild;
-								if (x == this->_null)
+								if (x != NULL)
 										x->parent = y->parent;
-								cur->pair.first = y->pair.first;
-								cur->pair.second = y->pair.second;
+
+								NodePtr		replace = NodeDup(cur, y->pair);
+								if (cur == this->_root)
+										this->_root = replace;
+								_alloc.destroy(cur);
+								_alloc.deallocate(cur, 1);
 								_alloc.destroy(y);
 								_alloc.deallocate(y, 1);
 						}
@@ -442,21 +480,32 @@ class BST
 						}
 						else if (cur->lChild != this->_null) {													// If cur has a lChild
 								y = cur->lChild;
-								cur->pair = y->pair;
-								cur->lChild = this->_null;
-								x = cur->lChild;
-								x->parent = cur;
+								NodePtr		replace = NodeDup(cur, y->pair);
+								if (cur == this->_root)
+										this->_root = replace;
+
+								replace->lChild = this->_null;
+								x = replace->lChild;
+								x->parent = replace;
 								oldColor = !y->color;
+
+								_alloc.destroy(cur);
+								_alloc.deallocate(cur, 1);
 								_alloc.destroy(y);
 								_alloc.deallocate(y, 1);
 						}
 						else {																		// If cur has a rChild
 								y = cur->rChild;
-								cur->pair = y->pair;
-								cur->rChild = this->_null;
-								x = cur->rChild;
-								x->parent = cur;
+								NodePtr		replace = NodeDup(cur, y->pair);
+								if (cur == this->_root)
+										this->_root = replace;
+								replace->rChild = this->_null;
+								x = replace->rChild;
+								x->parent = replace;
 								oldColor = !y->color;
+
+								_alloc.destroy(cur);
+								_alloc.deallocate(cur, 1);
 								_alloc.destroy(y);
 								_alloc.deallocate(y, 1);
 						}
@@ -554,26 +603,27 @@ class BST
 				 * Also 'node->parent' : lChild or rChild will change depending of prev pos of 'node'
 				 * Finally 'node->rChild->lChild : parent will change. */
 				void	leftRotate(NodePtr x) {
-						if (x->rChild == this->_null)
+						if (x == NULL || x == this->_null)
+								return ;
+
+						if (x->rChild == this->_null || x->rChild == NULL)
 								return ;
 
 						NodePtr		y = x->rChild;
 
 						x->rChild = y->lChild;
 
-						if (x->rChild != this->_null)
-								x->rChild->parent = x;
-
-						y->lChild = x;
+						if (y->lChild != this->_null)
+								y->lChild->parent = x;
 
 						y->parent = x->parent;
-						if (y->parent == this->_null || y->parent == NULL)
+						if (x->parent == NULL || x->parent == this->_null)
 								this->_root = y;
-						else if (y->parent->lChild == x)
-								y->parent->lChild = y;
+						else if (x->parent->lChild != NULL && x == x->parent->lChild)
+								x->parent->lChild = y;
 						else
-								y->parent->rChild = y;
-
+								x->parent->rChild = y;
+						y->lChild = x;
 						x->parent = y;
 				}
 
@@ -592,19 +642,17 @@ class BST
 
 						x->lChild = y->rChild;
 
-						if (x->lChild != this->_null)
-								x->lChild->parent = x;
-
-						y->rChild = x;
+						if (y->rChild != this->_null)
+								y->rChild->parent = x;
 
 						y->parent = x->parent;
-						if (y->parent == this->_null || y->parent == NULL)
+						if (x->parent == NULL || x->parent == this->_null)
 								this->_root = y;
-						else if (y->parent->lChild == x)
-								y->parent->lChild = y;
+						else if (x == x->parent->lChild)
+								x->parent->lChild = y;
 						else
-								y->parent->rChild = y;
-
+								x->parent->rChild = y;
+						y->rChild = x;
 						x->parent = y;
 				}
 

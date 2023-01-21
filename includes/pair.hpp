@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 16:10:38 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/20 16:33:48 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/21 15:48:03 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ struct pair {
 		pair&		operator = (const pair& other) {
 				if (&other == this)
 						return (*this);
-				this->first = other.getFirst();
-				this->second = other.getSecond();
+				this->first = other.first;
+				this->second = other.second;
 				return (*this);
 		}
 
