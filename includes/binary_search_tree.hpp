@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/21 17:45:45 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/21 19:39:24 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,21 +120,26 @@ class BST
 						BSTIterator&		operator ++ (void) {
 								NodePtr		y;
 
-								if (this->_ptr == NULL || this->_ptr == this->_bst->_null)
-										throw std::exception();
+								if (!this->_ptr || this->_ptr == this->_bst->_null) {
+										this->_ptr = NULL;
+										return (*this);
+								}
 
 								if (this->_ptr == this->_bst->maximum(this->_bst->getRoot())) {
-										this->_ptr = this->_ptr->rChild;
+										this->_ptr = this->_bst->_null;
 										return (*this);
 								}
 
 								y = this->_bst->minimum(this->_ptr->rChild);
-								if (y != this->_bst->_null && y != NULL)
+
+								if (y && y != this->_bst->_null)
 										this->_ptr = y;
-								else if (this->_ptr->parent->rChild != this->_ptr)
+								else if (this->_ptr->parent && this->_ptr->parent->rChild != this->_ptr)
 										this->_ptr = this->_ptr->parent;
-								else
+								else if (this->_ptr->parent->parent)
 										this->_ptr = this->_ptr->parent->parent;
+								else
+										this->_ptr = NULL;
 								return (*this);
 						}
 
@@ -147,9 +152,6 @@ class BST
 
 						BSTIterator&		operator -- (void) {
 								NodePtr		y;
-								
-								if (this->_bst->_root == NULL || this->_bst->_root == this->_bst->_null)
-										throw std::exception();
 								
 								if (this->_ptr == this->_bst->maximum(this->_bst->_root)->rChild) {
 										this->_ptr = this->_bst->maximum(this->_bst->_root);
@@ -263,7 +265,7 @@ class BST
 
 				void	clearTree(void) {
 						while (this->_root != this->_null)
-								deleteNode(this->_root->pair.first);
+								deleteNode(this->_root->pair.first, 0);
 						this->_root = NULL;
 						this->_size = 0;
 				}
@@ -286,7 +288,7 @@ class BST
 						newN->lChild = nPtr->lChild;
 						newN->rChild = nPtr->rChild;
 						newN->parent = nPtr->parent;
-						if (newN->parent != NULL && newN->parent != this->_null) {
+						if (newN->parent != this->_null) {
 								if (newN->parent->lChild == nPtr)
 										newN->parent->lChild = newN;
 								else
@@ -321,6 +323,7 @@ class BST
 								_alloc.construct(newNode, Node(newPair));
 								newNode->lChild = this->_null;
 								newNode->rChild = this->_null;
+								newNode->parent = this->_null;
 								newNode->lChild->parent = newNode;
 								newNode->rChild->parent = newNode;
 								this->_root = newNode;
@@ -377,7 +380,7 @@ class BST
 						bool		r;
 						bool		uncle = true;
 
-						if (x->parent->parent != NULL) {
+						if (x->parent != this->_null && x->parent->parent != this->_null) {
 								gp = x->parent->parent;
 								if (gp->lChild == x->parent)
 										r = false;
@@ -386,9 +389,8 @@ class BST
 								if ((r && gp->lChild == this->_null) || (!r && gp->rChild == this->_null))
 										uncle = false;
 						}
-
-						if (x->parent->color) { // Parent is red
-								if ((r && (gp->lChild != this->_null && gp->lChild->color)) || (!r && (gp->rChild != this->_null && gp->rChild->color))) { // Both Uncle and Parent are red
+						if (gp != NULL && (x->parent != this->_null && x->parent->color)) { // Parent is red
+								if ((uncle && (gp->lChild->color && gp->rChild->color))) { // Both Uncle and Parent are red
 										if (gp != this->_root)
 												recolor(gp);
 										recolor(gp->lChild);
@@ -421,25 +423,21 @@ class BST
 						}
 				}
 
-				bool	deleteNode(const Key& key) {
+				bool	deleteNode(const Key& key, bool toFix) {
 						NodePtr		cur;
 						NodePtr		y;
 						NodePtr		x;
 						bool		oldColor = true;
 
 						cur = this->_root;
-						if (cur == this->_null || cur == NULL)
+						if (cur == this->_null || !cur)
 								return (false);
 
-						while (cur != this->_null && cur->pair.first != key) {
+						while (cur && cur != this->_null && cur->pair.first != key) {
 								if (this->_comp(key, cur->pair.first))
 										cur = cur->lChild;
 								else
 										cur = cur->rChild;
-						}
-						if (cur == this->_null) {
-								std::cout << "No occurence found" << std::endl;
-								return (false);
 						}
 
 						if (cur->lChild != this->_null && cur->rChild != this->_null) {							// If cur has two child
@@ -463,7 +461,7 @@ class BST
 						}
 						else if (cur->lChild == this->_null && cur->rChild == this->_null) {					// If cur has no Child
 								oldColor = !cur->color;
-								if (cur->parent == NULL)
+								if (cur == this->_root)
 										this->_root = this->_null;
 								else if (cur->parent->lChild == cur) {
 										cur->parent->lChild = this->_null;
@@ -510,7 +508,7 @@ class BST
 								_alloc.deallocate(y, 1);
 						}
 						this->_size--;
-						if (oldColor)
+						if (oldColor && toFix)
 								deleteFix(x);
 						return (true);
 				}
@@ -521,31 +519,28 @@ class BST
 						while (x != this->_root && !x->color) {
 								if (x->parent->lChild == x) {								// If x is left Child
 										w = x->parent->rChild;
-										if (w->rChild == NULL)
-												w->rChild = this->_null;
-										if (w->lChild == NULL)
-												w->lChild = this->_null;
 										if (w->color) {										// Sibling color is red
 												recolor(w);
 												x->parent->color = true;
 												leftRotate(x->parent);
 												w = x->parent->rChild;
 										}
-										else if ((w->rChild != this->_null && !w->rChild->color) && (w->lChild != this->_null && !w->lChild->color)) {	// Both Sibling's child color are black
+										else if ((w->rChild && !w->rChild->color) && (w->lChild && !w->lChild->color)) {	// Both Sibling's child color are black
 												w->color = true;
 												x = x->parent;
 										}
-										else if (!w->rChild->color) {						// Right Child of sibling is black
+										else if (w->rChild && !w->rChild->color) {						// Right Child of sibling is black
 												w->lChild->color = false;
 												w->color = true;
-												rightRotate(w);
+												leftRotate(w);
 												w = x->parent->rChild;
 										}
 										else {												// Other cases
 												w->color = x->parent->color;
 												if (x->parent != this->_root)
 														x->parent->parent->color = false;
-												w->rChild->color = false;
+												if (w->rChild)
+														w->rChild->color = false;
 												leftRotate(x->parent);
 												x = this->_root;
 										}
@@ -582,15 +577,15 @@ class BST
 				}
 
 				NodePtr	minimum(NodePtr x) const {
-						if (x != NULL) {
-								while (x->lChild != this->_null && x->lChild != NULL)
+						if (x && x != this->_null) {
+								while (x && x->lChild != this->_null)
 									x = x->lChild;
 						}
 						return (x);
 				}
 
 				NodePtr	maximum(NodePtr x) const {
-						if (x != NULL) {
+						if (x && x != this->_null) {
 								while (x->rChild != this->_null && x->rChild != NULL)
 										x = x->rChild;
 						}
@@ -603,13 +598,11 @@ class BST
 				 * Also 'node->parent' : lChild or rChild will change depending of prev pos of 'node'
 				 * Finally 'node->rChild->lChild : parent will change. */
 				void	leftRotate(NodePtr x) {
-						if (x == NULL || x == this->_null)
-								return ;
-
-						if (x->rChild == this->_null || x->rChild == NULL)
+						if (x->rChild == this->_null)
 								return ;
 
 						NodePtr		y = x->rChild;
+						bool		isRoot = (x == this->_root);
 
 						x->rChild = y->lChild;
 
@@ -617,7 +610,7 @@ class BST
 								y->lChild->parent = x;
 
 						y->parent = x->parent;
-						if (x->parent == NULL || x->parent == this->_null)
+						if (x->parent == this->_null)
 								this->_root = y;
 						else if (x->parent->lChild != NULL && x == x->parent->lChild)
 								x->parent->lChild = y;
@@ -625,6 +618,8 @@ class BST
 								x->parent->rChild = y;
 						y->lChild = x;
 						x->parent = y;
+						if (isRoot)
+								this->_root = y;
 				}
 
 				/*
@@ -639,6 +634,7 @@ class BST
 								return ;
 
 						NodePtr		y = x->lChild;
+						bool		isRoot = (x == this->_root);
 
 						x->lChild = y->rChild;
 
@@ -654,9 +650,11 @@ class BST
 								x->parent->rChild = y;
 						y->rChild = x;
 						x->parent = y;
+						if (isRoot)
+								this->_root = y;
 				}
 
-				void	recolor(NodePtr node) { node->color = !node->color; }
+				void	recolor(NodePtr node) { if (node != this->_root) node->color = !node->color; }
 
 				iterator	find(const Key& key) const {
 						iterator	it(this->minimum(this->getRoot()), this);

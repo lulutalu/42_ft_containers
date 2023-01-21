@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/21 15:20:27 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/21 19:34:41 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,19 +337,18 @@ class map {
 		}
 
 		void		erase(iterator position) {
-				this->_bst.deleteNode(position->first);
+				this->_bst.deleteNode(position->first, 1);
 		}
 
 		size_type	erase(const key_type& k) {
-				if (this->_bst.deleteNode(k))
+				if (this->_bst.deleteNode(k, 1))
 						return (1);
 				return (0);
 		}
 
 		void		erase(iterator first, iterator last) {
 				while (first != last) {
-						this->_bst.deleteNode(first->first);
-						first++;
+						this->_bst.deleteNode((first++)->first, 1);
 				}
 		}
 
