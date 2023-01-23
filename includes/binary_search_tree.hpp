@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/23 15:57:08 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/23 17:01:53 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -496,6 +496,7 @@ class BST
 						}
 						else if (cur->lChild == this->_null && cur->rChild == this->_null) {					// If cur has no Child
 								oldColor = !cur->color;
+								x = NULL;
 								if (cur == this->_root)
 										this->_root = this->_null;
 								else if (cur->parent->lChild == cur) {
@@ -557,7 +558,7 @@ class BST
 								_alloc.deallocate(cur, 1);
 						}
 						this->_size--;
-						if (oldColor && toFix && (x != NULL || x != this->_null))
+						if (oldColor && toFix && (x != NULL && x != this->_null))
 								deleteFix(x);
 						return (true);
 				}
@@ -624,7 +625,7 @@ class BST
 										}
 								}
 						}
-//						x->color = false;
+						x->color = false;
 				}
 
 				NodePtr	minimum(NodePtr x) const {
@@ -708,12 +709,17 @@ class BST
 				void	recolor(NodePtr node) { if (node != this->_root) node->color = !node->color; }
 
 				iterator	find(const Key& key) const {
-						iterator	it(this->minimum(this->getRoot()), this);
-						iterator	null(this->_null, this);
+						NodePtr		find = this->_root;
 
-						while (it != null && it->first != key)
-								it++;
-						return (it);
+						while (find != NULL && find != this->_null) {
+								if (find->pair.first == key)
+										return (iterator(find, this));
+								else if (this->_comp(key, find->pair.first))
+										find = find->lChild;
+								else
+										find = find->rChild;
+						}
+						return (iterator(this->_null, this));
 				}
 
 				iterator		lower(const Key& key) {

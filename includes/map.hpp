@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/23 15:56:57 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/23 17:15:54 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class map {
 
 				typedef Key												key_type;
 				typedef T												mapped_type;
-				typedef ft::pair<key_type, mapped_type>					value_type;
+				typedef ft::pair<const key_type, mapped_type>			value_type;
 				typedef std::size_t										size_type;
 				typedef std::ptrdiff_t									difference_type;
 				typedef Compare											key_compare;
@@ -227,28 +227,28 @@ class map {
 		////////////////////////////////////////////////////////////////
 
 		iterator				begin(void) {
-				if (this->_bst.getRoot() != NULL)
+				if (this->_bst.getRoot() != NULL && this->_bst.getRoot() != this->_bst.getNull())
 						return (iterator(this->_bst.minimum(this->_bst.getRoot()), &this->_bst));
 				else
 						return (iterator(NULL, &this->_bst));
 		}
 
 		const_iterator			begin(void) const {
-				if (this->_bst.getRoot() != NULL || this->_bst.getRoot() != this->_bst.getNull())
+				if (this->_bst.getRoot() != NULL && this->_bst.getRoot() != this->_bst.getNull())
 						return (const_iterator(this->_bst.minimum(this->_bst.getRoot()), &this->_bst));
 				else
 						return (const_iterator(NULL, &this->_bst));
 		}
 
 		iterator				end(void) {
-				if (this->_bst.getRoot() != NULL)
+				if (this->_bst.getRoot() != NULL && this->_bst.getRoot() != this->_bst.getNull())
 						return (iterator(this->_bst.maximum(this->_bst.getRoot())->rChild, &this->_bst));
 				else
 						return (this->begin());
 		}
 
 		const_iterator			end(void) const {
-				if (this->_bst.getRoot() != NULL)
+				if (this->_bst.getRoot() != NULL && this->_bst.getRoot() != this->_bst.getNull())
 						return (const_iterator(this->_bst.maximum(this->_bst.getRoot())->rChild, &this->_bst));
 				else
 						return (this->begin());
