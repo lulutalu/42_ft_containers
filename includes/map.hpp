@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/23 17:15:54 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/23 18:20:11 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,18 +298,20 @@ class map {
 
 		mapped_type&		at(const key_type& k) {
 				iterator	it = this->_bst.find(k);
+				iterator	null(this->_bst.getNull(), &this->_bst);
 
-				if (it->_ptr == this->_bst.getNull())
+				if (it == null)
 						throw std::out_of_range("Out of Range");
-				return (it->pair._first);
+				return (it->second);
 		}
 
 		const mapped_type&	at(const key_type& k) const {
 				iterator	it = this->_bst.find(k);
+				iterator	null(this->_bst.getNull(), &this->_bst);
 
-				if (it->_ptr == this->_bst.getNull())
+				if (it == null)
 						throw std::out_of_range("Out of Range");
-				return (it->pair._first);
+				return (it->second);
 		}
 
 		////////////////////////////////////////////////////////////////

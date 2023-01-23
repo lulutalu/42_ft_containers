@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/23 17:01:53 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/23 18:31:05 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ class BST
 				typedef Alloc				allocator_type;
 				typedef Compare				comp_operation;
 
-		template <class U>
+		template <class U, class Comp>
 		class BSTIterator
 		{
 
@@ -105,8 +105,8 @@ class BST
 								return (this->_ptr != rhs._ptr);
 						}
 
-						operator	BSTIterator<const U> (void) const {
-								return (BSTIterator<const U>(this->_ptr, this->_bst));
+						operator	BSTIterator<const U, Comp> (void) const {
+								return (BSTIterator<const U, Comp>(this->_ptr, this->_bst));
 						}
 
 						reference	operator * (void) const {
@@ -186,10 +186,10 @@ class BST
 
 		}; // end of iterator class
 
-		typedef BSTIterator<value_type>						iterator;
-		typedef BSTIterator<const value_type>				const_iterator;
-		typedef ft::reverse_iterator<iterator>				reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+		typedef BSTIterator<value_type, comp_operation>						iterator;
+		typedef BSTIterator<const value_type, comp_operation>				const_iterator;
+		typedef ft::reverse_iterator<iterator>								reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>						const_reverse_iterator;
 
 		private :
 				
