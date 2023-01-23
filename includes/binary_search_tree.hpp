@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/21 19:39:24 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/23 14:05:19 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ class BST
 								}
 
 								if (this->_ptr == this->_bst->maximum(this->_bst->getRoot())) {
-										this->_ptr = this->_bst->_null;
+										this->_ptr = this->_ptr->rChild;
 										return (*this);
 								}
 
@@ -443,21 +443,34 @@ class BST
 						if (cur->lChild != this->_null && cur->rChild != this->_null) {							// If cur has two child
 								y = minimum(cur->rChild);
 								oldColor = !y->color;
-								if (y->parent == cur)
-										cur->rChild = this->_null;
-								else
-										y->parent->lChild = y->rChild;
-								x = y->rChild;
-								if (x != NULL)
-										x->parent = y->parent;
 
-								NodePtr		replace = NodeDup(cur, y->pair);
-								if (cur == this->_root)
-										this->_root = replace;
+								if (y->parent == cur) {
+										y->parent = cur->parent;
+										y->lChild = cur->lChild;
+										y->color = cur->color;
+								}
+								else {
+										y->parent->lChild = y->rChild;
+										y->rChild->parent = y->parent;
+										cur->rChild->parent = y;
+										y->parent = cur->parent;
+										y->lChild = cur->lChild;
+										y->color = cur->color;
+								}
+
+								if (y->parent && y->parent != this->_null) {
+										if (y->parent->rChild == cur)
+												y->parent->rChild = y;
+										else
+												y->parent->lChild = y;
+								}
+								else
+										this->_root = y;
+
+								y->lChild->parent = y;
+
 								_alloc.destroy(cur);
 								_alloc.deallocate(cur, 1);
-								_alloc.destroy(y);
-								_alloc.deallocate(y, 1);
 						}
 						else if (cur->lChild == this->_null && cur->rChild == this->_null) {					// If cur has no Child
 								oldColor = !cur->color;
@@ -475,6 +488,7 @@ class BST
 								}
 								_alloc.destroy(cur);
 								_alloc.deallocate(cur, 1);
+								cur = NULL;
 						}
 						else if (cur->lChild != this->_null) {													// If cur has a lChild
 								y = cur->lChild;
@@ -489,8 +503,10 @@ class BST
 
 								_alloc.destroy(cur);
 								_alloc.deallocate(cur, 1);
+								cur = NULL;
 								_alloc.destroy(y);
 								_alloc.deallocate(y, 1);
+								y = replace;
 						}
 						else {																		// If cur has a rChild
 								y = cur->rChild;
@@ -504,8 +520,10 @@ class BST
 
 								_alloc.destroy(cur);
 								_alloc.deallocate(cur, 1);
+								cur = NULL;
 								_alloc.destroy(y);
 								_alloc.deallocate(y, 1);
+								y = replace;
 						}
 						this->_size--;
 						if (oldColor && toFix)
