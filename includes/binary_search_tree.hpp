@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/23 14:05:19 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/23 15:57:08 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ class BST
 								return (tmp);
 						}
 
-						U*		getPointer(void) const {
+						NodePtr	getPointer(void) const {
 								return (this->_ptr);
 						}
 
@@ -252,10 +252,29 @@ class BST
 				BST&		operator = (const BST& x) {
 						if (this == &x)
 								return (*this);
-						this->_root = x._root;
-						this->_null = x._null;
-						this->_size = x._size;
+						this->_alloc = x.getAlloc();
+						this->_comp = x._comp;
+						this->_root = x.getRoot();
+						this->_null = x.getNull();
+						this->_size = x.getSize();
 						return (*this);
+				}
+
+				void	swap(BST& x) {
+						NodePtr		tmp_root = x._root;
+						NodePtr		tmp_null = x._null;
+						Alloc		tmp_alloc = x._alloc;
+						std::size_t	tmp_size = x._size;
+
+						x._root = this->_root;
+						x._null = this->_null;
+						x._alloc = this->_alloc;
+						x._size = this->_size;
+
+						this->_root = tmp_root;
+						this->_null = tmp_null;
+						this->_alloc = tmp_alloc;
+						this->_size = tmp_size;
 				}
 
 				~BST(void) {
@@ -439,10 +458,13 @@ class BST
 								else
 										cur = cur->rChild;
 						}
+						if (!cur || cur == this->_null)
+								return (false);
 
 						if (cur->lChild != this->_null && cur->rChild != this->_null) {							// If cur has two child
 								y = minimum(cur->rChild);
 								oldColor = !y->color;
+								x = y->rChild;
 
 								if (y->parent == cur) {
 										y->parent = cur->parent;
@@ -492,41 +514,50 @@ class BST
 						}
 						else if (cur->lChild != this->_null) {													// If cur has a lChild
 								y = cur->lChild;
-								NodePtr		replace = NodeDup(cur, y->pair);
-								if (cur == this->_root)
-										this->_root = replace;
-
-								replace->lChild = this->_null;
-								x = replace->lChild;
-								x->parent = replace;
-								oldColor = !y->color;
-
+								oldColor = !cur->color;
+								y->parent = cur->parent;
+								if (y->parent == NULL || y->parent == this->_null) {
+										if (y != this->_null) {
+												this->_root = y;
+												y->color = false;
+										}
+										else
+												this->_root = NULL;
+								}
+								else {
+										if (y->parent->rChild == cur)
+												y->parent->rChild = y;
+										else
+												y->parent->lChild = y;
+								}
+								x = y;
 								_alloc.destroy(cur);
 								_alloc.deallocate(cur, 1);
-								cur = NULL;
-								_alloc.destroy(y);
-								_alloc.deallocate(y, 1);
-								y = replace;
 						}
 						else {																		// If cur has a rChild
 								y = cur->rChild;
-								NodePtr		replace = NodeDup(cur, y->pair);
-								if (cur == this->_root)
-										this->_root = replace;
-								replace->rChild = this->_null;
-								x = replace->rChild;
-								x->parent = replace;
-								oldColor = !y->color;
-
+								oldColor = !cur->color;
+								y->parent = cur->parent;
+								if (y->parent == NULL || y->parent == this->_null) {
+										if (y != this->_null) {
+												this->_root = y;
+												y->color = false;
+										}
+										else
+												this->_root = NULL;
+								}
+								else {
+										if (y->parent->rChild == cur)
+												y->parent->rChild = y;
+										else
+												y->parent->lChild = y;
+								}
+								x = y;
 								_alloc.destroy(cur);
 								_alloc.deallocate(cur, 1);
-								cur = NULL;
-								_alloc.destroy(y);
-								_alloc.deallocate(y, 1);
-								y = replace;
 						}
 						this->_size--;
-						if (oldColor && toFix)
+						if (oldColor && toFix && (x != NULL || x != this->_null))
 								deleteFix(x);
 						return (true);
 				}
@@ -534,8 +565,10 @@ class BST
 				void	deleteFix(NodePtr x) {
 						NodePtr		w;
 
+						if (!x || x == this->_null)
+								return ;
 						while (x != this->_root && !x->color) {
-								if (x->parent->lChild == x) {								// If x is left Child
+								if (x->parent && x->parent->lChild == x) {								// If x is left Child
 										w = x->parent->rChild;
 										if (w->color) {										// Sibling color is red
 												recolor(w);
@@ -591,7 +624,7 @@ class BST
 										}
 								}
 						}
-						x->color = false;
+//						x->color = false;
 				}
 
 				NodePtr	minimum(NodePtr x) const {
@@ -746,7 +779,7 @@ class BST
 								strCol = "\033[1;31m";
 						else
 								strCol = "\033[0m";
-						std::cout << strCol << root->pair.second << "\033[0m" << std::endl;
+						std::cout << strCol << root->pair.first << "\033[0m" << std::endl;
 						printTree(root->lChild, space);
 				}
 

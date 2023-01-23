@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/23 14:01:28 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/23 15:56:57 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,11 +227,17 @@ class map {
 		////////////////////////////////////////////////////////////////
 
 		iterator				begin(void) {
-				return (iterator(this->_bst.minimum(this->_bst.getRoot()), &this->_bst));
+				if (this->_bst.getRoot() != NULL)
+						return (iterator(this->_bst.minimum(this->_bst.getRoot()), &this->_bst));
+				else
+						return (iterator(NULL, &this->_bst));
 		}
 
 		const_iterator			begin(void) const {
-				return (const_iterator(this->_bst.minimum(this->_bst.getRoot()), &this->_bst));
+				if (this->_bst.getRoot() != NULL || this->_bst.getRoot() != this->_bst.getNull())
+						return (const_iterator(this->_bst.minimum(this->_bst.getRoot()), &this->_bst));
+				else
+						return (const_iterator(NULL, &this->_bst));
 		}
 
 		iterator				end(void) {
@@ -353,11 +359,16 @@ class map {
 		}
 
 		void		swap(map& x) {
-				BST<value_type, key_type, key_compare>	tmp;
+				allocator_type		tmp_alloc = x._alloc;
+				key_compare			tmp_comp = x._compare;
 
-				tmp = this->_bst;
-				this->_bst = x._bst;
-				x._bst = tmp;
+				x._alloc = this->_alloc;
+				x._compare = this->_compare;
+
+				this->_alloc = tmp_alloc;
+				this->_compare = tmp_comp;
+
+				this->_bst.swap(x._bst);
 		}
 
 		void		clear(void) {
@@ -385,8 +396,8 @@ class map {
 				iterator	it = this->_bst.find(k);
 				iterator	null(this->_bst.getNull(), &this->_bst);
 
-				if (it == null)
-						return (this->end());
+				if (it == null || it.getPointer() == NULL)
+						return (iterator(NULL, &this->_bst));
 				return (it);
 		}
 
