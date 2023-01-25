@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/23 18:31:05 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/25 12:58:34 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -345,8 +345,8 @@ class BST
 								newNode->parent = this->_null;
 								newNode->lChild->parent = newNode;
 								newNode->rChild->parent = newNode;
+								newNode->color = false;
 								this->_root = newNode;
-								recolor(this->_root);
 								this->_size++;
 								isNewNode = true;
 						}
@@ -394,7 +394,51 @@ class BST
 						return (isNewNode);
 				}
 
-				void	insertFix(NodePtr x) {
+				void insertFix(NodePtr k) {
+					NodePtr u;
+					while (k->parent->color == 1) {
+					  if (k->parent == k->parent->parent->rChild) {
+						u = k->parent->parent->lChild;
+						if (u->color == 1) {
+						  u->color = 0;
+						  k->parent->color = 0;
+						  k->parent->parent->color = 1;
+						  k = k->parent->parent;
+						} else {
+						  if (k == k->parent->lChild) {
+							k = k->parent;
+							rightRotate(k);
+						  }
+						  k->parent->color = 0;
+						  k->parent->parent->color = 1;
+						  leftRotate(k->parent->parent);
+						}
+					  } else {
+						u = k->parent->parent->rChild;
+
+						if (u->color == 1) {
+						  u->color = 0;
+						  k->parent->color = 0;
+						  k->parent->parent->color = 1;
+						  k = k->parent->parent;
+						} else {
+						  if (k == k->parent->rChild) {
+							k = k->parent;
+							leftRotate(k);
+						  }
+						  k->parent->color = 0;
+						  k->parent->parent->color = 1;
+						  rightRotate(k->parent->parent);
+						}
+					  }
+					  if (k == this->_root) {
+						break;
+					  }
+					}
+					this->_root->color = 0;
+				  }
+
+/*				void	insertFix(NodePtr x) {
 						NodePtr		gp = NULL;
 						bool		r;
 						bool		uncle = true;
@@ -408,39 +452,44 @@ class BST
 								if ((r && gp->lChild == this->_null) || (!r && gp->rChild == this->_null))
 										uncle = false;
 						}
-						if (gp != NULL && (x->parent != this->_null && x->parent->color)) { // Parent is red
-								if ((uncle && (gp->lChild->color && gp->rChild->color))) { // Both Uncle and Parent are red
-										if (gp != this->_root)
-												recolor(gp);
-										recolor(gp->lChild);
-										recolor(gp->rChild);
+						while (x->parent->color) {
+								if (gp != NULL && (x->parent != this->_null && x->parent->color)) { // Parent is red
+										if ((uncle && (gp->lChild->color && gp->rChild->color))) { // Both Uncle and Parent are red
+												if (gp != this->_root)
+														recolor(gp);
+												recolor(gp->lChild);
+												recolor(gp->rChild);
+										}
+										else if (!uncle || ((r && !gp->lChild->color) || (!r && !gp->rChild->color))) { // Uncle is black
+												if (r && x->parent->rChild == x) {							// Parent is rChild of GrandParent and x is rChild of Parent
+														leftRotate(gp);
+														recolor(gp);
+														recolor(x->parent);
+												}
+												else if (r && x->parent->lChild == x) {						// Parent is rChild of GrandParent and x is lChild of Parent
+														rightRotate(x->parent);
+														leftRotate(gp);
+														recolor(gp);
+														recolor(x);
+												}
+												else if (!r && x->parent->lChild == x) {					// Parent is lChild of GrandParent and x is lChild of Parent
+														rightRotate(gp);
+														recolor(gp);
+														recolor(x->parent);
+												}
+												else if (!r && x->parent->rChild == x) {					// Parent is lChild of GrandParent anx x is rChild of Parent
+														leftRotate(x->parent);
+														rightRotate(gp);
+														recolor(gp);
+														recolor(x);
+												}
+										}
 								}
-								else if (!uncle || ((r && !gp->lChild->color) || (!r && !gp->rChild->color))) { // Uncle is black
-										if (r && x->parent->rChild == x) {							// Parent is rChild of GrandParent and x is rChild of Parent
-												leftRotate(gp);
-												recolor(gp);
-												recolor(x->parent);
-										}
-										else if (r && x->parent->lChild == x) {						// Parent is rChild of GrandParent and x is lChild of Parent
-												rightRotate(x->parent);
-												leftRotate(gp);
-												recolor(gp);
-												recolor(x);
-										}
-										else if (!r && x->parent->lChild == x) {					// Parent is lChild of GrandParent and x is lChild of Parent
-												rightRotate(gp);
-												recolor(gp);
-												recolor(x->parent);
-										}
-										else if (!r && x->parent->rChild == x) {					// Parent is lChild of GrandParent anx x is rChild of Parent
-												leftRotate(x->parent);
-												rightRotate(gp);
-												recolor(gp);
-												recolor(x);
-										}
-								}
+								if (x == this->_root)
+										break ;
 						}
-				}
+						this->_root->color = false;
+				}*/
 
 				bool	deleteNode(const Key& key, bool toFix) {
 						NodePtr		cur;
@@ -477,6 +526,7 @@ class BST
 										cur->rChild->parent = y;
 										y->parent = cur->parent;
 										y->lChild = cur->lChild;
+										y->rChild = cur->rChild;
 										y->color = cur->color;
 								}
 
