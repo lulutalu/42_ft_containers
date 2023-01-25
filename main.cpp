@@ -1,96 +1,116 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/25 14:35:09 by lduboulo         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#if 0
-
-# include <memory>
-# include <iostream>
-# include <vector>
-# include <iterator>
-# include <map>
-# include <string>
-# include <list>
-
-namespace ft = std;
-
+#include <iostream>
+#include <string>
+#include <deque>
+#if 0 //CREATE A REAL STL EXAMPLE
+	#include <map>
+	#include <stack>
+	#include <vector>
+	namespace ft = std;
 #else
-
-# include <vector.hpp>
-# include <map.hpp>
-# include <binary_search_tree.hpp>
-# include <vector>
-# include <list>
-
+	#include <map.hpp>
+	#include <stack.hpp>
+	#include <vector.hpp>
 #endif
 
-class B {
-public:
-    char *l;
-    int i;
-    B():l(nullptr), i(1) {};
-    B(const int &ex) {
-        this->i = ex;
-        this->l = new char('a');
-    };
-    virtual ~B() {
-        delete this->l;
-        this->l = nullptr;
-    };
+#include <stdlib.h>
+
+#define MAX_RAM 4294967296
+#define BUFFER_SIZE 4096
+struct Buffer
+{
+	int idx;
+	char buff[BUFFER_SIZE];
 };
 
-class A : public B {
+
+#define COUNT (MAX_RAM / (int)sizeof(Buffer))
+
+template<typename T>
+class MutantStack : public ft::stack<T>
+{
 public:
-    A():B(){};
-    A(const B* ex){
-        this->l = new char(*(ex->l));
-        this->i = ex->i;
-        if (ex->i == -1) throw "n";
-    }
-    ~A() {
-        delete this->l;
-        this->l = nullptr;
-    };
+	MutantStack() {}
+	MutantStack(const MutantStack<T>& src) { *this = src; }
+	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
+	{
+		this->c = rhs.c;
+		return *this;
+	}
+	~MutantStack() {}
+
+	typedef typename ft::stack<T>::container_type::iterator iterator;
+
+	iterator begin() { return this->c.begin(); }
+	iterator end() { return this->c.end(); }
 };
 
-int	main(void) {
+int main(int argc, char** argv) {
+	if (argc != 2)
+	{
+		std::cerr << "Usage: ./test seed" << std::endl;
+		std::cerr << "Provide a seed please" << std::endl;
+		std::cerr << "Count value:" << COUNT << std::endl;
+		return 1;
+	}
+	const int seed = atoi(argv[1]);
+	srand(seed);
 
-    std::vector<int> v;
+	ft::vector<std::string> vector_str;
+	ft::vector<int> vector_int;
+	ft::stack<int> stack_int;
+	ft::vector<Buffer> vector_buffer;
+	ft::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
+	ft::map<int, int> map_int;
 
-	ft::vector<int>	vector;
-	ft::vector<int> tmp;
-    tmp.assign(5, 1);
-    vector.assign(10, 1);
-    vector.insert(vector.end() - 2, tmp.begin(), tmp.end());
-    v.push_back(vector[3]);
-    v.push_back(vector.size());
-    v.push_back(vector.capacity());
+	for (int i = 0; i < COUNT; i++)
+	{
+		vector_buffer.push_back(Buffer());
+	}
 
-    std::unique_ptr<B> k2(new B(3));
-    std::unique_ptr<B> k3(new B(4));
-    std::unique_ptr<B> k4(new B(-1));
-	ft::vector<A> vv;
-		ft::vector<B*> v1;
+	for (int i = 0; i < COUNT; i++)
+	{
+		const int idx = rand() % COUNT;
+		vector_buffer[idx].idx = 5;
+	}
+	ft::vector<Buffer>().swap(vector_buffer);
 
-    v1.push_back(&(*k2));
-    v1.push_back(&(*k3));
-    v1.push_back(&(*k4));
-    try { vv.insert(vv.begin(), v1.begin(), v1.end()); }
-    catch (...) {
-        v.push_back(vv.size());
-        v.push_back(vv.capacity());
-    }
+	try
+	{
+		for (int i = 0; i < COUNT; i++)
+		{
+			const int idx = rand() % COUNT;
+			vector_buffer.at(idx);
+			std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" <<std::endl;
+		}
+	}
+	catch(const std::exception& e)
+	{
+		//NORMAL ! :P
+	}
+	
+	for (int i = 0; i < COUNT; ++i)
+	{
+		map_int.insert(ft::make_pair(rand(), rand()));
+	}
 
-		for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
-				std::cout << *it << std::endl;
+	int sum = 0;
+	for (int i = 0; i < 10000; i++)
+	{
+		int access = rand();
+		sum += map_int[access];
+	}
+	std::cout << "should be constant with the same seed: " << sum << std::endl;
 
+	{
+		ft::map<int, int> copy = map_int;
+	}
+	MutantStack<char> iterable_stack;
+	for (char letter = 'a'; letter <= 'z'; letter++)
+		iterable_stack.push(letter);
+	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
+	{
+		std::cout << *it;
+	}
+	std::cout << std::endl;
+	return (0);
 }
-
