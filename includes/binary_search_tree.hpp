@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 17:11:32 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/25 12:58:34 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/25 13:41:47 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ class BST
 
 						BSTIterator&		operator ++ (void) {
 								NodePtr		y;
+								NodePtr		ori;
 
 								if (!this->_ptr || this->_ptr == this->_bst->_null) {
 										this->_ptr = NULL;
@@ -136,10 +137,12 @@ class BST
 										this->_ptr = y;
 								else if (this->_ptr->parent && this->_ptr->parent->rChild != this->_ptr)
 										this->_ptr = this->_ptr->parent;
-								else if (this->_ptr->parent->parent)
-										this->_ptr = this->_ptr->parent->parent;
-								else
-										this->_ptr = NULL;
+								else {
+										ori = this->_ptr;
+										while (this->_ptr->parent && this->_bst->_comp(this->_ptr->parent->pair.first, ori->pair.first))
+												this->_ptr = this->_ptr->parent;
+										this->_ptr = this->_ptr->parent;
+								}
 								return (*this);
 						}
 

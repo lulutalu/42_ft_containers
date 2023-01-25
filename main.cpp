@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/25 12:59:06 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/25 13:39:05 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,6 +246,9 @@ int		main(void)
 	 *                                            43    45    47    49
 	 *
 	 * */
+
+	for (ft::map<int, std::string>::iterator it = mp.begin(); it != mp.end(); it++)
+			std::cout << it->first << std::endl;
 
 		mp.debog();
 
