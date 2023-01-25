@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:43:16 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/09 15:06:08 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/25 14:52:43 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -555,7 +555,7 @@ class vector
 		}
 
 		void	pop_back(void) {
-				_alloc.destroy(this->_pointer + this->_size);
+				_alloc.destroy(this->_pointer + this->_size - 1);
 				this->_size -= 1;
 		}
 
@@ -727,8 +727,8 @@ class vector
 						}
 				}
 
-				for (size_type i = 0; i < this->_size + pos; i++)
-						_alloc.construct(newPointer + pos + n + i, *(this->_pointer + pos + i));
+				for (size_type i = 0; i < this->_size - pos; i++)
+						_alloc.construct(newPointer + n + i + pos, *(this->_pointer + pos + i));
 
 				this->clear();
 				_alloc.deallocate(this->_pointer, old_cap);

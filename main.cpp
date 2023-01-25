@@ -6,7 +6,7 @@
 /*   By: lduboulo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 16:41:24 by lduboulo          #+#    #+#             */
-/*   Updated: 2023/01/25 13:59:34 by lduboulo         ###   ########.fr       */
+/*   Updated: 2023/01/25 14:35:09 by lduboulo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,42 +32,65 @@ namespace ft = std;
 
 #endif
 
+class B {
+public:
+    char *l;
+    int i;
+    B():l(nullptr), i(1) {};
+    B(const int &ex) {
+        this->i = ex;
+        this->l = new char('a');
+    };
+    virtual ~B() {
+        delete this->l;
+        this->l = nullptr;
+    };
+};
+
+class A : public B {
+public:
+    A():B(){};
+    A(const B* ex){
+        this->l = new char(*(ex->l));
+        this->i = ex->i;
+        if (ex->i == -1) throw "n";
+    }
+    ~A() {
+        delete this->l;
+        this->l = nullptr;
+    };
+};
+
 int	main(void) {
-		ft::map<int, int>		mp;
-		ft::map<int, int>		mp2;
 
-		mp.insert(ft::make_pair(29, 54));
-		mp.insert(ft::make_pair(97, 123));
-		mp.insert(ft::make_pair(25, 87));
-		mp.insert(ft::make_pair(896, 64));
-		mp.insert(ft::make_pair(75, 93));
-		mp.insert(ft::make_pair(57, 28));
-		mp.insert(ft::make_pair(24, 76));
+    std::vector<int> v;
 
-		mp2.insert(ft::make_pair(85, 10));
-		mp2.insert(ft::make_pair(16, 92));
-		mp2.insert(ft::make_pair(36, 600));
-		mp2.insert(ft::make_pair(93, 61));
-		mp2.insert(ft::make_pair(15, 98));
+	ft::vector<int>	vector;
+	ft::vector<int> tmp;
+    tmp.assign(5, 1);
+    vector.assign(10, 1);
+    vector.insert(vector.end() - 2, tmp.begin(), tmp.end());
+    v.push_back(vector[3]);
+    v.push_back(vector.size());
+    v.push_back(vector.capacity());
 
-		for (ft::map<int, int>::iterator it = mp.begin(); it != mp.end(); it++)
-				std::cout << it->first << "\t" << it->second << std::endl;
+    std::unique_ptr<B> k2(new B(3));
+    std::unique_ptr<B> k3(new B(4));
+    std::unique_ptr<B> k4(new B(-1));
+	ft::vector<A> vv;
+		ft::vector<B*> v1;
 
-		std::cout << "########################################" << std::endl;
+    v1.push_back(&(*k2));
+    v1.push_back(&(*k3));
+    v1.push_back(&(*k4));
+    try { vv.insert(vv.begin(), v1.begin(), v1.end()); }
+    catch (...) {
+        v.push_back(vv.size());
+        v.push_back(vv.capacity());
+    }
 
-		for (ft::map<int, int>::iterator it = mp2.begin(); it != mp2.end(); it++)
-				std::cout << it->first << "\t" << it->second << std::endl;
-
-		mp.swap(mp2);
-
-		std::cout << "+++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
-
-		for (ft::map<int, int>::iterator it = mp.begin(); it != mp.end(); it++)
-				std::cout << it->first << "\t" << it->second << std::endl;
-
-		std::cout << "########################################" << std::endl;
-
-		for (ft::map<int, int>::iterator it = mp2.begin(); it != mp2.end(); it++)
-				std::cout << it->first << "\t" << it->second << std::endl;
+		for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+				std::cout << *it << std::endl;
 
 }
+
