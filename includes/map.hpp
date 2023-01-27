@@ -6,7 +6,7 @@
 /*   By: lulutalu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/10 17:34:21 by lulutalu          #+#    #+#             */
-/*   Updated: 2023/01/23 18:20:11 by lulutalu         ###   ########.fr       */
+/*   Updated: 2023/01/27 16:23:53 by lulutalu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -459,8 +459,6 @@ class map {
 				this->_bst.printTree(this->_bst.getRoot(), 0);
 		}
 
-}; // class
-
 /*		////////////////////////////////////////////////////////////////
 		///					Non-Member Functions					////
 		////////////////////////////////////////////////////////////////
@@ -488,35 +486,29 @@ class map {
 		bool	operator >= (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs);
 */
 
-		template <class Key, class T, class Compare, class Alloc>
-		bool	operator == (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs) {
+		friend bool	operator == (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs) {
 				if (lhs.size() != rhs.size())
 						return (false);
 				return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 		}
 
-		template <class Key, class T, class Compare, class Alloc>
-		bool	operator != (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs) {
-				return (!(lhs == rhs));
+		friend bool	operator != (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs) {
+			return (!(lhs == rhs));
 		}
 
-		template <class Key, class T, class Compare, class Alloc>
-		bool	operator < (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs) {
+		friend bool	operator < (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs) {
 				return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 		}
 
-		template <class Key, class T, class Compare, class Alloc>
-		bool	operator <= (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs) {
+		friend bool	operator <= (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs) {
 				return (!(rhs < lhs));
 		}
 
-		template <class Key, class T, class Compare, class Alloc>
-		bool	operator > (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs) {
+		friend bool	operator > (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs) {
 				return (rhs < lhs);
 		}
 
-		template <class Key, class T, class Compare, class Alloc>
-		bool	operator >= (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs) {
+		friend bool	operator >= (const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs) {
 				return (!(lhs < rhs));
 		}
 
@@ -528,10 +520,12 @@ class map {
 		void	swap(ft::map<Key, T, Compare, Alloc>& lhs, ft::map<Key, T, Compare, Alloc>& rhs);
 */
 
-		template <class Key, class T, class Compare, class Alloc>
-		void	swap(ft::map<Key, T, Compare, Alloc>& lhs, ft::map<Key, T, Compare, Alloc>& rhs) {
+		friend void	swap(ft::map<Key, T, Compare, Alloc>& lhs, ft::map<Key, T, Compare, Alloc>& rhs) {
 				lhs.swap(rhs);
 		}
+
+
+}; // class
 
 } // namespace
 
