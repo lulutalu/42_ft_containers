@@ -39,3 +39,9 @@ There are also some miscellaneous C++98 functions to re-implement :
 
 - mli42's [containers tester](https://github.com/mli42/containers_test)
 - divinepet's [ft_containers-unit-test](https://github.com/divinepet/ft_containers-unit-test)
+
+# Result
+
+<p align="center">
+<a href="https://github.com/JaeSeoKim/badge42"><img src="https://badge42.vercel.app/api/v2/cl2668aqb008909jp0ecnecpa/project/2906616" alt="lduboulo's 42 ft_containers Score" /></a>
+</p>
